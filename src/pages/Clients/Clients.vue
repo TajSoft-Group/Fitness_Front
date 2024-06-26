@@ -27,50 +27,64 @@
   <div @click="addCard=!addCard" v-if="addCard" class="add-user-modal d-flex justify-content-center align-items-center ">
     <div @click.stop  class="content">
       <div class="title">ДОБАВИТЬ ПОЛЬЗОВАТЕЛЯ</div>
-      <div class="form">
+      <form class="form" @submit.prevent="submitForm">
         <label for="name">Имя*</label>
-        <input type="text" placeholder="Введите имя" id="name">
-      </div>
-      <div class="form">
+        <input type="text" placeholder="Введите имя" id="name" v-model="formData.name">
+
         <label for="surname">Фамилия*</label>
-        <input type="text" placeholder="Введите фамилию" id="surname">
-      </div>
-      <div class="form">
-        <label for="phone">Номер телефона*</label>
-        <input type="text" placeholder="Введите номер телефона" id="phone">
-      </div>
-      <div class="form">
-        <label for="name">Дата рождения*</label>
-        <input type="text" placeholder="Введите дату рождения" id="name">
-      </div>
-      <div class="checkbox d-flex align-items-center">
-        <div class="male d-flex align-items-center mr-30">
-          <input type="radio" id="male" name="gender">
-          <label for="male">Мужской</label>
+        <input type="text" placeholder="Введите фамилию" id="surname" v-model="formData.surname">
+
+        <label for="username">Номер телефона*</label>
+        <input type="text" placeholder="Введите номер телефона" id="username" v-model="formData.username">
+
+        <label for="birthday">Дата рождения*</label>
+        <input type="date" placeholder="1994-11-23" id="birthday" v-model="formData.birthday">
+
+        <div class="menu-type-2 d-flex justify-content-between pt-3 mt-3">
+          <div class="form-recipients">
+            <input type="radio" id="man" name="gender" value="1" v-model="formData.gender">
+            <label for="man">Мужчина</label>
+          </div>
+          <div class="form-recipients">
+            <input type="radio" id="woman" name="gender" value="2" v-model="formData.gender">
+            <label for="woman">Женщина</label>
+          </div>
         </div>
-        <div class="female d-flex align-items-center">
-          <input type="radio" id="female" name="gender">
-          <label for="female">Женский</label>
+
+        <div class="info d-flex justify-content-between form">
+          <div class="age mr-30">
+            <label for="age">Возраст</label>
+            <input type="text" id="age" v-model="formData.age">
+          </div>
+          <div class="age mr-30">
+            <label for="height">Рост</label>
+            <input type="text" id="height" v-model="formData.height">
+          </div>
+          <div class="age">
+            <label for="mass">Вес</label>
+            <input type="text" id="mass" v-model="formData.weight">
+          </div>
         </div>
-      </div>
-      <div class="info d-flex justify-content-between form">
-        <div class="age mr-30">
-          <label for="age">Возраст</label>
-          <input type="text" id="age">
+
+        <label for="password">Пароль*</label>
+        <input type="text" placeholder="пароль" id="password" v-model="formData.password">
+
+        <div class="menu-type-2 d-flex justify-content-between mt-3">
+          <div class="form-recipients">
+            <input type="radio" id="ios" name="mobile_id" value="1" v-model="formData.mobile_id">
+            <label for="ios">IOS</label><img class="ps-3 img-width-55" src="@/assets/images/icons/Ios_accueil.webp">
+          </div>
+          <div class=" form-recipients">
+            <input type="radio" id="android" name="mobile_id" value="2" v-model="formData.mobile_id">
+            <label for="android">android</label><img class="ps-3 img-width-55" src="@/assets/images/icons/Android_logo_2019.png">
+          </div>
         </div>
-        <div class="age mr-30">
-          <label for="height">Рост</label>
-          <input type="text" id="height">
+
+        <div class="d-flex justify-content-between add-user-buttons">
+          <button @click="addCard=false" class="dont" type="button">Отмена</button>
+          <button class="submit" type="submit">Добавить</button>
         </div>
-        <div class="age">
-          <label for="mass">Вес</label>
-          <input type="text" id="mass">
-        </div>
-      </div>
-      <div class="d-flex justify-content-between add-user-buttons">
-        <button @click="addCard=false" class="dont">Отмена</button>
-        <button class="submit" type="button">Добавить</button>
-      </div>
+      </form>
     </div>
   </div>
 
@@ -191,7 +205,7 @@
       <div class="col">
         <div :class="{'search-input':searchActive.length>0}"  class="d-flex justify-content-between align-items-center search-block">
           <img src="@/assets/images/icons/search.png" alt="search">
-          <input v-model="test" type="text" id="searchInput" placeholder="Поиск по всем параметрам">
+          <input v-model="searchActive" type="text" id="searchInput" placeholder="Поиск по всем параметрам">
           <router-link to="user-locked">Заблокированные</router-link>
         </div>
       </div>
@@ -411,25 +425,43 @@
   </div>
 </template>
 <script>
-
+import posts from "@/components/axios/posts.js";
 export default {
+  components:{posts},
   data(){
     return{
+      formData: {
+        name:"",
+        surname:"",
+        username:"",
+        status:"active",
+        age:"",
+        weight:"",
+        height:"",
+        gender:"",
+        birthday:"",
+        mobile_id:"",
+        password: ""
+      },
       searchActive:'',
-      addStatus:true,
+      addStatus:false,
       addCard:false
     }
   },
   methods:{
+
+    submitForm() {
+      console.log(this.formData);
+      posts('http://fitness.abdurazzoq.beget.tech/public/user_register', {...this.formData})
+    },
+
     addStatusDelay(){
       setTimeout(()=>{
         this.addStatus=false
       },2000)
     }
+
   },
-  mounted() {
-    this.addStatusDelay();
-  }
 }
 
 </script>

@@ -3,7 +3,8 @@ import NavBar from "@/pages/NavBar.vue";
 </script>
 
 <template>
-  <nav-bar/>
+
+  <nav-bar v-if="$route.fullPath!=='/login'" />
   <router-view/>
 </template>
 

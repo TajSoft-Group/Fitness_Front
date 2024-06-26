@@ -1,5 +1,8 @@
 <script >
+import Schedule from "@/components/Chart/Schedule.vue";
+import ScheduleChart from "@/components/Chart/ScheduleChart.vue";
   export default {
+    components:{Schedule,ScheduleChart},
     data(){
       return{
         trainerMenu:false,
@@ -58,8 +61,11 @@
   <div class="container mb-2">
     <div class="row">
       <div class="col">
-        <div class="statistics mt-3 bg-gray">
-          <div class="d-flex justify-content-between"></div>
+        <div class="statistics mt-3 bg-gray h-auto">
+          <schedule/>
+          <schedule-chart
+          style="height: 800px"
+          />
         </div>
       </div>
     </div>

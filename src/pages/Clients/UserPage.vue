@@ -4,9 +4,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <a href="#" class="d-flex title-block title-blocked align-items-center user-page-title-header">
-          <img src="@/assets/images/icons/arrow-left.png">
-        </a>
+        <div class="my-5"><router-link to="/clients" class="blocked"><img class="px-3 pb-2 blocked " src="@/assets/images/icons/Stroke.png"></router-link></div>
       </div>
     </div>
   </div>
@@ -41,47 +39,47 @@
               <div class="line"></div>
             </div>
           </div>
-          <div class="user-configs-modal-icon">
+          <div @click="UserConfigModal=!UserConfigModal" class="user-configs-modal-icon">
             <img src="@/assets/images/icons/nav-icon.png" height="26">
           </div>
-          <div class="user-configs-modal d-none">
+          <div v-if="UserConfigModal" class="user-configs-modal ">
             <div class="user-configs-modal-item">
               <a href="#">Добавить услугу</a>
               <img src="@/assets/images/icons/plus.png" height="22">
             </div>
-            <div class="user-configs-modal-item">
+            <div @click="toggleModal('.user-change-modal')" class="user-configs-modal-item">
               <a class="change-user-btn">Ред. профиль</a>
               <img src="@/assets/images/icons/pen.png" height="22">
             </div>
-            <div class="user-configs-modal-item">
+            <div @click="toggleModal('.user-block-modal')" class="user-configs-modal-item">
               <a class="block-user-btn">Заблокировать</a>
               <img src="@/assets/images/icons/ban.png" height="22">
             </div>
-            <div class="user-configs-modal-item red">
+            <div @click="toggleModal('.user-delete-modal')" class="user-configs-modal-item red">
               <a class="delete-user-btn">Удалить</a>
               <img src="@/assets/images/icons/delete.png" height="22">
             </div>
-            <div class="user-configs-modal-item">
+            <div @click="toggleModal('.add-money-modal')" class="user-configs-modal-item">
               <a class="add-money-btn">Пополнить счёт</a>
               <img src="@/assets/images/icons/add-money.png" height="22">
             </div>
-            <div class="user-configs-modal-item">
+            <div @click="toggleModal('.take-money-modal')" class="user-configs-modal-item">
               <a class="take-money-btn">Снять деньги</a>
               <img src="@/assets/images/icons/take-money.png" height="22">
             </div>
-            <div class="user-configs-modal-item">
+            <div @click="toggleModal('.up-card-modal')" class="user-configs-modal-item">
               <a class="up-card-btn">Повысить карту</a>
               <img src="@/assets/images/icons/up.png" height="22">
             </div>
-            <div class="user-configs-modal-item">
+            <div @click="toggleModal('.down-card-modal')" class="user-configs-modal-item">
               <a class="down-card-btn">Понизить карту</a>
               <img src="@/assets/images/icons/down.png" height="22">
             </div>
-            <div class="user-configs-modal-item yellow">
+            <div @click="toggleModal('.pin-card-modal')" class="user-configs-modal-item yellow">
               <a class="pin-card-btn">Закрепить карту</a>
               <img src="@/assets/images/icons/crown.png" height="22">
             </div>
-            <div class="user-configs-modal-item yellow">
+            <div @click="toggleModal('.unpin-card-modal')" class="user-configs-modal-item yellow">
               <a class="unpin-card-btn">Открепить карту</a>
               <img src="@/assets/images/icons/crown.png" height="22">
             </div>
@@ -91,8 +89,8 @@
     </div>
   </div>
 
-  <div class="add-user-modal user-change-modal d-none d-flex justify-content-center align-items-center">
-    <div class="content">
+  <div @click="toggleModal('.user-change-modal')" class="add-user-modal user-change-modal  d-flex justify-content-center align-items-center d-none">
+    <div @click.stop class="content">
       <h5>РЕДАКТИРОВАНИЕ</h5>
       <div class="courses mt-3">
         <div class="form mt-3">
@@ -112,14 +110,14 @@
           <input class="date-icon-none" type="date" id="date">
         </div>
 
-        <div class="checkbox d-flex align-items-center">
-          <div class="male d-flex align-items-center mr-30">
-            <input type="radio" id="male" name="gender">
-            <label for="male">Мужской</label>
+        <div class="menu-type-2 d-flex justify-content-between pt-3 mt-3">
+          <div class="form-recipients">
+            <input type="radio" id="man" name="recipients">
+            <label for="man">Мужчина</label>
           </div>
-          <div class="female d-flex align-items-center">
-            <input type="radio" id="female" name="gender">
-            <label for="female">Женский</label>
+          <div class="form-recipients">
+            <input type="radio" id="woman" name="recipients">
+            <label for="woman">Женщина</label>
           </div>
         </div>
 
@@ -132,8 +130,9 @@
       </div>
     </div>
   </div>
-  <div class="add-user-modal user-delete-modal d-none d-flex justify-content-center align-items-center">
-    <div class="content">
+
+  <div @click="toggleModal('.user-delete-modal')" class="add-user-modal user-delete-modal d-none d-flex justify-content-center align-items-center">
+    <div @click.stop class="content">
       <div class="text-center mb-5">
         <img src="@/assets/images/icons/info.png" height="70px">
       </div>
@@ -167,8 +166,9 @@
       </div>
     </div>
   </div>
-  <div class="add-user-modal user-block-modal d-none d-flex justify-content-center align-items-center">
-    <div class="content">
+
+  <div @click="toggleModal('.user-block-modal')" class="add-user-modal user-block-modal d-none d-flex justify-content-center align-items-center">
+    <div @click.stop class="content">
       <div class="text-center mb-5">
         <img src="@/assets/images/icons/info.png" height="70px">
       </div>
@@ -207,8 +207,9 @@
       </div>
     </div>
   </div>
-  <div class="add-user-modal add-money-modal d-none d-flex justify-content-center align-items-center">
-    <div class="content">
+
+  <div  @click="toggleModal('.add-money-modal')" class="add-user-modal add-money-modal d-none d-flex justify-content-center align-items-center">
+    <div @click.stop class="content">
       <h5>ПОПОЛНИТЬ КАРТУ</h5>
       <div class="courses mt-3">
         <div class="form mt-3">
@@ -235,8 +236,8 @@
       </div>
     </div>
   </div>
-  <div class="add-user-modal take-money-modal d-none d-flex justify-content-center align-items-center">
-    <div class="content">
+  <div @click="toggleModal('.take-money-modal')" class="add-user-modal take-money-modal d-none d-flex justify-content-center align-items-center">
+    <div @click.stop  class="content">
       <h5>СНЯТЬ НАЛИЧНЫЕ</h5>
       <div class="courses mt-3">
         <div class="form mt-3">
@@ -268,8 +269,8 @@
       </div>
     </div>
   </div>
-  <div class="add-user-modal up-card-modal d-none d-flex justify-content-center align-items-center">
-    <div class="content">
+  <div @click="toggleModal('.up-card-modal')" class="add-user-modal up-card-modal d-none d-flex justify-content-center align-items-center">
+    <div @click.stop  class="content">
       <h5>ПОВЫСИТЬ КАРТУ</h5>
       <div class="courses mt-3">
         <div class="form mt-3">
@@ -301,8 +302,8 @@
       </div>
     </div>
   </div>
-  <div class="add-user-modal down-card-modal d-none d-flex justify-content-center align-items-center">
-    <div class="content">
+  <div @click="toggleModal('.down-card-modal')" class="add-user-modal down-card-modal d-none d-flex justify-content-center align-items-center">
+    <div @click.stop  class="content">
       <h5>ПОНИЗИТЬ КАРТУ</h5>
       <div class="courses mt-3">
         <div class="form mt-3">
@@ -334,8 +335,8 @@
       </div>
     </div>
   </div>
-  <div class="add-user-modal pin-card-modal d-none d-flex justify-content-center align-items-center">
-    <div class="content">
+  <div @click="toggleModal('.pin-card-modal')" class="add-user-modal pin-card-modal d-none d-flex justify-content-center align-items-center">
+    <div @click.stop class="content">
       <h5>ЗАКРЕПИТЬ КАРТУ</h5>
       <div class="courses mt-3">
         <div class="form mt-3">
@@ -355,8 +356,8 @@
       </div>
     </div>
   </div>
-  <div class="add-user-modal unpin-card-modal d-none d-flex justify-content-center align-items-center">
-    <div class="content">
+  <div @click="toggleModal('.unpin-card-modal')" class="add-user-modal unpin-card-modal d-none d-flex justify-content-center align-items-center">
+    <div @click.stop class="content">
       <h5>ОТКРЕПИТЬ КАРТУ</h5>
       <div class="courses mt-3">
         <div class="form mt-3">
@@ -412,8 +413,8 @@
         <h5 class="page-title credit-cards-title">Карты</h5>
       </div>
     </div>
-    <div class="row">
-      <div class="col-6">
+    <div @click="toggleModal('.cards-modal')" class="row">
+      <div  class="col-6">
         <div class="credit-card">
           <img src="@/assets/images/card.png">
           <div class="info">
@@ -437,8 +438,8 @@
     </div>
   </div>
 
-  <div class="cards-modal d-none d-flex justify-content-center align-items-center">
-    <div class="content">
+  <div @click="toggleModal('.cards-modal')" class="cards-modal d-none d-flex justify-content-center align-items-center">
+    <div @click.stop class="content">
       <div class="cards-header d-flex justify-content-between align-items-center">
         <div class="titles">
           <div>НА СЧЕТУ</div>
@@ -450,10 +451,10 @@
         </div>
       </div>
       <div class="choose-type d-flex align-items-center">
-        <div class="checked uslugi-btn">Услуги</div>
-        <div class="courses-btn">Курсы</div>
+        <div :class="{checked:uslugi}" @click="uslugi=!uslugi" class=" uslugi-btn">Услуги</div>
+        <div  :class="{checked:!uslugi}" @click="uslugi=!uslugi" class="courses-btn">Курсы</div>
       </div>
-      <div class="uslugis">
+      <div v-show="uslugi" class="uslugis">
         <div class="form relative">
           <img src="@/assets/images/icons/row-right.png" class="row-right-icon">
           <label for="usluga">Услуга</label>
@@ -493,7 +494,7 @@
           </div>
         </div>
       </div>
-      <div class="coursess d-none">
+      <div v-show="uslugi===false" class="coursess ">
         <div class="form relative">
           <img src="@/assets/images/icons/row-right.png" class="row-right-icon">
           <label for="uslugas">Курсы</label>
@@ -579,7 +580,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div  class="col-6">
         <div class="user-page-card user-page-card-bottom">
           <div class="d-flex head d-flex align-items-center">
             <div class="img">
@@ -677,12 +678,37 @@
 
 <script>
 export default {
-  setup() {
-    return {}
+  data() {
+    return {
+      uslugi:false,
+      UserConfigModal: false,
+      modal:'auto',
+      modalSelector:''
+    }
+  },
+  watch: {
+    modal() {
+      this.updateToggleModal();
+    }
+  },
+  methods: {
+    updateToggleModal() {
+      console.log(this.modal)
+      if (this.modal==="auto"){
+        document.querySelector(this.modalSelector).classList.add("d-none")
+        document.body.style.overflow=this.modal
+      }else {
+        document.body.style.overflow=this.modal
+        document.querySelector(this.modalSelector).classList.remove("d-none")
+      }
+
+    },
+    toggleModal(modalSelector) {
+      this.modal = this.modal === 'auto' ? 'hidden' : 'auto';
+      this.modalSelector=modalSelector
+    }
   }
 }
 </script>
-
 <style lang="scss" scoped>
-
 </style>
