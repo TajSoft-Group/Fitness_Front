@@ -1,6 +1,6 @@
 <template>
 
-
+<div v-for="user in User">
   <div class="container">
     <div class="row">
       <div class="col">
@@ -18,36 +18,36 @@
               <img src="@/assets/images/avatar.jpg" >
             </div>
             <div class="user-info">
-              <div class="full-name">АЗИЗА СУЛТАНОВА</div>
-              <div class="phone">+992 92 000 0000</div>
+              <div class="full-name">{{user.name+' '+user.surname}}</div>
+              <div class="phone">{{ user.username }}</div>
             </div>
           </div>
           <div class="right d-flex align-items-center text-center">
             <div class="item">
               <div class="age">Возраст</div>
-              <div class="age-value">25</div>
+              <div class="age-value">{{new Date().getFullYear() - new Date(user.birthday).getFullYear() }}</div>
               <div class="line"></div>
             </div>
             <div class="item">
-              <div class="age">Возраст</div>
-              <div class="age-value">25</div>
+              <div class="age">Рост</div>
+              <div class="age-value">{{ user.height }}</div>
               <div class="line"></div>
             </div>
             <div class="item">
-              <div class="age">Возраст</div>
-              <div class="age-value">25</div>
+              <div class="age">Вес</div>
+              <div class="age-value">{{ user.weight }}</div>
               <div class="line"></div>
             </div>
           </div>
           <div @click="UserConfigModal=!UserConfigModal" class="user-configs-modal-icon">
             <img src="@/assets/images/icons/nav-icon.png" height="26">
           </div>
-          <div v-if="UserConfigModal" class="user-configs-modal ">
+          <div v-show="UserConfigModal" class="user-configs-modal ">
             <div class="user-configs-modal-item">
               <a href="#">Добавить услугу</a>
               <img src="@/assets/images/icons/plus.png" height="22">
             </div>
-            <div @click="toggleModal('.user-change-modal')" class="user-configs-modal-item">
+            <div @click="editedUser(), toggleModal('.user-change-modal')" class="user-configs-modal-item">
               <a class="change-user-btn">Ред. профиль</a>
               <img src="@/assets/images/icons/pen.png" height="22">
             </div>
@@ -95,28 +95,28 @@
       <div class="courses mt-3">
         <div class="form mt-3">
           <label for="name">Имя</label>
-          <input type="text" placeholder="Имя" id="name">
+          <input type="text" placeholder="Имя" id="name" v-model="formData.name">
         </div>
         <div class="form mt-3">
           <label for="surname">Фамилия</label>
-          <input type="text" placeholder="Фамилия" id="surname">
+          <input type="text" placeholder="Фамилия" id="surname" v-model="formData.surname">
         </div>
         <div class="form mt-3">
-          <label for="phone">Номер телефона</label>
-          <input type="text" placeholder="+992 92 000 0000" id="phone">
+          <label for="password">Пароль</label>
+          <input type="password" id="password" v-model="formData.password">
         </div>
         <div class="form mt-3">
           <label for="date">Дата рождения</label>
-          <input class="date-icon-none" type="date" id="date">
+          <input type="date" v-model="formData.birthday">
         </div>
 
         <div class="menu-type-2 d-flex justify-content-between pt-3 mt-3">
           <div class="form-recipients">
-            <input type="radio" id="man" name="recipients">
+            <input :checked="user.gender==='1'" type="radio" id="man" name="recipients" value="Мужчина">
             <label for="man">Мужчина</label>
           </div>
           <div class="form-recipients">
-            <input type="radio" id="woman" name="recipients">
+            <input :checked="user.gender==='2'" type="radio" id="woman" name="recipients" value="Женщина" >
             <label for="woman">Женщина</label>
           </div>
         </div>
@@ -124,7 +124,7 @@
         <div class="cards-infos">
           <div class="d-flex justify-content-between add-user-buttons">
             <button class="dont">Отмена</button>
-            <button class="submit" type="button">Сохранить</button>
+            <button class="submit" type="button" @click="saveUser(), toggleModal('.user-change-modal')">Сохранить</button>
           </div>
         </div>
       </div>
@@ -415,23 +415,24 @@
     </div>
     <div @click="toggleModal('.cards-modal')" class="row">
       <div  class="col-6">
-        <div class="credit-card">
+        <div v-if="user.card.length>0" class="credit-card">
           <img src="@/assets/images/card.png">
-          <div class="info">
-            <div class="type">BRONZE</div>
-            <div class="price">500 TJS</div>
-            <div class="name">АЗИЗА СУЛТАНОВА</div>
-            <div class="card-number">012 345 678 9012</div>
+          <div  class="info">
+            <div class="type">{{user.card[0].name}}</div>
+            <div class="price">{{user.card[0].balance}} TJS</div>
+            <div class="name">{{user.name+' '+user.surname}}</div>
+            <div class="card-number">{{user.card[0].card_number}}</div>
           </div>
         </div>
+        <div v-else class="h3 color-yellow ms-4">карты отсутствуют</div>
       </div>
       <div class="col-6">
-        <div class="credit-card">
+        <div v-if="user.card.length>0" class="credit-card">
           <img src="@/assets/images/card.png">
-          <div class="info">
-            <div class="bonus-title">20 БОНУСОВ</div>
-            <div class="name">АЗИЗА СУЛТАНОВА</div>
-            <div class="card-number">012 345 678 9012</div>
+          <div class="info ">
+            <div class="bonus-title">{{user.card[1].balance}} БОНУСОВ</div>
+            <div class="name">{{user.name+' '+user.surname}}</div>
+            <div class="card-number">{{user.card[1].card_number}}</div>
           </div>
         </div>
       </div>
@@ -674,16 +675,32 @@
       </div>
     </div>
   </div>
+
+</div>
 </template>
 
 <script>
+import get from "@/components/axios/get.js";
+import Patch from "@/components/axios/Patch.js";
+
 export default {
+  name: 'UserPage',
   data() {
     return {
-      uslugi:false,
+      formData: {
+        gender:'',
+        name: '',
+        surname: '',
+        password: '',
+        birthday: '',
+      },
+      User: '',
+      uslugi: false,
+      error: false,
+      loading: true,
       UserConfigModal: false,
-      modal:'auto',
-      modalSelector:''
+      modal: 'auto',
+      modalSelector: ''
     }
   },
   watch: {
@@ -694,19 +711,61 @@ export default {
   methods: {
     updateToggleModal() {
       console.log(this.modal)
-      if (this.modal==="auto"){
+      if (this.modal === "auto") {
         document.querySelector(this.modalSelector).classList.add("d-none")
-        document.body.style.overflow=this.modal
-      }else {
-        document.body.style.overflow=this.modal
+        document.body.style.overflow = this.modal
+      } else {
+        document.body.style.overflow = this.modal
         document.querySelector(this.modalSelector).classList.remove("d-none")
       }
 
     },
     toggleModal(modalSelector) {
       this.modal = this.modal === 'auto' ? 'hidden' : 'auto';
-      this.modalSelector=modalSelector
+      this.modalSelector = modalSelector
+    },
+    getInfo() {
+      get(`http://fitness.abdurazzoq.beget.tech/public/api/user/${this.id}`,)
+          .then(response => {
+            this.User = response.data;
+          })
+          .catch(error => {
+            this.error = error;
+          });
+    },
+    editedUser() {
+      const editUser = this.User.user
+      this.formData = {
+        ...{
+          name: editUser.name,
+          surname: editUser.surname,
+          gender:editUser.gender,
+          password: '',
+          birthday: editUser.birthday,
+        }
+      }
+    },
+    saveUser(){
+      Patch(`http://fitness.abdurazzoq.beget.tech/public/api/user/update/${this.id}`, {...this.formData})
+          .then(response => {
+            this.UserConfigModal=false
+            console.log(this.User)
+            this.getInfo()
+          })
+          .catch(error => {
+            this.error = error;
+          });
     }
+  },
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+
+  },
+  mounted() {
+    this.getInfo()
   }
 }
 </script>

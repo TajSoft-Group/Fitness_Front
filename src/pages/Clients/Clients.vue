@@ -1,21 +1,21 @@
 <template>
   <div class="container">
     <div class="row relative">
-        <transition name="bounce" v-if="addStatus" class="added-user-message">
+        <div :class="[addStatus ? 'show-false' : 'show-add']"  class="added-user-message">
           <div class="result-true">
             <div class="result-true-card d-flex align-items-center">
               <img class="m-4 img-width-40" src="@/assets/images/icons/check_add.png">
               <div class="result-true-content ">
-                <div class="result-true-title">Пользователь добавлен</div>
+                <div class="result-true-title">Пользователь <span class="color-yellow">{{formData.name+' '+formData.surname}}</span> добавлен</div>
                 <div class="result-true-body mt-2">Новый пользователь успешно добавлен в список клиентов</div>
               </div>
             </div>
           </div>
-        </transition>
+        </div>
 
       <div class="col">
         <div class="d-flex justify-content-between title-block align-items-center">
-          <div class="page-title"><router-link to="/"><img class="px-3 pb-2" src="@/assets/images/icons/Stroke.png">Клиенты</router-link></div>
+          <div @click="addStatus=!addStatus" class="page-title">wwww</div>
           <div class="user-add-btn d-flex justify-content-center align-items-center">
             <button @click="addCard=true" class="add-user-btn">Добавить</button>
           </div>
@@ -27,7 +27,7 @@
   <div @click="addCard=!addCard" v-if="addCard" class="add-user-modal d-flex justify-content-center align-items-center ">
     <div @click.stop  class="content">
       <div class="title">ДОБАВИТЬ ПОЛЬЗОВАТЕЛЯ</div>
-      <form class="form" @submit.prevent="submitForm">
+      <form class="form" @submit.prevent="submitForm(), addCard=false">
         <label for="name">Имя*</label>
         <input type="text" placeholder="Введите имя" id="name" v-model="formData.name">
 
@@ -293,32 +293,11 @@
               <th>Услуги</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody v-show="!loading" v-for="users in DataUsers" :key="users.id">
             <tr>
-              <td><router-link to="/user-page">Азиза Султанова</router-link></td>
-              <td>92 000 00 00</td>
-              <td>Bronze</td>
-              <td class="d-flex justify-content-center"><div class="abonent">1</div></td>
-              <td>Кардио</td>
-              <td class="d-flex justify-content-center">
-                <div class="uslugi red">1</div>
-                <div class="uslugi green">1</div>
-              </td>
-            </tr>
-            <tr>
-              <td>Азиза Султанова</td>
-              <td>92 000 00 00</td>
-              <td>Bronze</td>
-              <td class="d-flex justify-content-center"><div class="abonent">1</div></td>
-              <td>Кардио</td>
-              <td class="d-flex justify-content-center">
-                <div class="uslugi green">1</div>
-              </td>
-            </tr>
-            <tr>
-              <td>Азиза Султанова</td>
-              <td>92 000 00 00</td>
-              <td>Bronze</td>
+              <td><router-link :to="{ name: 'UserPage', params: { id: users.id } }">{{users.name+' '+ users.surname}}</router-link></td>
+              <td>{{ users.username }}</td>
+              <td>{{ users.status }}</td>
               <td class="d-flex justify-content-center"><div class="abonent">1</div></td>
               <td>Кардио</td>
               <td class="d-flex justify-content-center">
@@ -327,71 +306,10 @@
                 <div class="uslugi green">1</div>
               </td>
             </tr>
+            </tbody>
+            <tbody v-if="loading">
             <tr>
-              <td>Азиза Султанова</td>
-              <td>92 000 00 00</td>
-              <td>Bronze</td>
-              <td class="d-flex justify-content-center"><div class="abonent">1</div></td>
-              <td>Кардио</td>
-              <td class="d-flex justify-content-center">
-                <div class="uslugi red">1</div>
-                <div class="uslugi green">1</div>
-              </td>
-            </tr>
-            <tr>
-              <td>Азиза Султанова</td>
-              <td>92 000 00 00</td>
-              <td>Bronze</td>
-              <td class="d-flex justify-content-center"><div class="abonent">1</div></td>
-              <td>Кардио</td>
-              <td class="d-flex justify-content-center">
-                <div class="uslugi green">1</div>
-              </td>
-            </tr>
-            <tr>
-              <td>Азиза Султанова</td>
-              <td>92 000 00 00</td>
-              <td>Bronze</td>
-              <td class="d-flex justify-content-center"><div class="abonent">1</div></td>
-              <td>Кардио</td>
-              <td class="d-flex justify-content-center">
-                <div class="uslugi blue">1</div>
-                <div class="uslugi red">1</div>
-                <div class="uslugi green">1</div>
-              </td>
-            </tr>
-            <tr>
-              <td>Азиза Султанова</td>
-              <td>92 000 00 00</td>
-              <td>Bronze</td>
-              <td class="d-flex justify-content-center"><div class="abonent">1</div></td>
-              <td>Кардио</td>
-              <td class="d-flex justify-content-center">
-                <div class="uslugi red">1</div>
-                <div class="uslugi green">1</div>
-              </td>
-            </tr>
-            <tr>
-              <td>Азиза Султанова</td>
-              <td>92 000 00 00</td>
-              <td>Bronze</td>
-              <td class="d-flex justify-content-center"><div class="abonent">1</div></td>
-              <td>Кардио</td>
-              <td class="d-flex justify-content-center">
-                <div class="uslugi green">1</div>
-              </td>
-            </tr>
-            <tr>
-              <td>Азиза Султанова</td>
-              <td>92 000 00 00</td>
-              <td>Bronze</td>
-              <td class="d-flex justify-content-center"><div class="abonent">1</div></td>
-              <td>Кардио</td>
-              <td class="d-flex justify-content-center">
-                <div class="uslugi blue">1</div>
-                <div class="uslugi red">1</div>
-                <div class="uslugi green">1</div>
-              </td>
+              <td class="color-yellow w-100 d-flex justify-content-center">loading...</td>
             </tr>
             </tbody>
           </table>
@@ -426,8 +344,9 @@
 </template>
 <script>
 import posts from "@/components/axios/posts.js";
+import get from "@/components/axios/get.js"
 export default {
-  components:{posts},
+  components:{posts,get},
   data(){
     return{
       formData: {
@@ -443,25 +362,57 @@ export default {
         mobile_id:"",
         password: ""
       },
+      DataUsers: null,
+      error: null,
+      loading: true,
       searchActive:'',
       addStatus:false,
       addCard:false
     }
   },
   methods:{
+    getInfo(){
+      posts('http://fitness.abdurazzoq.beget.tech/public/users', {"form": "0", "to": '21'})
+          .then(response => {
+            this.DataUsers = response.data.users;
+            this.Delay('loading', 1)
+            console.log(this.DataUsers)
+      })
+          .catch(error => {
+            this.error = error;
+            this.Delay('loading', 1)
+      });
+    },
 
     submitForm() {
       console.log(this.formData);
       posts('http://fitness.abdurazzoq.beget.tech/public/user_register', {...this.formData})
+          .then(response => {
+            if (response.status===200){
+              this.addStatus=true
+              this.Delay('addStatus',5)
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
     },
-
-    addStatusDelay(){
+    Delay(target,t){
       setTimeout(()=>{
-        this.addStatus=false
-      },2000)
+        this[target]=false
+        this.clearData(this.formData)
+      },t*1000)
+    },
+    clearData(data){
+      for (let key in data){
+        data[key]=''
+      }
     }
-
   },
+  mounted() {
+    this.getInfo()
+  }
+
 }
 
 </script>

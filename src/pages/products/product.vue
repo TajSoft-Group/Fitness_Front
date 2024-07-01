@@ -83,37 +83,36 @@
             >{{ item }}</button>
         </div>
       </div>
-      <div class="color-yellow h2 mt-4">Все</div>
     </div>
 </div>
 
   <div class="container">
     <div class="row">
-    <div class="col-3 position-relative">
-      <div class="product-card p-0 position-relative">
-        <img src="@/assets/images/woman.png">
-        <div class="product-info ">
-          <div class="product-title mb-2">Батончик протеиновый</div>
-          <div class="product-price color-yellow d-flex ">15 TJS
-            <span class="product-old-price text-white "><s>22 c</s>
-            </span>
+      <div class="col-3 position-relative">
+        <div class="uslug-card product-card p-0 position-relative">
+          <img src="@/assets/images/woman.png">
+          <div class=" product-info ">
+            <div class="product-title mb-2">Батончик протеиновый</div>
+            <div class="product-price color-yellow d-flex ">15 TJS
+              <span class="product-old-price text-white "><s>22 c</s>
+              </span>
+            </div>
           </div>
         </div>
-        </div>
-    <div class="product-card-menu">
-    <div class="position-relative "><img class="p-2 edit-card-hover" src="@/assets/images/icons/menu.png">
-      <div class="col bg-black h-auto statistics m-0 p-4 position-absolute edit-card  ">
-        <div  class="d-flex align-items-center justify-content-between px-3 py-4">
-          <p class="m-0">Редактировать</p>
-          <img class="img-width-20 ms-5" src="@/assets/images/icons/pencel.png">
-        </div>
-        <div class="d-flex align-items-center justify-content-between px-3 py-4">
-          <p @click="toggleModal('.user-delete-modal')" class="m-0 blocked">Удалить</p>
-          <img class="img-width-20 ms-5" src="@/assets/images/icons/delete.png">
-        </div>
-      </div>
-    </div>
-    </div>
+           <div class="product-card-menu">
+              <div class="position-relative "><img class="p-2 edit-card-hover" src="@/assets/images/icons/menu.png">
+                <div class="col bg-black h-auto statistics m-0 p-4 position-absolute edit-card  ">
+                  <div  class="d-flex align-items-center justify-content-between px-3 py-4">
+                    <p class="m-0">Редактировать</p>
+                    <img class="img-width-20 ms-5" src="@/assets/images/icons/pencel.png">
+                  </div>
+                  <div class="d-flex align-items-center justify-content-between px-3 py-4">
+                    <p @click="toggleModal('.user-delete-modal')" class="m-0 blocked">Удалить</p>
+                    <img class="img-width-20 ms-5" src="@/assets/images/icons/delete.png">
+                  </div>
+                </div>
+              </div>
+          </div>
     </div>
     <div class="col-3 position-relative">
       <div class="product-card p-0 position-relative">
@@ -346,7 +345,6 @@ export default {
     },
     toggleButton(index,add) {
       const position = this.activeButtons.indexOf(index);
-      console.log(add)
       if (add==='+'){
         this.toggleModal('.add-money-modal')
       }else{
@@ -361,7 +359,6 @@ export default {
     },
     isActive(index) {
       return this.activeButtons.includes(index);
-
     },
     updateToggleModal() {
       if (this.modal==="auto"){

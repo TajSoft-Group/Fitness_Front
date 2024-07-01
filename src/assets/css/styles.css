@@ -192,7 +192,13 @@ input[type="checkbox"] {
     position: absolute;
     opacity: 0;
 }
-
+.uslug-card{
+    margin: 15px;
+    height: 200px;
+    border-radius: 22px;
+    overflow: hidden;
+    max-width: 340px;
+}
 .my-checkbox + label {
     margin-top: 30px;
     display: inline-flex;
@@ -1307,19 +1313,18 @@ header {
     align-content: center;
     justify-content: center;
 }
-.product-card {
-}
 .add-user-modal input[type="radio"] {
     height: 20px;
     background: #363636;
 }
-.product-card img {
+.product-card img, .uslug-card img {
     width: 100%;
     height: 100%;
     display: block;
     object-fit: cover;
 }
 .product-info {
+    width: 100%;
     padding: 15px;
     position: absolute;
     bottom: 0;
@@ -1448,7 +1453,7 @@ label.radio-label span {
     transition: var(--transition);
 }
 .result-true-title{
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
 }
 .result-true-body{
@@ -1456,13 +1461,30 @@ label.radio-label span {
     line-height: 18px;
     font-weight: 400;
 }
+.show-add{
+    right: -1000px;
+}
+.show-false{
+    right: 15px;
+}
 .added-user-message {
+    transition: all .3s;
+    z-index: 99;
     position: absolute;
-    right: 0;
     background-color: black;
     border-radius: 18px;
     padding: 0;
     width: auto;
+}
+.product-menu {
+    scrollbar-width: none;
+    cursor: grab;
+}
+.product-menu::-webkit-scrollbar {
+    display: none;
+}
+.product-menu:active {
+    cursor: grabbing;
 }
 .bounce-enter-active {
     animation: bounce-in 0.5s;
@@ -1484,6 +1506,7 @@ label.radio-label span {
 
 .relative {
     position: relative;
+    overflow: hidden;
 }
 
 .cards-modal .content {

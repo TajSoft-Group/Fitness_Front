@@ -52,9 +52,10 @@ const routes = [
     component: Clients
   },
   {
-    path: '/user-page',
+    path: '/user-page/:id',
     name: 'UserPage',
-    component: UserPages
+    component: UserPages,
+    props:true
   },
   {
     path: '/user-locked',
