@@ -214,23 +214,23 @@
       <div class="courses mt-3">
         <div class="form mt-3">
           <label for="sum">Сумма</label>
-          <input type="text" placeholder="Введите сумму" id="sum">
+          <input v-model="payCash" type="number" placeholder="Введите сумму"  id="sum">
         </div>
 
         <div class="info mt-5">
           <div class="d-flex justify-content-between">
             <div>На счету</div>
-            <div>500 TJS</div>
+            <div>{{user.card[0].balance}} TJS</div>
           </div>
           <div class="d-flex justify-content-between">
             <div>Бонусов</div>
-            <div>100</div>
+            <div>{{user.card[1].balance}}</div>
           </div>
         </div>
         <div class="cards-infos">
           <div class="d-flex justify-content-between add-user-buttons">
-            <button class="dont">Отмена</button>
-            <button class="submit" type="button">Пополнить</button>
+            <button @click="toggleModal('.add-money-modal')" class="dont">Отмена</button>
+            <button @click="payment(payCash)" class="submit" type="button">Пополнить</button>
           </div>
         </div>
       </div>
@@ -682,6 +682,7 @@
 <script>
 import get from "@/components/axios/get.js";
 import Patch from "@/components/axios/Patch.js";
+import posts from "@/components/axios/posts.js";
 
 export default {
   name: 'UserPage',
@@ -694,6 +695,7 @@ export default {
         password: '',
         birthday: '',
       },
+      payCash:'',
       User: '',
       uslugi: false,
       error: false,
@@ -750,6 +752,17 @@ export default {
           .then(response => {
             this.UserConfigModal=false
             console.log(this.User)
+            this.getInfo()
+          })
+          .catch(error => {
+            this.error = error;
+          });
+    },
+    payment(payCash){
+      const pay={ owner_id: this.id, payment: payCash, payment_type: "refill"}
+      posts('http://fitness.abdurazzoq.beget.tech/public/api/payment', pay)
+          .then(response => {
+            console.log('ok',response)
             this.getInfo()
           })
           .catch(error => {

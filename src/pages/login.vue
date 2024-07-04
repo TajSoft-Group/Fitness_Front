@@ -9,8 +9,7 @@
           <div class="sign-in">Войти</div>
           <div class="sign-in-bottom">Пожалуйста, введите логин и пароль</div>
           <div class="login">
-            <input  v-model="username" @input="validateInput" type="text" placeholder="00 000 00 00" id="phoneNumberInput" maxlength="10">
-            <span>+992</span>
+            <input  v-model="username" type="text" placeholder="" id="phoneNumberInput" >
             <span class="line"></span>
           </div>
           <div class="password">
@@ -35,7 +34,7 @@
     </div>
   </div>
   <div v-else>
-    <h1>вы авторезованны</h1>
+    <h1>вы авторизованы</h1>
     <h2><router-link to="/" class="color-yellow">главная страница</router-link></h2>
     <h3 @click="deleteCookie('token')" class="w-100 text-end px-4" style="cursor: pointer">Выйти</h3>
   </div>

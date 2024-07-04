@@ -19,6 +19,7 @@ import login from "@/pages/login.vue";
 import Lockers from "@/pages/lockers.vue";
 import finance from "@/pages/finance.vue";
 import Cash from "@/pages/Cash.vue";
+import courses from "@/pages/Courses/courses.vue";
 
 const routes = [
   {
@@ -83,9 +84,10 @@ const routes = [
     component: personal
   },
   {
-    path: '/trainer-page',
+    path: '/trainer-page/:id',
     name: 'TrainerPage',
-    component: TrainerPage
+    component: TrainerPage,
+    props:true
   },
   {
     path: '/product',
@@ -116,6 +118,11 @@ const routes = [
     path: '/cash',
     name: 'cash',
     component: Cash
+  },
+  {
+    path: '/courses',
+    name: 'courses',
+    component: courses
   },
 
 ];

@@ -54,7 +54,7 @@
     </div>
   </div>
 
-  <div class="container relative m">
+  <div class="container relative ">
     <div class="row">
       <div class="col">
         <div :class="{'search-input':searchActive.length>0}"  class="d-flex justify-content-between align-items-center search-block mt-4">
@@ -78,9 +78,9 @@
                 class="mt-3  py-2 me-3"
                 v-for="(item, index) in buttonsCategory"
                 :key="index"
-                :class="{'active': isActive(index), 'add-button': item === '+'}"
-                @click="toggleButton(index,item)"
-            >{{ item }}</button>
+                :class="{'active': isActive(index), 'add-button': item.name === '+'}"
+                @click="toggleButton(index,item.name)"
+            >{{ item.name }}</button>
         </div>
       </div>
     </div>
@@ -88,117 +88,13 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-3 position-relative">
-        <div class="uslug-card product-card p-0 position-relative">
-          <img src="@/assets/images/woman.png">
-          <div class=" product-info ">
-            <div class="product-title mb-2">Батончик протеиновый</div>
-            <div class="product-price color-yellow d-flex ">15 TJS
-              <span class="product-old-price text-white "><s>22 c</s>
-              </span>
-            </div>
-          </div>
-        </div>
-           <div class="product-card-menu">
-              <div class="position-relative "><img class="p-2 edit-card-hover" src="@/assets/images/icons/menu.png">
-                <div class="col bg-black h-auto statistics m-0 p-4 position-absolute edit-card  ">
-                  <div  class="d-flex align-items-center justify-content-between px-3 py-4">
-                    <p class="m-0">Редактировать</p>
-                    <img class="img-width-20 ms-5" src="@/assets/images/icons/pencel.png">
-                  </div>
-                  <div class="d-flex align-items-center justify-content-between px-3 py-4">
-                    <p @click="toggleModal('.user-delete-modal')" class="m-0 blocked">Удалить</p>
-                    <img class="img-width-20 ms-5" src="@/assets/images/icons/delete.png">
-                  </div>
-                </div>
-              </div>
-          </div>
-    </div>
-    <div class="col-3 position-relative">
+    <div v-for="product in productList" class="col-3 position-relative">
       <div class="product-card p-0 position-relative">
-        <img src="@/assets/images/woman.png">
+        <img :src="'http://fitness.abdurazzoq.beget.tech/public/'+product.img">
         <div class="product-info ">
-          <div class="product-title mb-2">Батончик протеиновый</div>
-          <div class="product-price color-yellow d-flex ">15 TJS
-            <span class="product-old-price text-white "><s>22 c</s>
-            </span>
-          </div>
-        </div>
-        </div>
-    <div class="product-card-menu">
-    <div class="position-relative "><img class="p-2 edit-card-hover" src="@/assets/images/icons/menu.png">
-      <div class="col bg-black h-auto statistics m-0 p-4 position-absolute edit-card  ">
-        <div @click="dllStatus=true , addStatusDelay('dllStatus')" class="d-flex align-items-center justify-content-between px-3 py-4">
-          <p class="m-0">Редактировать</p>
-          <img class="img-width-20 ms-5" src="@/assets/images/icons/pencel.png">
-        </div>
-        <div class="d-flex align-items-center justify-content-between px-3 py-4">
-          <p class="m-0 blocked">Удалить</p>
-          <img class="img-width-20 ms-5" src="@/assets/images/icons/delete.png">
-        </div>
-      </div>
-    </div>
-    </div>
-    </div>
-    <div class="col-3 position-relative">
-      <div class="product-card p-0 position-relative">
-        <img src="@/assets/images/woman.png">
-        <div class="product-info ">
-          <div class="product-title mb-2">Батончик протеиновый</div>
-          <div class="product-price color-yellow d-flex ">15 TJS
-            <span class="product-old-price text-white "><s>22 c</s>
-            </span>
-          </div>
-        </div>
-        </div>
-    <div class="product-card-menu">
-    <div class="position-relative "><img class="p-2 edit-card-hover" src="@/assets/images/icons/menu.png">
-      <div class="col bg-black h-auto statistics m-0 p-4 position-absolute edit-card  ">
-        <div @click="dllStatus=true , addStatusDelay('dllStatus')" class="d-flex align-items-center justify-content-between px-3 py-4">
-          <p class="m-0">Редактировать</p>
-          <img class="img-width-20 ms-5" src="@/assets/images/icons/pencel.png">
-        </div>
-        <div class="d-flex align-items-center justify-content-between px-3 py-4">
-          <p class="m-0 blocked">Удалить</p>
-          <img class="img-width-20 ms-5" src="@/assets/images/icons/delete.png">
-        </div>
-      </div>
-    </div>
-    </div>
-    </div>
-    <div class="col-3 position-relative">
-      <div class="product-card p-0 position-relative">
-        <img src="@/assets/images/woman.png">
-        <div class="product-info ">
-          <div class="product-title mb-2">Батончик протеиновый</div>
-          <div class="product-price color-yellow d-flex ">15 TJS
-            <span class="product-old-price text-white "><s>22 c</s>
-            </span>
-          </div>
-        </div>
-        </div>
-    <div class="product-card-menu">
-    <div class="position-relative "><img class="p-2 edit-card-hover" src="@/assets/images/icons/menu.png">
-      <div class="col bg-black h-auto statistics m-0 p-4 position-absolute edit-card  ">
-        <div class="d-flex align-items-center justify-content-between px-3 py-4">
-          <p class="m-0">Редактировать</p>
-          <img class="img-width-20 ms-5" src="@/assets/images/icons/pencel.png">
-        </div>
-        <div class="d-flex align-items-center justify-content-between px-3 py-4">
-          <p class="m-0 blocked">Удалить</p>
-          <img class="img-width-20 ms-5" src="@/assets/images/icons/delete.png">
-        </div>
-      </div>
-    </div>
-    </div>
-    </div>
-    <div class="col-3 position-relative">
-      <div class="product-card p-0 position-relative">
-        <img src="@/assets/images/woman.png">
-        <div class="product-info ">
-          <div class="product-title mb-2">Батончик протеиновый</div>
-          <div class="product-price color-yellow d-flex ">15 TJS
-            <span class="product-old-price text-white "><s>22 c</s>
+          <div class="product-title mb-2">{{product.title}}</div>
+          <div class="product-price color-yellow d-flex ">{{product.result}} TJS
+            <span class="product-old-price text-white "><s>{{product.price_one}} c</s>
             </span>
           </div>
         </div>
@@ -227,13 +123,13 @@
       <h5>ДОБАВИТЬ КАТЕГОРИЮ</h5>
       <div class="courses mt-3">
         <div class="form mt-3 ">
-          <label for="sum">Заголовок*</label>
-          <input v-model="AddCategory" type="text" placeholder="Введите название категории" id="sum">
+          <label for="Category">Заголовок*</label>
+          <input v-model="AddCategory" type="text" placeholder="Введите название категории" id="Category">
         </div>
         <div class="cards-infos">
           <div class="d-flex justify-content-between add-user-buttons">
-            <button class="dont">Отмена</button>
-            <button @click="addCategory" class="submit" type="button">Добавить</button>
+            <button @click="toggleModal('.add-money-modal')" class="dont">Отмена</button>
+            <button @click="addCategory('addCategory'), toggleModal('.add-money-modal')" class="submit" type="button">Добавить</button>
           </div>
         </div>
       </div>
@@ -244,23 +140,22 @@
     <div @click.stop  class="content">
       <div class="title">ДОБАВИТЬ ПРОДУКТ</div>
       <div class="form position-relative">
-        <label  for="surname">Заголовок**</label>
-        <input ref="inputText" type="text" placeholder="Введите заголовок" id="heading">
+        <label  for="surname">Заголовок*</label>
+        <input ref="inputText" type="text" placeholder="Введите название продукта" id="heading" v-model="formData.title">
       </div>
       <div class="form position-relative">
-        <label for="phone">Описание*</label>
-        <textarea ref="descriptionTextarea"  type="text"  placeholder="Введите текст" class="description"
-        ></textarea>
+        <label for="discount">Описание*</label>
+        <textarea ref="descriptionTextarea" id="discount" type="text"  placeholder="Введите текст" class="description" v-model="formData.description"></textarea>
       </div>
 
       <div class="form position-relative">
-        <label for="phone">Описание*</label>
+        <label for="phone">Выберите фото*</label>
         <div class="img-card row p-3 justify-content-between">
         <div v-for="(image, index) in images" :key="index" class="card-add-img m-2">
             <img :src="image" class="card-img-top" alt="Product Image">
         </div>
-          <div class="card-button align-content-center text-center m-2" @click="selectImage">
-            <button class="add-button">+</button>
+          <div v-show="images.length<6" class="card-button align-content-center text-center m-2" @click="selectImage">
+            <button type="button" class="add-button">+</button>
           </div>
         </div>
         <input type="file" ref="fileInput" @change="handleFileChange" style="display: none">
@@ -268,12 +163,12 @@
 
       <div class="form position-relative">
         <label for="name">Категория*</label>
-        <input  type="text" :value="picked" id="present">
+        <input  type="text" v-model="categoryActive" id="present">
         <img @click="presentMenu=!presentMenu" :class="{'rotate-90':presentMenu}" class="row-right-icon" src="@/assets/images/icons/row-right.png">
         <div :class="{'d-block':presentMenu}" class="menu-type-1 pt-4 px-4 ">
-          <div v-for="item in buttonsCategory" class="menu-type-2 d-flex justify-content-between align-items-center flex-row-reverse">
-            <input v-if=" item!=='Все' & item!=='+'"   @click="presentMenu=false" type="radio" :id="item" :value="item" v-model="picked" />
-            <label v-if=" item!=='Все' & item!=='+'" class="text-white" :for="item">{{item}}</label>
+          <div  v-for="item in buttonsCategory" class="menu-type-2 d-flex justify-content-between align-items-center flex-row-reverse" >
+            <input @click="categoryActive=item.name,formData.category_id=item.id, presentMenu=false" v-if=" item.name!=='Все' & item.name!=='+'" type="radio" :id="item.name" name="catcat" />
+            <label @click="categoryActive=item.name,formData.category_id=item.id, presentMenu=false" v-if=" item.name!=='Все' & item.name!=='+'" class="text-white" :for="item.name" >{{item.name}}</label>
           </div>
           <hr>
         </div>
@@ -281,27 +176,31 @@
 
       <div class="d-flex justify-content-between mt-3 text-center">
         <div  class=" form col position-relative">
-          <label  for="surname">Цена за шт.*</label>
-          <input type="text"  id="heading">
+          <label  for="price_one">Цена за шт.*</label>
+          <input type="text"  id="price_one" v-model="formData.price_one">
         </div>
         <div  class=" form col mx-2 position-relative">
-          <label  for="surname">Скидка</label>
-          <input type="text"  id="heading">
+          <label  for="discount">Скидка</label>
+          <input type="text"  id="discount" v-model="formData.discount">
         </div>
         <div  class=" form col position-relative">
-          <label  for="surname">Итого</label>
-          <input type="text"  id="heading">
+          <label  for="surname">Итого <span v-if="formData.price_one!==''">{{formData.result=formData.price_one-Math.round((formData.price_one/100) * formData.discount)}}</span></label>
+          <input type="text"  id="heading" v-model="formData.result">
         </div>
       </div>
       <div class="d-flex justify-content-between add-user-buttons">
         <button @click="addCardHoliday=false" class="dont">Отмена</button>
-        <button class="submit" type="button" @click="addCardHoliday=false, addStatus=true, StatusDelay('addStatus') ">Добавить</button>
+        <button class="submit" type="button" @click="addCategory('FormData') ">Добавить</button>
       </div>
     </div>
   </div>
 
 </template>
 <script>
+
+import gets from "@/components/axios/get.js";
+import form_Data from "@/components/axios/formData.js";
+import posts from "@/components/axios/posts.js";
 
 export default {
   data(){
@@ -315,10 +214,22 @@ export default {
       searchActive:'',
       addStatus:false,
       addCard:false,
-      buttonsCategory: ['Все', 'Батончики', 'Печенья', 'Коктейли', '+'],
+      buttonsCategory: [],
       activeButtons: [0],
+      productList:'',
       modal:'auto',
       modalSelector:'',
+      formData:{
+        title:'',
+        price_one:'',
+        discount:'',
+        description:'',
+        result:'',
+        category_id:''
+      },
+      imagesPost:[],
+      categoryActive:'Выберите категорию продукта',
+      categoryActive_id:''
     }
   },
   watch: {
@@ -327,22 +238,73 @@ export default {
     }
   },
   methods:{
+    Delay(target,t){
+      setTimeout(()=>{
+        this[target]=false
+        this.AddCategory=''
+      },t*1000)
+    },
     StatusDelay(i){
       setTimeout(()=>{
         this[i]=false
       },3000)
     },
-    addCategory(){
-      if (this.AddCategory!==''){
-        this.buttonsCategory.pop()
-        this.buttonsCategory.push(this.AddCategory)
-        this.buttonsCategory.push('+')
-        this.AddCategory=''
-        this.activeButtons
-        this.toggleModal('.add-money-modal')
-        this.activeButtons.push(-1)
+     getInfo (url,dataStore,id) {
+
+        gets(url)
+          .then(response => {
+            console.log(response)
+            this[dataStore]=[]
+            if (id===1){
+              this[dataStore].push({id : Date.now(),name:'Все'})
+              for (let Key in response.data) {
+                this[dataStore].push(response.data[Key])
+              }
+              this[dataStore].push({id : Date.now(),name:'+'})
+            }else if (id===2) {
+              this[dataStore]=response.data
+            }
+          })
+          .catch(error => {
+            console.log(error)
+            this.error = error;
+          });
+    },
+
+    // ///////////// //////////// => addCategory // => product
+    async addCategory(typeAdd) {
+      if (typeAdd==='addCategory'){
+        posts('http://fitness.abdurazzoq.beget.tech/public/category_create', {"name":this.AddCategory})
+            .then(response => {
+              console.log(this.AddCategory)
+              if (response.status===200){
+                this.addStatus=true
+                this.getInfo()
+                this.Delay('addStatus',5)
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+      }else if (typeAdd==='FormData'){
+        let FormData = this.formData
+        FormData.img=this.imagesPost[0]
+        try {
+          console.log(FormData)
+          const response = await form_Data('http://fitness.abdurazzoq.beget.tech/public/product_create', FormData);
+          console.log(response)
+          if (response.status === 200) {
+            this.addStatus = true;
+            await this.getInfo();
+            this.Delay('addStatus', 5);
+          } else {
+            console.error(`Запрос завершился с ошибкой: ${response.status}`);
+          }
+        } catch (error) {
+        }
       }
     },
+
     toggleButton(index,add) {
       const position = this.activeButtons.indexOf(index);
       if (add==='+'){
@@ -382,13 +344,17 @@ export default {
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
+          this.imagesPost.push(file)
           this.images.push(e.target.result);
         };
         reader.readAsDataURL(file);
       }
     },
-
   },
+  mounted() {
+    this.getInfo('http://fitness.abdurazzoq.beget.tech/public/category','buttonsCategory', 1)
+    this.getInfo('http://fitness.abdurazzoq.beget.tech/public/product/all','productList', 2)
+  }
 }
 
 </script>

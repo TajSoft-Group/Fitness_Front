@@ -30,7 +30,7 @@
         {{ day }}
       </span>
     </div>
-    <div class="buttons mx-4 mt-5">
+    <div class="buttons d-flex justify-content-between mt-5">
       <button @click="cancel" class="button-type-1 bg-gray">Отмена</button>
       <button @click="save" class="b bg-yellow button-type-1">Сохранить</button>
     </div>

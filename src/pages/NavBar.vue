@@ -29,8 +29,8 @@ export default {
               <li :class="{active: ActiveMenu === '/clients'|| ActiveMenu==='/user-page'}"><router-link to="/clients">Клиенты</router-link></li>
               <li :class="{active: ActiveMenu === '/personal' || ActiveMenu === '/trainer-page'}"><router-link to="/personal">Персонал</router-link></li>
               <li :class="{active: ActiveMenu === '/services'}"><router-link to="/services">Услуги</router-link></li>
-              <li :class="{active: ActiveMenu === '/services'}">
-                <router-link to="/services" class="trigger-hover">Курсы</router-link>
+              <li :class="{active: ActiveMenu === '/courses'}">
+                <router-link to="/courses" class="trigger-hover">Курсы</router-link>
                 <ul class="hidden-hover bg-gray p-0 position-absolute">
                   <li :class="{active: ActiveMenu === '/individual-courses'}"><router-link to="/individual-courses" class="m-3">Курсы индивидуальные</router-link></li>
                   <li :class="{active: ActiveMenu === '/reviews-page'}"><router-link to="/reviews-page" class="m-3">Курсы индивидуальные Отзывы</router-link></li>

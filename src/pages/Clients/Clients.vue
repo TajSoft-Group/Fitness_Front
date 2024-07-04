@@ -15,7 +15,7 @@
 
       <div class="col">
         <div class="d-flex justify-content-between title-block align-items-center">
-          <div @click="addStatus=!addStatus" class="page-title">wwww</div>
+          <div @click="addStatus=!addStatus" class="page-title">Главная</div>
           <div class="user-add-btn d-flex justify-content-center align-items-center">
             <button @click="addCard=true" class="add-user-btn">Добавить</button>
           </div>
@@ -96,7 +96,7 @@
           <div class="d-flex justify-content-between">
             <div class="card-left">
               <div class="card-title">Новые пользователи</div>
-              <div class="card-quantity">0</div>
+              <div class="card-quantity"></div>
               <div class="card-statistics d-flex align-items-center">
                 <div class="d-flex percentage align-items-center justify-content-center">
                   <div>
@@ -131,28 +131,28 @@
           </div>
         </div>
       </div>
+
       <div class="col-4">
-        <div class="">
-          <div class="bg-gray card-block ">
-            <div class="d-flex justify-content-between">
-              <div class="card-left">
-                <div class="card-title">Курсы индивидуальные</div>
-                <div class="card-quantity">0</div>
-                <div class="card-statistics d-flex align-items-center">
-                  <div class="d-flex percentage statistics-down align-items-center justify-content-center">
-                    <div>
-                      <img class="arrow-down" height="12" src="@/assets/images/icons/arrow-up.png">
-                      <img class="d-none" height="12" src="@/assets/images/icons/arrow-up.png">
-                    </div>
-                    <div class="div">10%</div>
+        <div class="bg-gray card-block ">
+          <div class="d-flex justify-content-between">
+            <div class="card-left">
+              <div class="fs-5 card-title">Курсы индивидуальные</div>
+              <div class="p-0 m-0  card-quantity">101</div>
+              <div class="card-statistics d-flex align-items-center">
+                <div class="p-0  m-0 d-flex percentage statistics-up align-items-center justify-content-center">
+                  <div>
+                    <img class="arrow-down d-none" height="12" src="@/assets/images/icons/arrow-up.png">
+                    <img height="12" src="@/assets/images/icons/arrow-up.png">
                   </div>
-                  <div>от предыдущего периода</div>
+                  <div class="div">10%</div>
                 </div>
+                <div>от предыдущего периода</div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <div class="col-4">
         <div class="">
           <div class="bg-gray card-block ">
@@ -309,7 +309,7 @@
             </tbody>
             <tbody v-if="loading">
             <tr>
-              <td class="color-yellow w-100 d-flex justify-content-center">loading...</td>
+              <td class="color-yellow w-100 d-flex justify-content-center">Загрузка...</td>
             </tr>
             </tbody>
           </table>
@@ -385,11 +385,13 @@ export default {
     },
 
     submitForm() {
-      console.log(this.formData);
+      this.formData.status='active'
       posts('http://fitness.abdurazzoq.beget.tech/public/user_register', {...this.formData})
           .then(response => {
+            console.log(this.formData)
             if (response.status===200){
               this.addStatus=true
+              this.getInfo()
               this.Delay('addStatus',5)
             }
           })

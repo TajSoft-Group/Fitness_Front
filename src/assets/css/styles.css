@@ -399,9 +399,10 @@ header {
 
 .card-block {
     border-radius: 25px;
-    padding: 22px 60px 24px 30px;
+    padding: 22px 20px 24px 20px;
     align-items: end;
     margin-top: 34px;
+    height: 200px;
 }
 
 .row>* {
@@ -1261,6 +1262,12 @@ header {
 .user-page-card-bottom .bottom .sales {
     font-size: 20px;
 }
+.color-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+}
 
 .user-page-card-bottom .green {
     color: var(--green);
@@ -1318,17 +1325,19 @@ header {
     background: #363636;
 }
 .product-card img, .uslug-card img {
+    cursor: pointer;
     width: 100%;
     height: 100%;
     display: block;
     object-fit: cover;
 }
 .product-info {
+    cursor: pointer;
     width: 100%;
     padding: 15px;
     position: absolute;
     bottom: 0;
-    background: linear-gradient(180deg, rgb(0 0 0 / 1%) 20%, rgb(0 0 0 / 58%) 40%, rgba(0, 0, 0, 1) 69%);
+    background: linear-gradient(180deg, rgb(0 0 0 / -9%) 6%, rgb(0 0 0 / 58%) 40%, rgba(0, 0, 0, 1) 96%);
 }
 .product-title {
     font-weight: 700;
@@ -1787,7 +1796,7 @@ a{
     height: 63px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid #F1972E;
+    border: 3px solid ;
     margin-right: 15px;
 }
 
@@ -1883,7 +1892,7 @@ a{
     right: 0;
 }
 .description{
-    height: 200px;
+    height: 110px;
 }
 .contacts-edit {
     left: 120px;

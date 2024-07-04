@@ -1,38 +1,135 @@
 
-<script setup>
-import DataPicker from "@/pages/analytics/DataPicker.vue";
-import ButtonSorting from "@/UI/ButtonSorting.vue";
-</script>
-
 <script >
+import ButtonSorting from "@/UI/ButtonSorting.vue";
+import posts from "@/components/axios/posts.js";
+
 export default {
+  components:{ButtonSorting},
   data(){
     return{
-      statusPicker:false
+      formData: {
+        name:"",
+        surname:"",
+        username:"",
+        status:"active",
+        age:"",
+        weight:"",
+        height:"",
+        gender:"",
+        birthday:"",
+        mobile_id:"",
+        password: ""
+      },
+      statusPicker:false,
+      addStatus:false,
+      addCard:false,
+      images: [],
     }
   },
+  methods:{
+    selectImage() {
+      this.$refs.fileInput.click();
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.images.push(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    submitForm() {
+      this.formData.status='active'
+      posts('http://fitness.abdurazzoq.beget.tech/public/user_register', {...this.formData})
+          .then(response => {
+            console.log(this.formData)
+            if (response.status===200){
+              this.addStatus=true
+              this.getInfo()
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    },
+  }
   }
 </script>
 
 
 <template>
-  <div v-if="statusPicker"  class="row statusPicker">
-    <div @click.stop="statusPicker=true" class="col mt-5 d-flex justify-content-center">
-      <DataPicker />
-    </div>
-  </div>
+
   <div class="container">
-    <div class="row">
+    <div class="row relative">
+      <div :class="[addStatus ? 'show-false' : 'show-add']"  class="added-user-message">
+        <div class="result-true">
+          <div class="result-true-card d-flex align-items-center">
+            <img class="m-4 img-width-40" src="@/assets/images/icons/check_add.png">
+            <div class="result-true-content ">
+              <div class="result-true-title">Пользователь <span class="color-yellow">{{formData.name+' '+formData.surname}}</span> добавлен</div>
+              <div class="result-true-body mt-2">Новый пользователь успешно добавлен в список клиентов</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="col">
         <div class="d-flex justify-content-between title-block align-items-center">
-          <div class="page-title "><router-link to="/"><img class="px-3 pb-2" src="@/assets/images/icons/Stroke.png">Услуги</router-link></div>
-          <div class="filter-icon d-flex justify-content-center align-items-center">
-            <img height="29" width="37" src="@/assets/images/icons/filter.png" alt="user">
+          <div @click="addStatus=!addStatus" class="page-title">Услуги</div>
+          <div class="user-add-btn d-flex justify-content-center align-items-center">
+            <button @click="addCard=true" class="add-user-btn">Добавить</button>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <div @click="addCard=!addCard" v-if="addCard" class="add-user-modal d-flex justify-content-center align-items-center ">
+    <div @click.stop  class="content">
+      <div class="title">СОЗДАТЬ КУРС</div>
+      <form class="form" @submit.prevent="submitForm(), addCard=false">
+        <label for="name">Название курса</label>
+        <input type="text" placeholder="Введите название услуги" id="name" v-model="formData.name">
+
+        <label for="surname">Цена за посещение</label>
+        <input type="text" placeholder="Введите цену за одно посещение" id="surname" v-model="formData.surname">
+
+        <div class="menu-type-2 d-flex justify-content-between pt-3 mt-3">
+          <div class="form-recipients">
+            <input type="radio" id="man" name="gender" value="1" v-model="formData.gender">
+            <label for="man">Индивидуальные</label>
+          </div>
+          <div class="form-recipients">
+            <input type="radio" id="woman" name="gender" value="2" v-model="formData.gender">
+            <label for="woman">Групповые</label>
+          </div>
+        </div>
+        <div class="form position-relative">
+          <label for="phone"></label>
+          <div class="img-card row p-3 justify-content-between">
+            <div v-for="(image, index) in images" :key="index" class="card-add-img m-2">
+              <img :src="image" class="card-img-top" alt="Product Image">
+            </div>
+            <div v-show="images.length<1" class="card-button align-content-center text-center m-2" @click="selectImage">
+              <button  class="add-button">+</button>
+            </div>
+          </div>
+          <input type="file" ref="fileInput" @change="handleFileChange" style="display: none">
+        </div>
+
+        <label for="password">Пароль*</label>
+        <input type="text" placeholder="пароль" id="password" v-model="formData.password">
+
+        <div class="d-flex justify-content-between add-user-buttons">
+          <button @click="addCard=false" class="dont" type="button">Отмена</button>
+          <button class="submit" type="submit">Добавить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div class="container">
     <div class="row">
       <div class="col-6">
@@ -247,5 +344,16 @@ export default {
 </template>
 
 <style scoped>
-
+button.active {
+  background-color: #c3ff00;
+  color: #333;
+}
+button.add-button {
+  background: url("@/assets/images/icons/add.png") center;
+  color: #333;
+  border-radius: 50%;
+  min-width: 43px;
+  min-height: 43px;
+  padding: 0;
+}
 </style>

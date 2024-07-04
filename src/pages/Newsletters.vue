@@ -589,7 +589,6 @@ export default {
       const textAfterCursor = text.substring(cursorPosition);
 
       refObject.value = textBeforeCursor + ' $имя$ ' + textAfterCursor;
-      console.log(text)
     },
     addStatusDelay(i){
     setTimeout(()=>{

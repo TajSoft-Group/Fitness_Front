@@ -98,27 +98,6 @@
               <td>-5%</td>
               <td>15 сом<br></td>
             </tr>
-            <tr>
-              <td class="col-2 d-flex ">1.<div class="text-start ms-2">Печенье протеиновое</div></td>
-              <td><input class="bg-gray w-25 border-1px text-white" type="number" min="1" max="99" oninput="this.value = this.value.slice(0, 2)"  ></td>
-              <td>18 сом</td>
-              <td>-5%</td>
-              <td>15 сом<br></td>
-            </tr>
-            <tr>
-              <td class="col-2 d-flex ">1.<div class="text-start ms-2">Индивидуальный курс</div></td>
-              <td></td>
-              <td>150 сом</td>
-              <td></td>
-              <td>150 сом<br></td>
-            </tr>
-            <tr>
-              <td class="col-2 d-flex ">1.<div class="text-start ms-2">Абонемент</div></td>
-              <td><input class="bg-gray w-25 border-1px text-white" type="number" min="1" max="99" oninput="this.value = this.value.slice(0, 2)"  ></td>
-              <td>150 сом</td>
-              <td></td>
-              <td>150 сом<br></td>
-            </tr>
             </tbody>
           </table>
           <div class="d-flex justify-content-between">
@@ -133,10 +112,10 @@
           <div class="col product-catalog ">
             <button
                 class="mt-3  py-2 me-3"
-                v-for="(item, index) in buttonsCategory"
+                v-for="(item, index) in Cat1"
                 :key="index"
-                :class="{'active': isActive(index), 'add-button': item === '+'}"
-                @click="toggleButton(index)"
+                :class="{'active': isActive(index, 'But1'), 'add-button': item === '+'}"
+                @click="toggleButton(index, 'But1')"
             >{{ item }}</button>
           </div>
         </div>
@@ -167,10 +146,10 @@
           <div class="col product-catalog ">
             <button
                 class="mt-3  py-2 me-3"
-                v-for="(item, index) in buttonsCategory"
+                v-for="(item, index) in Cat2"
                 :key="index"
-                :class="{'active': isActive(index), 'add-button': item === '+'}"
-                @click="toggleButton(index)"
+                :class="{'active': isActive(index,'But2'), 'add-button': item === '+'}"
+                @click="toggleButton(index,'But2')"
             >{{ item }}</button>
           </div>
         </div>
@@ -196,65 +175,27 @@
           <div class="col product-catalog ">
             <button
                 class="mt-3  py-2 me-3"
-                v-for="(item, index) in buttonsCategory"
+                v-for="(item, index) in Cat3"
                 :key="index"
-                :class="{'active': isActive(index), 'add-button': item === '+'}"
-                @click="toggleButton(index)"
+                :class="{'active': isActive(index, 'But3'), 'add-button': item === '+'}"
+                @click="toggleButton(index,'But3', )"
             >{{ item }}</button>
           </div>
         </div>
         <div class="row">
+
           <h3 class="pt-3">ПРОДУКТЫ</h3>
-          <div class=" product-card p-0 position-relative">
+          <div v-for="(item) in productList" @click="addProduct(item)" class=" product-card p-0 position-relative">
             <img src="@/assets/images/woman.png">
             <div class="product-info ">
-              <div class="product-title mb-2">Батончик протеиновый</div>
-              <div class="product-price color-yellow d-flex ">15 TJS
-                <span class="product-old-price text-white "><s>22 c</s>
+              <div class="product-title mb-2">{{ item.title }}</div>
+              <div class="product-price color-yellow d-flex ">{{ item.price }} TJS
+                <span class="product-old-price text-white "><s>{{ item.oldPrice }} c</s>
               </span>
               </div>
             </div>
           </div>
-          <div class="product-card p-0 position-relative">
-            <img src="@/assets/images/woman.png">
-            <div class="product-info ">
-              <div class="product-title mb-2">Батончик протеиновый</div>
-              <div class="product-price color-yellow d-flex ">15 TJS
-                <span class="product-old-price text-white "><s>22 c</s>
-              </span>
-              </div>
-            </div>
-          </div>
-          <div class="product-card p-0 position-relative">
-            <img src="@/assets/images/woman.png">
-            <div class="product-info ">
-              <div class="product-title mb-2">Батончик протеиновый</div>
-              <div class="product-price color-yellow d-flex ">15 TJS
-                <span class="product-old-price text-white "><s>22 c</s>
-              </span>
-              </div>
-            </div>
-          </div>
-          <div class="product-card p-0 position-relative">
-            <img src="@/assets/images/woman.png">
-            <div class="product-info ">
-              <div class="product-title mb-2">Батончик протеиновый</div>
-              <div class="product-price color-yellow d-flex ">15 TJS
-                <span class="product-old-price text-white "><s>22 c</s>
-              </span>
-              </div>
-            </div>
-          </div>
-          <div class="product-card p-0 position-relative">
-            <img src="@/assets/images/woman.png">
-            <div class="product-info ">
-              <div class="product-title mb-2">Батончик протеиновый</div>
-              <div class="product-price color-yellow d-flex ">15 TJS
-                <span class="product-old-price text-white "><s>22 c</s>
-              </span>
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>
@@ -266,25 +207,35 @@
 export default {
   data(){
     return{
+      productList:[{title:'Батончик протеиновый',price:15, oldPrice:22  },{title:'ШЕЙК протеиновЫЙ', price:25, oldPrice:22  },{title:'печенье протеиновое', price:35, oldPrice:22  }],
       searchActive:'',
-      buttonsCategory: ['Все', 'Батончики', 'Печенья', 'Коктейли'],
-      activeButtons: [0],
+      Cat1: ['Все', 'Абонемент', 'Йога', 'Массаж', 'Солярий'],
+      Cat2: ['Все', 'Индивидуальные', 'Групповые'],
+      Cat3: ['Все', 'Батончики', 'Печенья', 'Коктейли'],
+      But1: [0],
+      But2: [0],
+      But3: [0],
+      purchases:[]
     }
   },
   methods:{
-    toggleButton(index) {
-      const position = this.activeButtons.indexOf(index);
+    addProduct(product){
+      this.purchases.push(product)
+      console.log(this.purchases)
+    },
+    toggleButton(index, but) {
+      const position = this[but].indexOf(index);
         if (position !== -1) {
-          this.activeButtons.splice(position, 1);
+          this[but].splice(position, 1);
         }
         else {
-          this.activeButtons.push(index);
+          this[but].push(index);
         }
     },
-    isActive(index) {
-      return this.activeButtons.includes(index);
+    isActive(index, but) {
+      return this[but].includes(index);
     },
-  }
+  },
 }
 </script>
 

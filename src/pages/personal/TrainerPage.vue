@@ -1,4 +1,5 @@
 <template>
+  <div v-for="user in DataUsers">
   <div class="container">
     <div class="row">
       <div class="col">
@@ -47,7 +48,7 @@
             </button>
           </div>
           <div class="title-trainer">
-            <div class="teacher-img img-width-200 border-9px border-color-yellow"><img src="/src/assets/images/woman.png" alt=""></div>
+            <div class="teacher-img img-width-200 border-9px " :style="{borderColor:user.color}"><img :src="'http://fitness.abdurazzoq.beget.tech/public/'+user.avatar" alt=""></div>
           </div>
         </div>
       </div>
@@ -59,7 +60,7 @@
       <div class="col">
         <div class="statistics position-relative bg-gray h-auto py-4">
             <div class="trainer-info-title d-flex justify-content-between align-items-center">
-              <div class="trainer-name color-yellow ">РАХИМА ГАФУРОВА <img class="mx-3 " src="@/assets/images/icons/pencel.png"></div>
+              <div class="trainer-name color-yellow ">{{ user.name+' '+user.surname }} <img class="mx-3 " src="@/assets/images/icons/pencel.png"></div>
               <img class="w-auto px-3 trainer-menu" src="@/assets/images/icons/menu-2.png">
               <div class="trainer-status statistics bg-black h-auto position-absolute w-25 ">
                 <div>На работе</div>
@@ -69,7 +70,7 @@
             </div>
             <div class="trainer-info-body d-flex justify-content-between mt-3 ">
               <div class="trainer-info">Тренер по кардио нагрузкам<br>На работе</div>
-              <div class="color-yellow align-content-end">+992 92 000 00 00</div>
+              <div class="color-yellow align-content-end">{{user.phone_number}}</div>
             </div>
         </div>
       </div>
@@ -84,7 +85,7 @@
           <div class="d-flex justify-content-between">
             <div class="card-left">
               <div class="card-title">Количество курсов</div>
-              <div class="card-quantity">18</div>
+              <div class="card-quantity">{{user.courses_completed}}</div>
               <div class="card-statistics d-flex align-items-center">
                 <div class="d-flex percentage align-items-center justify-content-center">
                   <div>
@@ -135,7 +136,7 @@
       <div class="col-3">
         <div class="user-page-card h3  p-4">
           <div class="title">Опыт работы</div>
-          <div class="desc-number ">2 <span class="fs-4">года</span></div>
+          <div class="desc-number ">{{user.work_experience}} <span class="fs-4">года</span></div>
         </div>
       </div>
       <div class="col-3">
@@ -544,19 +545,43 @@
 </div>
 
 
-
+  </div>
 </template>
 
 <script>
 import ButtonSorting from "@/UI/ButtonSorting.vue";
+import gets from "@/components/axios/get.js"
 
 export default {
   components: {ButtonSorting},
-  setup() {
+  data() {
     return {
-
+      DataUsers:''
       }
-    }
+    },
+  methods: {
+    getInfo() {
+      gets(`http://fitness.abdurazzoq.beget.tech/public/api/coach/${this.id}`)
+          .then(response => {
+            this.DataUsers=response.data
+            console.log(this.DataUsers)
+          })
+          .catch(error => {
+            console.log(error)
+            this.error = error;
+          });
+    },
+  },
+  mounted() {
+    this.getInfo()
+  },
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+
+  },
 }
 </script>
 
