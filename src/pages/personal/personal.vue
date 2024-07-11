@@ -113,8 +113,8 @@
             </div>
         </div>
         <div class="d-flex justify-content-between add-user-buttons">
-          <button @click="addCard=false" class="dont" type="button">Отмена</button>
-          <button class="submit" type="submit">Добавить</button>
+          <button @click="toggleModal('.add-user-modal')" class="dont" type="button">Отмена</button>
+          <button @click="toggleModal('.add-user-modal')" class="submit" type="submit">Добавить</button>
         </div>
       </form>
     </div>
@@ -297,7 +297,8 @@ export default {
       modal:'auto',
       DataUsers:'',
       modalSelector:'',
-      activeColor:'12'
+      activeColor:'12',
+      loadData:false
     }
   },
   methods:{

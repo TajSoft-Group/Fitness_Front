@@ -19,17 +19,6 @@
         </div>
       </div>
 
-      <transition name="bounce" v-if="addStatus" class="added-user-message">
-        <div class="result-true">
-          <div class="result-true-card d-flex align-items-center">
-            <img class="m-4 img-width-40" src="@/assets/images/icons/check_add.png">
-            <div class="result-true-content ">
-              <div class="result-true-title">Пользователь добавлен</div>
-              <div class="result-true-body mt-2">Новый пользователь успешно добавлен в список клиентов</div>
-            </div>
-          </div>
-        </div>
-      </transition>
 
       <transition v-if="dllStatus"  name="bounce"   class="z-3 added-user-message ">
         <div class="result-true del-result">
@@ -190,7 +179,7 @@
       </div>
       <div class="d-flex justify-content-between add-user-buttons">
         <button @click="addCardHoliday=false" class="dont">Отмена</button>
-        <button class="submit" type="button" @click="addCategory('FormData') ">Добавить</button>
+        <button class="submit" type="button" @click="addCategory('FormData'),addCardHoliday=false ">Добавить</button>
       </div>
     </div>
   </div>
@@ -212,7 +201,7 @@ export default {
       picked:'',
       AddCategory:'',
       searchActive:'',
-      addStatus:false,
+      addStatus:true,
       addCard:false,
       buttonsCategory: [],
       activeButtons: [0],
@@ -279,7 +268,8 @@ export default {
               console.log(this.AddCategory)
               if (response.status===200){
                 this.addStatus=true
-                this.getInfo()
+                this.getInfo('http://fitness.abdurazzoq.beget.tech/public/category','buttonsCategory', 1)
+                this.getInfo('http://fitness.abdurazzoq.beget.tech/public/product/all','productList', 2)
                 this.Delay('addStatus',5)
               }
             })
@@ -295,7 +285,9 @@ export default {
           console.log(response)
           if (response.status === 200) {
             this.addStatus = true;
-            await this.getInfo();
+            await this.getInfo('http://fitness.abdurazzoq.beget.tech/public/category','buttonsCategory', 1)
+            await this.getInfo('http://fitness.abdurazzoq.beget.tech/public/product/all','productList', 2)
+            await this.Delay('addStatus',5)
             this.Delay('addStatus', 5);
           } else {
             console.error(`Запрос завершился с ошибкой: ${response.status}`);

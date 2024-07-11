@@ -17,17 +17,17 @@
         <div class="d-flex justify-content-between title-block align-items-center">
           <div @click="addStatus=!addStatus" class="page-title">Курсы</div>
           <div class="user-add-btn d-flex justify-content-center align-items-center">
-            <button @click="addCard=true" class="add-user-btn">Добавить</button>
+            <button @click="toggleModal('.add-curs')" class="add-user-btn">Добавить</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div @click="addCard=!addCard" v-if="addCard" class="add-user-modal d-flex justify-content-center align-items-center ">
+  <div @click="toggleModal('.add-curs')"  class="add-user-modal add-curs d-none d-flex justify-content-center align-items-center ">
     <div @click.stop  class="content">
       <div class="title">СОЗДАТЬ КУРС</div>
-      <form class="form" @submit.prevent="submitForm(), addCard=false">
+      <form class="form" @submit.prevent="submitForm(),toggleModal('.add-curs')">
 
         <label for="name" class="m-0 p-0 mt-4">ТИП КУРССА</label>
         <div class="menu-type-2 d-flex justify-content-between ">
@@ -81,7 +81,42 @@
         <label for="create_date">начало курса*</label>
         <input type="date" placeholder="1994-11-23" id="create_date" v-model="formData.create_date">
         <div class="d-flex justify-content-between add-user-buttons">
-          <button @click="addCard=false" class="dont" type="button">Отмена</button>
+          <button @click="toggleModal('.add-curs')" class="dont" type="button">Отмена</button>
+          <button class="submit" type="submit">Добавить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div @click="toggleModal('.pay-curs')" class="add-user-modal pay-curs d-none d-flex justify-content-center align-items-center ">
+    <div @click.stop  class="content">
+      <div class="title">оплата курса </div>
+      <form class="form" @submit.prevent="coursesFn(), toggleModal('.pay-curs')">
+
+        <label for="title">тип курса</label>
+        <input type="text" placeholder="Введите название курса" id="title" v-model="addCurs.type_courses">
+        <label for="title">название курса</label>
+        <input type="text" placeholder="Введите название курса" id="title" v-model="addCurs.title">
+        <div class="form position-relative">
+          <label for="phone">Описание*</label>
+          <textarea  type="text" v-model="addCurs.description"  placeholder="Введите текст" class="description"
+          ></textarea>
+        </div>
+        <div class="position-relative">
+        <label  for="name">выберите пользователя</label>
+        <input type="text" id="present" v-model="activeTR">
+        <img @click="presentMenu=!presentMenu" :class="{'rotate-90':presentMenu}" class="row-right-icon" src="@/assets/images/icons/row-right.png">
+        <div :class="{'d-block':presentMenu}" class="menu-type-1 pt-4 px-4">
+          <h1>Все пользователи</h1>
+          <div role="button"  v-for="treners in userData" @click="cursData.user_id=treners.id,presentMenu=false,presentMenu=false,activeTR=treners.name+' '+treners.surname" class="statistics h-auto m-0 p-2"><hr class="m-0 p-1">
+            {{treners.name+' '+ treners.surname}}
+          </div>
+        </div>
+        </div>
+        <label for="title">количество</label>
+        <input type="text" placeholder="Введите количество" id="title" v-model="cursData.count">
+        <div class="d-flex justify-content-between add-user-buttons">
+          <button @click="toggleModal('.pay-curs')" class="dont" type="button">Отмена</button>
           <button class="submit" type="submit">Добавить</button>
         </div>
       </form>
@@ -92,7 +127,7 @@
     <div class="row">
       <div class="col">
         <div class="row">
-          <div v-for="curs in cursList" class="uslug-card  p-0 position-relative">
+          <div @click="toggleModal('.pay-curs'),addCurs=curs,cursData.courses_id=curs.id" v-for="curs in cursList" class="uslug-card  p-0 position-relative">
             <div class="position-absolute bg-red top-0 right border-radius-25 px-3 me-3 mt-2">-{{curs.discount+'%'}}</div>
             <img :src="'http://fitness.abdurazzoq.beget.tech/public/'+curs.img">
             <div class="product-info ">
@@ -184,6 +219,7 @@ export default {
       idTr:'',
       images: [],
       imagesPost: [],
+      addCurs:'',
       formData: {
         title:"",
         type_courses:"",
@@ -201,16 +237,35 @@ export default {
         user_count:"1",
       },
       DataUsers: null,
+      userData: null,
       cursList: '',
+      cursData:{
+        user_id:'',
+        courses_id:'',
+        count:''
+      },
+      modal:'auto',
       error: null,
       loading: true,
       searchActive:'',
       addStatus:false,
       addCard:false,
+      modalSelector:'',
       presentMenu:false
     }
   },
   methods:{
+    coursesFn(){
+      posts('http://fitness.abdurazzoq.beget.tech/public/enroll/courses', {...this.cursData})
+          .then(response => {
+            this.Delay('loading', 1)
+            console.log(this.cursData)
+          })
+          .catch(error => {
+            this.error = error;
+            this.Delay('loading', 1)
+          });
+    },
     selectImage() {
       this.$refs.fileInput.click();
     },
@@ -225,11 +280,21 @@ export default {
         reader.readAsDataURL(file);
       }
     },
+    getInfoUsers(){
+      posts('http://fitness.abdurazzoq.beget.tech/public/users', {"form": "0", "to": '21'})
+          .then(response => {
+            this.userData = response.data.users;
+            this.Delay('loading', 1)
+          })
+          .catch(error => {
+            this.error = error;
+            this.Delay('loading', 1)
+          });
+    },
     getInfo (url,dataStore,id) {
 
       gets(url)
           .then(response => {
-            console.log(response)
             this[dataStore]=[]
             if (id===1){
               this[dataStore]=response.data.data
@@ -248,14 +313,13 @@ export default {
       FormData.img=this.imagesPost
       FormData.coach_id=this.idTr
       try {
-        console.log(FormData)
         const response = await form_Data('http://fitness.abdurazzoq.beget.tech/api/courses/create', FormData);
-        console.log(response);
-
         if (response.status === 200) {
           this.addStatus = true;
-          await this.getInfo();
-          this.Delay('addStatus', 5);
+          await this.getInfo('http://fitness.abdurazzoq.beget.tech/public/api/coach/all','DataUsers', 1)
+          await this.getInfo('http://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
+          await this.getInfoUsers()
+          this.Delay('addStatus', 7);
         } else {
           console.error(`Запрос завершился с ошибкой: ${response.status}`);
         }
@@ -272,13 +336,32 @@ export default {
       for (let key in data){
         data[key]=''
       }
-    }
+    },
+    toggleModal(modalSelector) {
+      this.modal = this.modal === 'auto' ? 'hidden' : 'auto';
+      this.modalSelector=modalSelector
+    },
+    updateToggleModal() {
+      if (this.modal==="auto"){
+        document.querySelector(this.modalSelector).classList.add("d-none")
+        document.body.style.overflow=this.modal
+      }else{
+        document.body.style.overflow=this.modal
+        document.querySelector(this.modalSelector).classList.remove("d-none")
+      }
+
+    },
   },
   mounted() {
     this.getInfo('http://fitness.abdurazzoq.beget.tech/public/api/coach/all','DataUsers', 1)
     this.getInfo('http://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
-  }
-
+    this.getInfoUsers()
+  },
+  watch: {
+    modal() {
+      this.updateToggleModal();
+    }
+  },
 }
 
 </script>

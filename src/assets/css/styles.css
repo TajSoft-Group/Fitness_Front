@@ -1479,7 +1479,7 @@ label.radio-label span {
 .added-user-message {
     transition: all .3s;
     z-index: 99;
-    position: absolute;
+    position: fixed;
     background-color: black;
     border-radius: 18px;
     padding: 0;

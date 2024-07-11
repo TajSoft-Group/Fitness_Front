@@ -15,7 +15,7 @@
 
       <div class="col">
         <div class="d-flex justify-content-between title-block align-items-center">
-          <div @click="addStatus=!addStatus" class="page-title">Главная</div>
+          <div class="page-title">Клиенты</div>
           <div class="user-add-btn d-flex justify-content-center align-items-center">
             <button @click="addCard=true" class="add-user-btn">Добавить</button>
           </div>
@@ -96,7 +96,7 @@
           <div class="d-flex justify-content-between">
             <div class="card-left">
               <div class="card-title">Новые пользователи</div>
-              <div class="card-quantity"></div>
+              <div class="card-quantity">123</div>
               <div class="card-statistics d-flex align-items-center">
                 <div class="d-flex percentage align-items-center justify-content-center">
                   <div>
@@ -133,26 +133,27 @@
       </div>
 
       <div class="col-4">
-        <div class="bg-gray card-block ">
-          <div class="d-flex justify-content-between">
-            <div class="card-left">
-              <div class="fs-5 card-title">Курсы индивидуальные</div>
-              <div class="p-0 m-0  card-quantity">101</div>
-              <div class="card-statistics d-flex align-items-center">
-                <div class="p-0  m-0 d-flex percentage statistics-up align-items-center justify-content-center">
-                  <div>
-                    <img class="arrow-down d-none" height="12" src="@/assets/images/icons/arrow-up.png">
-                    <img height="12" src="@/assets/images/icons/arrow-up.png">
+        <div class="">
+          <div class="bg-gray card-block ">
+            <div class="d-flex justify-content-between">
+              <div class="card-left">
+                <div class="card-title">Курсы индивидуальные</div>
+                <div class="card-quantity">101</div>
+                <div class="card-statistics d-flex align-items-center">
+                  <div class="d-flex percentage align-items-center justify-content-center">
+                    <div>
+                      <img class="arrow-down" height="12" src="@/assets/images/icons/arrow-up.png">
+                      <img height="12" src="@/assets/images/icons/arrow-up.png">
+                    </div>
+                    <div class="div">0%</div>
                   </div>
-                  <div class="div">10%</div>
+                  <div>от предыдущего периода</div>
                 </div>
-                <div>от предыдущего периода</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
       <div class="col-4">
         <div class="">
           <div class="bg-gray card-block ">
@@ -409,7 +410,17 @@ export default {
       for (let key in data){
         data[key]=''
       }
-    }
+    },
+    updateToggleModal() {
+      if (this.modal==="auto"){
+        document.querySelector(this.modalSelector).classList.add("d-none")
+        document.body.style.overflow=this.modal
+      }else{
+        document.body.style.overflow=this.modal
+        document.querySelector(this.modalSelector).classList.remove("d-none")
+      }
+
+    },
   },
   mounted() {
     this.getInfo()

@@ -220,11 +220,11 @@
         <div class="info mt-5">
           <div class="d-flex justify-content-between">
             <div>На счету</div>
-            <div>{{user.card[0].balance}} TJS</div>
+            <div>{{user.cards[0].balance}} TJS</div>
           </div>
           <div class="d-flex justify-content-between">
             <div>Бонусов</div>
-            <div>{{user.card[1].balance}}</div>
+            <div>{{user.cards[1].balance}}</div>
           </div>
         </div>
         <div class="cards-infos">
@@ -415,24 +415,24 @@
     </div>
     <div @click="toggleModal('.cards-modal')" class="row">
       <div  class="col-6">
-        <div v-if="user.card.length>0" class="credit-card">
+        <div v-if="user.cards.length>0" class="credit-card">
           <img src="@/assets/images/card.png">
           <div  class="info">
-            <div class="type">{{user.card[0].name}}</div>
-            <div class="price">{{user.card[0].balance}} TJS</div>
+            <div class="type">{{user.cards[0].name}}</div>
+            <div class="price">{{user.cards[0].balance}} TJS</div>
             <div class="name">{{user.name+' '+user.surname}}</div>
-            <div class="card-number">{{user.card[0].card_number}}</div>
+            <div class="card-number">{{user.cards[0].card_number}}</div>
           </div>
         </div>
         <div v-else class="h3 color-yellow ms-4">карты отсутствуют</div>
       </div>
       <div class="col-6">
-        <div v-if="user.card.length>0" class="credit-card">
+        <div v-if="user.cards.length>0" class="credit-card">
           <img src="@/assets/images/card.png">
           <div class="info ">
-            <div class="bonus-title">{{user.card[1].balance}} БОНУСОВ</div>
+            <div class="bonus-title">{{user.cards[1].balance}} БОНУСОВ</div>
             <div class="name">{{user.name+' '+user.surname}}</div>
-            <div class="card-number">{{user.card[1].card_number}}</div>
+            <div class="card-number">{{user.cards[1].card_number}}</div>
           </div>
         </div>
       </div>
