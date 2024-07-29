@@ -166,7 +166,7 @@
                     {{ currentUser.name }} {{ currentUser.surname }}
                   </div>
                   <div class="d-flex justify-content-between">
-                    <span>{{ currentUser.usernam }}</span>
+                    <span>{{ currentUser.username }}</span>
                     <span>{{ currentUser.cards[0].balance }} TJS</span>
                   </div>
                   <div class="d-flex justify-content-between">
@@ -281,7 +281,7 @@
                 <div class="row flex-nowrap">
                   <div
                     v-for="item in productList"
-                    @click="addProduct(item)"
+                    @click="selectItem(item)"
                     class="product-card p-0 position-relative"
                   >
                     <img src="@/assets/images/woman.png" />
@@ -380,9 +380,10 @@
                 <div
                   v-for="course in coursesList"
                   class="uslug-card p-0 position-relative"
+                  @click="selectItem(item)"
                 >
                   <img
-                    :src="`https://fitness.abdurazzoq.beget.tech/public/${course.img}`"
+                    :src="`http://fitness.abdurazzoq.beget.tech/public/${course.img}`"
                   />
                   <div class="product-info">
                     <div class="product-title mb-2 border-color-yellow">
@@ -433,6 +434,7 @@ export default {
       productCategories: [],
       activeProductCategory: null,
       productList: [],
+      serviceType: [],
     };
   },
   computed: {
@@ -443,7 +445,6 @@ export default {
   watch: {
     // whenever question changes, this function will run
     searchActive(queryString) {
-      console.log("queryString", queryString);
       posts("http://fitness.abdurazzoq.beget.tech/public/search_all", {
         name: queryString,
       })
@@ -451,7 +452,6 @@ export default {
           if (response && response.data) {
             this.searchResult = response.data;
           }
-          console.log("searc api", this.searchResult);
         })
         .catch((error) => {
           this.error = error;
@@ -466,7 +466,6 @@ export default {
     getCourseTypes() {
       gets("http://fitness.abdurazzoq.beget.tech/public/api/courses_get_type ")
         .then((response) => {
-          console.log("cotses type", response);
           this.courseTypes = response.data;
         })
         .catch((error) => {
@@ -481,7 +480,6 @@ export default {
           : 1;
       gets(`http://fitness.abdurazzoq.beget.tech/public/api/courses/type/${id}`)
         .then((response) => {
-          console.log("cotses !!!!!!!!", response);
           this.coursesList = response.data;
         })
         .catch((error) => {
@@ -496,7 +494,6 @@ export default {
           : 9;
       gets(`http://fitness.abdurazzoq.beget.tech/public/product/category/${id}`)
         .then((response) => {
-          console.log("products !!!!!!!!", response);
           this.productList = response.data;
         })
         .catch((error) => {
@@ -507,8 +504,17 @@ export default {
     getProductCategories() {
       gets("http://fitness.abdurazzoq.beget.tech/public/category")
         .then((response) => {
-          console.log("product type", response);
           this.productCategories = response.data;
+        })
+        .catch((error) => {
+          this.error = error;
+          this.Delay("loading", 1);
+        });
+    },
+    getCourseTypes() {
+      gets("http://fitness.abdurazzoq.beget.tech/public/api/services/name")
+        .then((response) => {
+          this.serviceType = response.data;
         })
         .catch((error) => {
           this.error = error;
@@ -517,7 +523,6 @@ export default {
     },
     addProduct(product) {
       this.purchases.push(product);
-      console.log(this.purchases);
     },
     toggleButton(index, but) {
       const position = this[but].indexOf(index);
@@ -554,8 +559,8 @@ export default {
       }
     },
     selectItem(item) {
-      if (item.type === "user") {
-        this.currentUser === item;
+      if (item.type == "user") {
+        this.currentUser = item;
       } else {
         item.count = 1;
         if (item.type === "service") {
@@ -564,7 +569,6 @@ export default {
         }
         this.cart.push(item);
       }
-      console.log("item", item);
     },
     itemTotalPrice(count, price) {
       return count * price;
@@ -618,6 +622,7 @@ export default {
     this.getCourses();
     this.getProductCategories();
     this.getProducts();
+    this.getCourseTypes();
   },
 };
 </script>
