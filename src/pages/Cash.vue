@@ -100,54 +100,8 @@
                 <span v-if="key === 'products'">{{ item.title }}</span>
                 <span v-if="key === 'services'">{{ item.name }}</span>
               </div>
-              <!-- <pre>{{ searchItem }}</pre> -->
             </div>
           </div>
-
-          <!-- <div
-            v-if="searchActive.length > 0"
-            class="users-block p-0 bg-gray search-result-block"
-          >
-            <table>
-              <thead>
-                <tr style="opacity: 0">
-                  <th>ФИО</th>
-                  <th>Телефон</th>
-                  <th>Статус</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <router-link to="userpage">Азиза Султанова</router-link>
-                  </td>
-                  <td>92 000 00 00</td>
-                  <td>Bronze</td>
-                </tr>
-                <tr>
-                  <td>
-                    <router-link to="userpage">Азиза Султанова</router-link>
-                  </td>
-                  <td>92 000 00 00</td>
-                  <td>Bronze</td>
-                </tr>
-                <tr>
-                  <td>
-                    <router-link to="userpage">Азиза Султанова</router-link>
-                  </td>
-                  <td>92 000 00 00</td>
-                  <td>Bronze</td>
-                </tr>
-                <tr>
-                  <td>
-                    <router-link to="userpage">Азиза Султанова</router-link>
-                  </td>
-                  <td>92 000 00 00</td>
-                  <td>Bronze</td>
-                </tr>
-              </tbody>
-            </table>
-          </div> -->
         </div>
       </div>
       <div class="row">
@@ -175,16 +129,6 @@
                     }}</span>
                     <span>20 баллов</span>
                   </div>
-                  <!-- <div class="d-flex justify-content-between">
-                    <div>
-                      <div class="fs-5">+992 92 000 0000</div>
-                      <div class="fs-5 color-yellow">Bronze</div>
-                    </div>
-                    <div class="ms-5 ps-5">
-                      <div class="fs-5">500 TJS</div>
-                      <div class="fs-5">20 баллов</div>
-                    </div>
-                  </div> -->
                 </div>
               </div>
             </div>
@@ -260,6 +204,7 @@
                     :class="{
                       active: !activeProductCategory,
                     }"
+                    @click="toggleProduct(null)"
                   >
                     Все
                   </button>
@@ -306,41 +251,38 @@
                 <div class="col product-catalog">
                   <button
                     class="mt-3 py-2 me-3"
-                    v-for="(item, index) in Cat1"
+                    :class="{
+                      active: !activeServiceType,
+                    }"
+                    @click="toggleService(null)"
+                  >
+                    Все
+                  </button>
+                  <button
+                    class="mt-3 py-2 me-3"
+                    v-for="(item, index) in serviceType"
                     :key="index"
                     :class="{
-                      active: isActive(index, 'But1'),
-                      'add-button': item === '+',
+                      active: activeServiceType?.name === item.name,
                     }"
-                    @click="toggleButton(index, 'But1')"
+                    @click="toggleService(item)"
                   >
-                    {{ item }}
+                    {{ item.name }}
                   </button>
                 </div>
               </div>
               <div class="row flex-nowrap">
-                <div class="uslug-card p-0 position-relative">
+                <div
+                  v-for="item in serviceList"
+                  class="uslug-card p-0 position-relative"
+                >
                   <img src="@/assets/images/masaj.png" />
                   <div class="product-info">
                     <div class="product-title mb-2 border-color-yellow">
-                      Массаж
+                      {{ item.name }}
                     </div>
                     <div class="product-price color-yellow d-flex">
-                      15 TJS
-                      <span class="product-old-price text-white"
-                        >/ 1 посещение
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="uslug-card p-0 position-relative">
-                  <img src="@/assets/images/sal.png" />
-                  <div class="product-info">
-                    <div class="product-title mb-2 border-color-yellow">
-                      Солярий
-                    </div>
-                    <div class="product-price color-yellow d-flex">
-                      15 TJS
+                      {{ item.price_visit }} TJS
                       <span class="product-old-price text-white"
                         >/ 1 посещение
                       </span>
@@ -360,6 +302,7 @@
                     :class="{
                       active: !activeCurseType,
                     }"
+                    @click="toggleCourse(null)"
                   >
                     Все
                   </button>
@@ -410,19 +353,7 @@ import gets from "@/components/axios/get.js";
 export default {
   data() {
     return {
-      // productList: [
-      //   { title: "Батончик протеиновый", price: 15, oldPrice: 22 },
-      //   { title: "ШЕЙК протеиновЫЙ", price: 25, oldPrice: 22 },
-      //   { title: "печенье протеиновое", price: 35, oldPrice: 22 },
-      // ],
       searchActive: "",
-      Cat1: ["Все", "Абонемент", "Йога", "Массаж", "Солярий"],
-      Cat2: ["Все", "Индивидуальные", "Групповые"],
-      Cat3: ["Все", "Батончики", "Печенья", "Коктейли"],
-      But1: [0],
-      But2: [0],
-      But3: [0],
-      purchases: [],
       searchResult: null,
       currentUser: null,
       cart: [],
@@ -435,6 +366,8 @@ export default {
       activeProductCategory: null,
       productList: [],
       serviceType: [],
+      activeServiceType: null,
+      serviceList: [],
     };
   },
   computed: {
@@ -458,6 +391,100 @@ export default {
           this.Delay("loading", 1);
         });
     },
+    activeCurseType: {
+      async handler(type) {
+        if (this.courseTypes.length) {
+          if (type) {
+            const data = await this.getCourses(type.id);
+            this.coursesList = data;
+          } else {
+            this.coursesList = [];
+            this.courseTypes.forEach(async (item) => {
+              const data = await this.getCourses(item.id);
+              data.forEach(async (item) => {
+                this.coursesList.push(item);
+              });
+            });
+          }
+        }
+      },
+      immediate: true,
+    },
+    courseTypes: {
+      async handler(types) {
+        types.forEach(async (item) => {
+          const data = await this.getCourses(item.id);
+          data.forEach(async (item) => {
+            this.coursesList.push(item);
+          });
+        });
+      },
+      once: true,
+      deep: true,
+    },
+
+    // activeProductCategory
+    activeProductCategory: {
+      async handler(type) {
+        if (this.productCategories.length) {
+          if (type) {
+            const data = await this.getProducts(type.id);
+            this.productList = data;
+          } else {
+            this.productList = [];
+            this.productCategories.forEach(async (item) => {
+              const data = await this.getProducts(item.id);
+              data.forEach(async (item) => {
+                this.productList.push(item);
+              });
+            });
+          }
+        }
+      },
+      immediate: true,
+    },
+    productCategories: {
+      async handler(types) {
+        types.forEach(async (item) => {
+          const data = await this.getProducts(item.id);
+          data.forEach(async (item) => {
+            this.productList.push(item);
+          });
+        });
+      },
+      once: true,
+      deep: true,
+    },
+
+    // activeServiceType
+    activeServiceType: {
+      async handler(type) {
+        if (this.getService.length) {
+          if (type) {
+            this.serviceList = [];
+            const data = await this.getService(type.name);
+            this.serviceList.push(data.data);
+          } else {
+            this.serviceList = [];
+            this.serviceType.forEach(async (item) => {
+              const data = await this.getService(item.name);
+              this.serviceList.push(data.data);
+            });
+          }
+        }
+      },
+      immediate: true,
+    },
+    serviceType: {
+      async handler(types) {
+        types.forEach(async (item) => {
+          const data = await this.getService(item.name);
+          this.serviceList.push(data.data);
+        });
+      },
+      once: true,
+      deep: true,
+    },
     modal() {
       this.updateToggleModal();
     },
@@ -473,28 +500,24 @@ export default {
           this.Delay("loading", 1);
         });
     },
-    getCourses() {
-      const id =
-        this.activeCurseType && this.activeCurseType.id
-          ? this.activeCurseType.id
-          : 1;
-      gets(`http://fitness.abdurazzoq.beget.tech/public/api/courses/type/${id}`)
+    getCourses(id) {
+      return gets(
+        `http://fitness.abdurazzoq.beget.tech/public/api/courses/type/${id}`
+      )
         .then((response) => {
-          this.coursesList = response.data;
+          return response.data;
         })
         .catch((error) => {
           this.error = error;
           this.Delay("loading", 1);
         });
     },
-    getProducts() {
-      const id =
-        this.activeProductCategory && this.activeProductCategory.id
-          ? this.activeProductCategory.id
-          : 9;
-      gets(`http://fitness.abdurazzoq.beget.tech/public/product/category/${id}`)
+    getProducts(id) {
+      return gets(
+        `http://fitness.abdurazzoq.beget.tech/public/product/category/${id}`
+      )
         .then((response) => {
-          this.productList = response.data;
+          return response.data;
         })
         .catch((error) => {
           this.error = error;
@@ -511,40 +534,42 @@ export default {
           this.Delay("loading", 1);
         });
     },
-    getCourseTypes() {
+    getServiceTypes() {
       gets("http://fitness.abdurazzoq.beget.tech/public/api/services/name")
         .then((response) => {
-          this.serviceType = response.data;
+          this.serviceType = response.data.data;
         })
         .catch((error) => {
           this.error = error;
           this.Delay("loading", 1);
         });
     },
-    addProduct(product) {
-      this.purchases.push(product);
-    },
-    toggleButton(index, but) {
-      const position = this[but].indexOf(index);
-      if (position !== -1) {
-        this[but].splice(position, 1);
-      } else {
-        this[but].push(index);
-      }
+    getService(id) {
+      return gets(
+        `http://fitness.abdurazzoq.beget.tech/public/api/services/find_by_name/${id}`
+      )
+        .then((response) => {
+          // this.productList = response.data;
+          return response.data;
+        })
+        .catch((error) => {
+          this.error = error;
+          this.Delay("loading", 1);
+        });
     },
     toggleCourse(item) {
       this.activeCurseType = item;
-      this.getCourses();
     },
     toggleProduct(item) {
       this.activeProductCategory = item;
-      this.getProducts();
+    },
+    toggleService(item) {
+      this.activeServiceType = item;
     },
     isActive(index, but) {
       return this[but].includes(index);
     },
     outputSearchTitle(key) {
-      console.log(this.purchases);
       switch (key) {
         case "courses":
           return "Курсы";
@@ -619,10 +644,8 @@ export default {
   },
   mounted() {
     this.getCourseTypes();
-    this.getCourses();
     this.getProductCategories();
-    this.getProducts();
-    this.getCourseTypes();
+    this.getServiceTypes();
   },
 };
 </script>
