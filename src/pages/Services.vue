@@ -139,14 +139,14 @@
                     src="@/assets/images/icons/check_add.png"
                   />
                   <div class="result-true-content">
-                    <div
+                    <!-- <div
                       v-if="activeCourse && activeCourse.name"
                       class="result-true-title"
                     >
                       Пользователь {{ activeCourse.name }} добавлен
-                    </div>
+                    </div> -->
                     <div class="result-true-body mt-2">
-                      Новый пользователь успешно добавлен в список клиентов
+                      {{ messageSuccess }}
                     </div>
                   </div>
                 </div>
@@ -413,6 +413,7 @@
   <!--  </div>-->
 </template>
 <script>
+import Cookies from "js-cookie";
 import posts from "@/components/axios/posts.js";
 import gets from "@/components/axios/get.js";
 import form_Data from "@/components/axios/formData.js";
@@ -449,6 +450,7 @@ export default {
       presentMenu: false,
       searchQuery: "",
       activeIndex: null,
+      messageSuccess: "",
     };
   },
   computed: {
@@ -504,10 +506,15 @@ export default {
       }
     },
     getInfoUsers() {
-      posts("http://fitness.abdurazzoq.beget.tech/public/users", {
-        form: "0",
-        to: "21",
-      })
+      const token = Cookies.get("token");
+      posts(
+        "http://fitness.abdurazzoq.beget.tech/public/users",
+        {
+          form: "0",
+          to: "21",
+        },
+        token
+      )
         .then((response) => {
           this.userData = response.data.users;
           this.Delay("loading", 1);
@@ -518,7 +525,8 @@ export default {
         });
     },
     getInfo(url, dataStore, id) {
-      gets(url)
+      const token = Cookies.get("token");
+      gets(url, token)
         .then((response) => {
           this[dataStore] = [];
           if (id === 1) {
@@ -594,6 +602,7 @@ export default {
       })
         .then((response) => {
           console.log("changeCourse response", response);
+          this.messageSuccess = response.data.message;
           this.addStatus = true;
           this.addStatusDelay();
         })

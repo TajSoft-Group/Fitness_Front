@@ -58,14 +58,14 @@
                     src="@/assets/images/icons/check_add.png"
                   />
                   <div class="result-true-content">
-                    <div
+                    <!-- <div
                       v-if="activeCourse && activeCourse.name"
                       class="result-true-title"
                     >
                       Пользователь {{ activeCourse.name }} добавлен
-                    </div>
+                    </div> -->
                     <div class="result-true-body mt-2">
-                      Новый пользователь успешно добавлен в список клиентов
+                      {{ messageSuccess }}
                     </div>
                   </div>
                 </div>
@@ -570,6 +570,7 @@ export default {
       activeIndex: null,
       searchQuery: "",
       activeCourse: null,
+      messageSuccess: "",
     };
   },
   computed: {
@@ -746,6 +747,7 @@ export default {
       })
         .then((response) => {
           console.log("changeCourse response", response);
+          this.messageSuccess = response.data.message;
           this.addStatus = true;
           this.addStatusDelay();
         })
