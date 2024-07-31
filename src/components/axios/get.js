@@ -14,6 +14,10 @@ export default function gets(url, t) {
       return response;
     })
     .catch((error) => {
+      if (error.response && error.response.status === 401) {
+        Cookies.remove("token");
+        router.push("/login");
+      }
       throw error;
     });
 }

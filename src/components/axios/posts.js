@@ -13,11 +13,11 @@ export default function posts(url, data, t) {
       return response;
     })
     .catch((error) => {
-      //   console.log("error!!!", error);
-      //   if (error.response && error.response.status === 401) {
-      //     Cookies.remove("token");
-      //     router.push("/login");
-      //   }
+      console.log("error!!!", error);
+      if (error.response && error.response.status === 401) {
+        Cookies.remove("token");
+        router.push("/login");
+      }
       return error;
     });
 }
