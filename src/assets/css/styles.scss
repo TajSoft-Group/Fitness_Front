@@ -199,6 +199,22 @@ input[type="checkbox"] {
     overflow: hidden;
     max-width: 340px;
 }
+.statistics {
+    .uslug-card{
+        margin: 15px 10px;
+        height: 130px;
+        border-radius: 22px;
+        overflow: hidden;
+        max-width: 200px;
+        margin-right: 10px;
+    }
+}
+.uslug-card-responsive {
+    max-width: 500px;
+    width: 33.3%;
+    padding: 0 15px !important;
+    margin: 15px 0;
+}
 .my-checkbox + label {
     margin-top: 30px;
     display: inline-flex;
@@ -647,6 +663,12 @@ header {
 
 .search-input {
     position: relative;
+    .button-close {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
 }
 
 .users-block {
@@ -1273,9 +1295,9 @@ header {
     color: white;
     background: rgba(58, 58, 60, 1);
     border-radius: 50px;
-    min-width: 120px;
+    min-width: 100px;
     font-weight: 500;
-    font-size: 18px;
+    font-size: 14px;
 }
 .user-page-card-bottom .head .title {
     font-weight: 600;
@@ -1372,12 +1394,14 @@ header {
 }
 .product-title {
     font-weight: 700;
-    line-height: 25px;
-    font-size: 25px;
+    line-height: 17px;
+    font-size: 12px;
     letter-spacing: 1.1px;
+    white-space: break-spaces;
+    text-transform: uppercase;
 }
 .product-price {
-    font-size: 22px;
+    font-size: 12px;
     font-weight: 600;
 }
 span.product-old-price {
@@ -1415,11 +1439,11 @@ span.product-old-price {
     object-fit: cover;
 }
 .product-card  {
-    height: 360px;
+    height: 180px;
     border-radius: 22px;
     overflow: hidden;
-    max-width: 280px;
-    margin-right: 40px;
+    max-width: 140px;
+    margin-right: 10px;
     margin-top: 40px;
 }
 

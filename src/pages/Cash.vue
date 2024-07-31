@@ -70,6 +70,11 @@
             id="searchInput"
             placeholder="Поиск по номеру телефона"
           />
+          <button
+            v-if="searchActive.length > 0"
+            class="button-close"
+            @click="clearSearch"
+          ></button>
         </div>
         <div class="col">
           <div
@@ -147,7 +152,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row cart-container">
             <div class="users-block p-4">
               <table id="dataTable">
                 <thead>
@@ -182,7 +187,7 @@
                   </tr>
                 </tbody>
               </table>
-              <div class="d-flex justify-content-between">
+              <div class="d-flex justify-content-between cart-buttons">
                 <button class="button-type-1 ms-5">Отмена</button>
                 <button
                   class="button-type-1 bg-yellow me-5"
@@ -195,6 +200,7 @@
           </div>
         </div>
         <div class="col-5 statistics bg-gray h-auto p-4">
+          <h3 class="pt-3 statistics-title">ПРОДУКТЫ</h3>
           <div class="scroll-container">
             <div class="scroll-content">
               <div class="row">
@@ -222,14 +228,15 @@
                 </div>
               </div>
               <div class="row">
-                <h3 class="pt-3">ПРОДУКТЫ</h3>
                 <div class="row flex-nowrap">
                   <div
                     v-for="item in productList"
                     @click="selectItem(item)"
                     class="product-card p-0 position-relative"
                   >
-                    <img src="@/assets/images/woman.png" />
+                    <img
+                      :src="`http://fitness.abdurazzoq.beget.tech/public/${item.img[0]}`"
+                    />
                     <div class="product-info">
                       <div class="product-title mb-2">{{ item.title }}</div>
                       <div class="product-price color-yellow d-flex">
@@ -247,7 +254,7 @@
           <div class="scroll-container">
             <div class="scroll-content">
               <div class="row">
-                <h3 class="pt-3">УСЛУГИ</h3>
+                <h3 class="pt-3 statistics-title">УСЛУГИ</h3>
                 <div class="col product-catalog">
                   <button
                     class="mt-3 py-2 me-3"
@@ -295,7 +302,7 @@
           <div class="scroll-container">
             <div class="scroll-content">
               <div class="row">
-                <h3>КУРСЫ</h3>
+                <h3 class="statistics-title">КУРСЫ</h3>
                 <div v-if="courseTypes" class="col product-catalog">
                   <button
                     class="mt-3 py-2 me-3"
@@ -641,6 +648,9 @@ export default {
         console.error("Ошибка при отправке данных:", error);
       }
     },
+    clearSearch() {
+      this.searchActive = "";
+    },
   },
   mounted() {
     this.getCourseTypes();
@@ -657,6 +667,10 @@ export default {
 .cash {
   .statistics {
     padding: 35px;
+  }
+  .statistics-title {
+    font-size: 22px !important;
+    padding-left: 15px;
   }
 }
 button.active {
@@ -708,6 +722,18 @@ button.active {
   padding: 20px 0;
   span + span {
     color: #d0fd3e;
+  }
+}
+.cart-container {
+  height: calc(100% - 222px);
+  .users-block {
+    position: relative;
+  }
+  .cart-buttons {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 30px;
   }
 }
 </style>

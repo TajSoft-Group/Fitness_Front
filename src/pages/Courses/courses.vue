@@ -207,7 +207,10 @@
     <div @click.stop class="holder">
       <div class="base-modal-top">
         <div class="title">Список клиентов</div>
-        <button class="button-close"></button>
+        <button
+          class="button-close"
+          @click="toggleModal('.clients-list')"
+        ></button>
       </div>
       <div class="content">
         <form
@@ -218,51 +221,67 @@
             <input v-model="searchQuery" type="text" placeholder="Поиск" />
           </div>
 
-          <div
-            role="button"
-            v-for="(trener, index) in filteredClients"
-            :key="trener.id"
-            class="user-list h-auto m-0 p-2"
-          >
+          <div class="clients-list-holder">
             <div
-              class="user-list-item"
-              :class="{ active: activeIndex === index }"
-              @click.self="toggleCollapse(index)"
+              role="button"
+              v-for="(trener, index) in filteredClients"
+              :key="trener.id"
+              class="user-list h-auto m-0 p-2"
             >
-              <div class="user-list-item-img">
-                <img
-                  v-if="trener.img"
-                  :src="`http://fitness.abdurazzoq.beget.tech/public/${trener.img}`"
-                  alt=""
-                />
-                <img v-else src="@/assets/images/user-photo.png" alt="" />
+              <div
+                class="user-list-item"
+                :class="{ active: activeIndex === index }"
+                @click.self="toggleCollapse(index)"
+              >
+                <div class="user-list-item-img">
+                  <img
+                    v-if="trener.img"
+                    :src="`http://fitness.abdurazzoq.beget.tech/public/${trener.img}`"
+                    alt=""
+                  />
+                  <img v-else src="@/assets/images/user-photo.png" alt="" />
+                </div>
+                {{ trener.name + " " + trener.surname }}
               </div>
-              {{ trener.name + " " + trener.surname }}
+              <div
+                v-if="activeIndex === index && trener.courses.length"
+                class="collapse-content"
+              >
+                <ul class="user-list-inner">
+                  <li
+                    v-for="(course, index) in trener.courses"
+                    :key="index"
+                    class="d-flex"
+                  >
+                    <label class="custom-checkbox">
+                      <span>{{ course.course_name }}</span>
+                      <input
+                        type="radio"
+                        :name="`course-user-${trener.id}`"
+                        @change="
+                          changeCourse(
+                            trener.id,
+                            course.course_id,
+                            course.count
+                          )
+                        "
+                      />
+                      <span class="custom-checkmark"></span>
+                    </label>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div
-              v-if="activeIndex === index && trener.courses.length"
-              class="collapse-content"
+          </div>
+          <div class="d-flex justify-content-between add-user-buttons">
+            <button
+              @click="toggleModal('.clients-list')"
+              class="dont"
+              type="button"
             >
-              <ul class="user-list-inner">
-                <li
-                  v-for="(course, index) in trener.courses"
-                  :key="index"
-                  class="d-flex"
-                >
-                  <label class="custom-checkbox">
-                    <span>{{ course.course_name }}</span>
-                    <input
-                      type="radio"
-                      :name="`course-user-${trener.id}`"
-                      @change="
-                        changeCourse(trener.id, course.course_id, course.count)
-                      "
-                    />
-                    <span class="custom-checkmark"></span>
-                  </label>
-                </li>
-              </ul>
-            </div>
+              Отмена
+            </button>
+            <button class="submit" type="submit">Добавить</button>
           </div>
         </form>
       </div>
@@ -374,27 +393,29 @@
                 (cursData.courses_id = curs.id)
             "
             v-for="curs in cursList"
-            class="uslug-card p-0 position-relative"
+            class="uslug-card uslug-card-responsive p-0 position-relative"
           >
-            <div
-              class="position-absolute bg-red top-0 right border-radius-25 px-3 me-3 mt-2"
-            >
-              -{{ curs.discount + "%" }}
-            </div>
-            <img
-              :src="'http://fitness.abdurazzoq.beget.tech/public/' + curs.img"
-            />
-            <div class="product-info">
-              <div class="product-title mb-2 border-color-yellow">
-                {{ curs.title }}
+            <div class="uslug-card-holder">
+              <div
+                class="position-absolute bg-red top-0 right border-radius-25 px-3 me-3 mt-2"
+              >
+                -{{ curs.discount + "%" }}
               </div>
-              <div class="product-price color-yellow d-flex">
-                {{ curs.discount_price }} TJS
-                <span class="product-old-price text-white"
-                  ><s>{{ curs.price }}</s>
-                </span>
+              <img
+                :src="'http://fitness.abdurazzoq.beget.tech/public/' + curs.img"
+              />
+              <div class="product-info">
+                <div class="product-title mb-2 border-color-yellow">
+                  {{ curs.title }}
+                </div>
+                <div class="product-price color-yellow d-flex">
+                  {{ curs.discount_price }} TJS
+                  <span class="product-old-price text-white"
+                    ><s>{{ curs.price }}</s>
+                  </span>
+                </div>
+                <div class="h6">{{ curs.type_courses }}</div>
               </div>
-              <div class="h6">{{ curs.type_courses }}</div>
             </div>
           </div>
         </div>
@@ -468,6 +489,7 @@
 </template>
 <script>
 import VueSelect from "vue3-select-component";
+import Cookies from "js-cookie";
 
 import posts from "@/components/axios/posts.js";
 import gets from "@/components/axios/get.js";
@@ -569,13 +591,17 @@ export default {
       }
     },
     getInfoUsers() {
-      posts("http://fitness.abdurazzoq.beget.tech/public/users", {
-        form: "0",
-        to: "21",
-      })
+      const token = Cookies.get("token");
+      posts(
+        "http://fitness.abdurazzoq.beget.tech/public/users",
+        {
+          form: "0",
+          to: "21",
+        },
+        token
+      )
         .then((response) => {
           this.userData = response.data.users;
-          console.log("response.data.users", response.data.users);
           this.Delay("loading", 1);
         })
         .catch((error) => {
@@ -584,7 +610,8 @@ export default {
         });
     },
     getInfo(url, dataStore, id) {
-      gets(url)
+      const token = Cookies.get("token");
+      gets(url, token)
         .then((response) => {
           this[dataStore] = [];
           if (id === 1) {
@@ -653,10 +680,15 @@ export default {
       }
     },
     getClients() {
-      posts("http://fitness.abdurazzoq.beget.tech/public/users", {
-        form: "0",
-        to: "21",
-      })
+      const token = Cookies.get("token");
+      posts(
+        "http://fitness.abdurazzoq.beget.tech/public/users",
+        {
+          form: "0",
+          to: "21",
+        },
+        token
+      )
         .then((response) => {
           const options = response.data.users.map((client) => {
             const option = client;
@@ -666,7 +698,6 @@ export default {
           });
           this.clients = options;
           this.Delay("loading", 1);
-          console.log("clients", this.clients);
         })
         .catch((error) => {
           this.error = error;
@@ -745,6 +776,7 @@ button.add-button {
 }
 
 :deep(.custom-select .menu) {
+  position: static;
   padding-top: 20px;
 }
 :deep(.custom-select .menu-header) {
@@ -880,6 +912,10 @@ button.add-button {
         border-bottom: 1px solid rgba(220, 220, 220, 0.1);
       }
     }
+  }
+  &-holder {
+    max-height: 350px;
+    overflow-y: auto;
   }
 }
 </style>
