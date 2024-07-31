@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row relative">
-      <div
+      <!-- <div
         :class="[addStatus ? 'show-false' : 'show-add']"
         class="added-user-message"
       >
@@ -25,7 +25,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div class="col">
         <div
@@ -44,6 +44,33 @@
             <button @click="toggleModal('.add-curs')" class="add-user-btn">
               Добавить
             </button>
+            <transition
+              name="bounce"
+              v-if="addStatus"
+              class="added-user-message"
+            >
+              <div class="result-true">
+                <div
+                  class="result-true-card d-flex align-items-center relative"
+                >
+                  <img
+                    class="m-4 img-width-40"
+                    src="@/assets/images/icons/check_add.png"
+                  />
+                  <div class="result-true-content">
+                    <div
+                      v-if="activeCourse && activeCourse.name"
+                      class="result-true-title"
+                    >
+                      Пользователь {{ activeCourse.name }} добавлен
+                    </div>
+                    <div class="result-true-body mt-2">
+                      Новый пользователь успешно добавлен в список клиентов
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </transition>
           </div>
         </div>
       </div>
@@ -262,7 +289,8 @@
                           selectedCourse(
                             trener.id,
                             course.course_id,
-                            course.count
+                            course.count,
+                            trener.name
                           )
                         "
                       />
@@ -557,6 +585,11 @@ export default {
     },
   },
   methods: {
+    addStatusDelay() {
+      setTimeout(() => {
+        this.addStatus = false;
+      }, 3000);
+    },
     toggleCollapse(index) {
       if (this.activeIndex === index) {
         this.activeIndex = null;
@@ -713,17 +746,20 @@ export default {
       })
         .then((response) => {
           console.log("changeCourse response", response);
+          this.addStatus = true;
+          this.addStatusDelay();
         })
         .catch((error) => {
           this.error = error;
           this.Delay("loading", 1);
         });
     },
-    selectedCourse(userId, courseId, courseCount) {
+    selectedCourse(userId, courseId, courseCount, name) {
       const courseData = {};
       courseData.userId = userId;
       courseData.courseId = courseId;
       courseData.courseCount = courseCount;
+      courseData.name = name;
       this.activeCourse = courseData;
     },
   },
