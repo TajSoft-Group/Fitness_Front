@@ -283,7 +283,9 @@
                   v-for="item in serviceList"
                   class="uslug-card p-0 position-relative"
                 >
-                  <img src="@/assets/images/masaj.png" />
+                  <img
+                    :src="`http://fitness.abdurazzoq.beget.tech/public/${item.img[0]}`"
+                  />
                   <div class="product-info">
                     <div class="product-title mb-2 border-color-yellow">
                       {{ item.name }}
