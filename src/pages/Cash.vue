@@ -278,7 +278,7 @@
                   </button>
                 </div>
               </div>
-              <div class="row flex-nowrap">
+              <div class="row flex-nowrap uslugi-holder">
                 <div
                   v-for="item in serviceList"
                   class="uslug-card p-0 position-relative"
@@ -735,5 +735,8 @@ button.active {
     left: 0;
     bottom: 30px;
   }
+}
+.uslugi-holder {
+  min-height: 160px;
 }
 </style>

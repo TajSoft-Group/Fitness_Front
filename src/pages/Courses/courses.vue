@@ -215,7 +215,7 @@
       <div class="content">
         <form
           class="form"
-          @submit.prevent="submitForm(), toggleModal('.clients-list')"
+          @submit.prevent="changeCourse(), toggleModal('.clients-list')"
         >
           <div class="search-input pb-4">
             <input v-model="searchQuery" type="text" placeholder="Поиск" />
@@ -259,7 +259,7 @@
                         type="radio"
                         :name="`course-user-${trener.id}`"
                         @change="
-                          changeCourse(
+                          selectedCourse(
                             trener.id,
                             course.course_id,
                             course.count
@@ -541,6 +541,7 @@ export default {
       clients: [],
       activeIndex: null,
       searchQuery: "",
+      activeCourse: null,
     };
   },
   computed: {
@@ -704,12 +705,11 @@ export default {
           this.Delay("loading", 1);
         });
     },
-    changeCourse(userId, courseId, count) {
+    changeCourse() {
       console.log("changeCourse");
-      posts("http://fitness.abdurazzoq.beget.tech/public/enroll/courses", {
-        user_id: userId,
-        courses_id: courseId,
-        count: count,
+      posts("http://fitness.abdurazzoq.beget.tech/public/count/courses", {
+        user_id: this.activeCourse.userId,
+        courses_id: this.activeCourse.courseId,
       })
         .then((response) => {
           console.log("changeCourse response", response);
@@ -718,6 +718,13 @@ export default {
           this.error = error;
           this.Delay("loading", 1);
         });
+    },
+    selectedCourse(userId, courseId, courseCount) {
+      const courseData = {};
+      courseData.userId = userId;
+      courseData.courseId = courseId;
+      courseData.courseCount = courseCount;
+      this.activeCourse = courseData;
     },
   },
   mounted() {
