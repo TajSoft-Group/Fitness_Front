@@ -52,11 +52,15 @@
                     :key="index"
                     class="d-flex"
                   >
-                    <label class="custom-checkbox">
+                    <label
+                      class="custom-checkbox"
+                      :class="{ disabled: course.count <= 0 }"
+                    >
                       <span>{{ course.service_name }}</span>
                       <input
                         type="radio"
                         :name="`course-user-${trener.id}`"
+                        :disabled="course.count <= 0"
                         @change="
                           selectedCourse(trener.id, course.id, trener.name)
                         "
@@ -667,6 +671,9 @@ button.add-button {
   cursor: pointer;
   font-size: 22px;
   user-select: none;
+}
+.custom-checkbox.disabled {
+  opacity: 0.7;
 }
 
 .custom-checkbox input {
