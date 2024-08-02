@@ -52,21 +52,27 @@
     <div @click.stop class="content">
       <div class="title">ДОБАВИТЬ ПОЛЬЗОВАТЕЛЯ</div>
       <form class="form" @submit.prevent="submitForm(), (addCard = false)">
-        <label for="name">Имя*</label>
-        <input
-          type="text"
-          placeholder="Введите имя"
-          id="name"
-          v-model="formData.name"
-        />
+        <div class="d-flex">
+          <div style="padding-right: 5px">
+            <label for="name">Имя*</label>
+            <input
+              type="text"
+              placeholder="Введите имя"
+              id="name"
+              v-model="formData.name"
+            />
+          </div>
 
-        <label for="surname">Фамилия*</label>
-        <input
-          type="text"
-          placeholder="Введите фамилию"
-          id="surname"
-          v-model="formData.surname"
-        />
+          <div style="padding-left: 5px">
+            <label for="surname">Фамилия*</label>
+            <input
+              type="text"
+              placeholder="Введите фамилию"
+              id="surname"
+              v-model="formData.surname"
+            />
+          </div>
+        </div>
 
         <label for="username">Номер телефона*</label>
         <input

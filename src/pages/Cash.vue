@@ -81,29 +81,31 @@
             v-if="searchActive"
             class="users-block bg-gray search-result-block"
           >
-            <div
-              v-for="(searchItem, key) in searchResult"
-              :key="key"
-              class="search-result-row"
-            >
-              <div class="search-result-row__title">
-                <h2>{{ outputSearchTitle(key) }}</h2>
-                <h2 class="search-result-row__count">
-                  Найдено: {{ searchItem.length }}
-                </h2>
-              </div>
+            <div>
               <div
-                v-for="item in searchItem"
-                :key="item.id"
-                @click="selectItem(item)"
-                class="search-result-row__item"
+                v-for="(searchItem, key) in searchResult"
+                :key="key"
+                class="search-result-row"
               >
-                <span v-if="key === 'users'"
-                  >{{ item.name }} {{ item.surname }}</span
+                <div class="search-result-row__title">
+                  <h2>{{ outputSearchTitle(key) }}</h2>
+                  <h2 class="search-result-row__count">
+                    Найдено: {{ searchItem.length }}
+                  </h2>
+                </div>
+                <div
+                  v-for="item in searchItem"
+                  :key="item.id"
+                  @click="selectItem(item)"
+                  class="search-result-row__item"
                 >
-                <span v-if="key === 'courses'">{{ item.title }}</span>
-                <span v-if="key === 'products'">{{ item.title }}</span>
-                <span v-if="key === 'services'">{{ item.name }}</span>
+                  <span v-if="key === 'users'"
+                    >{{ item.name }} {{ item.surname }}</span
+                  >
+                  <span v-if="key === 'courses'">{{ item.title }}</span>
+                  <span v-if="key === 'products'">{{ item.title }}</span>
+                  <span v-if="key === 'services'">{{ item.name }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -112,27 +114,41 @@
       <div class="row">
         <div class="col-7">
           <div class="row statistics-holder justify-content-between">
-            <div class="col-7 statistics statistics-left mr-3 h-auto bg-gray">
-              <div class="left d-flex align-items-center">
-                <div
-                  class="teacher-img img-width-60 border-2px border-color-yellow"
-                >
-                  <img v-if="currentUser" src="@/assets/images/avatar.jpg" />
-                  <img v-else src="@/assets/images/avatar-user-empty.png" />
-                </div>
-                <div v-if="currentUser">
-                  <div class="h5">
-                    {{ currentUser.name }} {{ currentUser.surname }}
+            <div class="col-7 h-auto statistics-container-left">
+              <div class="statistics statistics-left mr-3 h-auto bg-gray">
+                <div class="left d-flex align-items-center">
+                  <div
+                    class="teacher-img img-width-60 border-2px border-color-yellow"
+                  >
+                    <img v-if="currentUser" src="@/assets/images/avatar.jpg" />
+                    <img v-else src="@/assets/images/avatar-user-empty.png" />
                   </div>
-                  <div class="d-flex justify-content-between">
-                    <span>{{ currentUser.username }}</span>
-                    <span>{{ currentUser.cards[0].balance }} TJS</span>
-                  </div>
-                  <div class="d-flex justify-content-between">
-                    <span class="color-yellow">{{
-                      currentUser.cards[0].name
-                    }}</span>
-                    <span>20 баллов</span>
+                  <div v-if="currentUser">
+                    <div class="h5">
+                      {{ currentUser.name }} {{ currentUser.surname }}
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <span v-if="currentUser.username">{{
+                        currentUser.username
+                      }}</span>
+                      <span
+                        v-if="
+                          currentUser.cards.length &&
+                          currentUser.cards[0].balance
+                        "
+                        >{{ currentUser.cards[0].balance }} TJS</span
+                      >
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <span
+                        v-if="
+                          currentUser.cards.length && currentUser.cards[0].name
+                        "
+                        class="color-yellow"
+                        >{{ currentUser.cards[0].name }}</span
+                      >
+                      <span>20 баллов</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -162,6 +178,7 @@
                     <th>Цена</th>
                     <th>Скидка</th>
                     <th>Итого</th>
+                    <th>&nbsp;</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -183,6 +200,17 @@
                     <td>-5%</td>
                     <td>
                       {{ itemTotalPrice(item.count, item.price) }} сом<br />
+                    </td>
+                    <td>
+                      <button
+                        @click="deleteProduct(index)"
+                        class="delete-product"
+                      >
+                        <img
+                          src="@/assets/images/icons/close-icon.png"
+                          alt="search"
+                        />
+                      </button>
                     </td>
                   </tr>
                 </tbody>
@@ -282,6 +310,7 @@
                 <div
                   v-for="item in serviceList"
                   class="uslug-card p-0 position-relative"
+                  @click="selectItem(item)"
                 >
                   <img
                     :src="`http://fitness.abdurazzoq.beget.tech/public/${item.img[0]}`"
@@ -332,7 +361,7 @@
                 <div
                   v-for="course in coursesList"
                   class="uslug-card p-0 position-relative"
-                  @click="selectItem(item)"
+                  @click="selectItem(course)"
                 >
                   <img
                     :src="`http://fitness.abdurazzoq.beget.tech/public/${course.img}`"
@@ -381,7 +410,9 @@ export default {
   },
   computed: {
     totalPrice() {
-      return this.cart.reduce((item, current) => item.price + current, 0);
+      return this.cart.reduce((total, item) => {
+        return total + parseFloat(item.price);
+      }, 0);
     },
   },
   watch: {
@@ -499,6 +530,9 @@ export default {
     },
   },
   methods: {
+    deleteProduct(index) {
+      this.cart.splice(index, 1);
+    },
     getCourseTypes() {
       gets("http://fitness.abdurazzoq.beget.tech/public/api/courses_get_type ")
         .then((response) => {
@@ -593,14 +627,18 @@ export default {
       }
     },
     selectItem(item) {
-      if (item.type == "user") {
+      console.log("item cart", item);
+      if (item.type && item.type == "user") {
         this.currentUser = item;
-      } else {
+        this.clearSearch();
+      }
+      if (item.type && item.type !== "user") {
         item.count = 1;
         if (item.type === "service") {
           item.price = item.price_visit;
           item.title = item.name;
         }
+        item.price = item.price || item.price_one || 0;
         this.cart.push(item);
       }
     },
@@ -665,6 +703,7 @@ export default {
 <style lang="scss" scoped>
 .statistics-holder {
   margin: 0 -10px;
+  margin-left: -24px !important;
 }
 .cash {
   .statistics {
@@ -728,6 +767,7 @@ button.active {
 }
 .cart-container {
   height: calc(100% - 222px);
+  margin-left: -15px !important;
   .users-block {
     position: relative;
   }
@@ -740,5 +780,9 @@ button.active {
 }
 .uslugi-holder {
   min-height: 160px;
+}
+.delete-product {
+  background: transparent;
+  border: transparent;
 }
 </style>

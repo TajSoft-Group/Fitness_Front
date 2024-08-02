@@ -278,7 +278,7 @@
                   <li
                     v-for="(course, index) in trener.courses"
                     :key="index"
-                    class="d-flex"
+                    :class="{ 'close-course': course.count <= 0 }"
                   >
                     <label
                       class="custom-checkbox"
@@ -300,6 +300,9 @@
                       />
                       <span class="custom-checkmark"></span>
                     </label>
+                    <span v-if="course.count <= 0" class="error"
+                      >Выбор курса невозможен, т.к. кол-во истрачено.</span
+                    >
                   </li>
                 </ul>
               </div>
@@ -877,7 +880,9 @@ button.add-button {
   user-select: none;
 }
 .custom-checkbox.disabled {
-  opacity: 0.7;
+  .custom-checkmark {
+    border-color: #505050;
+  }
 }
 
 .custom-checkbox input {
@@ -960,8 +965,28 @@ button.add-button {
       }
     }
     &-inner {
+      list-style: none;
       li {
-        border-bottom: 1px solid rgba(220, 220, 220, 0.1);
+        border-top: 1px solid rgba(220, 220, 220, 0.1);
+        padding: 3px 0;
+        list-style: none;
+        &:first-child {
+          border-top: none;
+        }
+        &.close-course {
+          .custom-checkbox {
+            border-bottom: 1px solid rgba(220, 220, 220, 0.1);
+            margin-bottom: 15px;
+          }
+          & + li {
+            border-top: transparent;
+          }
+        }
+      }
+      .error {
+        font-size: 20px;
+        line-height: 24px;
+        color: #ff2424;
       }
     }
   }

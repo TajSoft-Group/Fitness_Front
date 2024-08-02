@@ -208,6 +208,14 @@ input[type="checkbox"] {
         max-width: 200px;
         margin-right: 10px;
     }
+    .product-card  {
+        height: 180px;
+        border-radius: 22px;
+        overflow: hidden;
+        max-width: 140px;
+        margin-right: 10px;
+        margin-top: 15px;
+    }
 }
 .uslug-card-responsive {
     max-width: 500px;
@@ -549,6 +557,14 @@ header {
 .statistics-block {
     margin-bottom: 50px;
 
+}
+
+.statistics-container-left {
+    margin-top: 60px;
+    .statistics {
+        margin-top: 0;
+        height: 100% !important;
+    }
 }
 
 .circle {
@@ -1441,10 +1457,10 @@ span.product-old-price {
     object-fit: cover;
 }
 .product-card  {
-    height: 180px;
+    height: 200px;
     border-radius: 22px;
     overflow: hidden;
-    max-width: 140px;
+    max-width: 500px;
     margin-right: 10px;
     margin-top: 40px;
 }
