@@ -197,9 +197,12 @@
                       />
                     </td>
                     <td>{{ item.price }} сом</td>
-                    <td>-5%</td>
+                    <td>- {{ item.discount }} %</td>
                     <td>
-                      {{ itemTotalPrice(item.count, item.price) }} сом<br />
+                      {{
+                        itemTotalPrice(item.count, item.price_discount)
+                      }}
+                      сом<br />
                     </td>
                     <td>
                       <button
@@ -411,7 +414,7 @@ export default {
   computed: {
     totalPrice() {
       return this.cart.reduce((total, item) => {
-        return total + parseFloat(item.price);
+        return total + parseFloat(item.price_discount);
       }, 0);
     },
   },
@@ -639,6 +642,8 @@ export default {
           item.title = item.name;
         }
         item.price = item.price || item.price_one || 0;
+        item.discount = item.discount || 0;
+        item.price_discount = item.price - (item.price / 100) * item.discount;
         this.cart.push(item);
       }
     },
