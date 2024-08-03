@@ -170,54 +170,56 @@
           </div>
           <div class="row cart-container">
             <div class="users-block p-4">
-              <table id="dataTable">
-                <thead>
-                  <tr>
-                    <th class="col-3 text-start">Название</th>
-                    <th>Кол-во (шт)</th>
-                    <th>Цена</th>
-                    <th>Скидка</th>
-                    <th>Итого</th>
-                    <th>&nbsp;</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(item, index) in cart" :key="item.id">
-                    <td class="col-2 d-flex">
-                      {{ index + 1 }}.
-                      <div class="text-start ms-2">{{ item.name }}</div>
-                    </td>
-                    <td>
-                      <input
-                        class="bg-gray w-25 border-1px text-white"
-                        type="number"
-                        min="1"
-                        max="99"
-                        v-model="item.count"
-                      />
-                    </td>
-                    <td>{{ item.price }} сом</td>
-                    <td>- {{ item.discount }} %</td>
-                    <td>
-                      {{
-                        itemTotalPrice(item.count, item.price_discount)
-                      }}
-                      сом<br />
-                    </td>
-                    <td>
-                      <button
-                        @click="deleteProduct(index)"
-                        class="delete-product"
-                      >
-                        <img
-                          src="@/assets/images/icons/close-icon.png"
-                          alt="search"
+              <div class="cart-list-holder">
+                <table id="dataTable">
+                  <thead>
+                    <tr>
+                      <th class="col-3 text-start">Название</th>
+                      <th>Кол-во (шт)</th>
+                      <th>Цена</th>
+                      <th>Скидка</th>
+                      <th>Итого</th>
+                      <th>&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in cart" :key="item.id">
+                      <td class="col-2">
+                        <div class="d-flex">
+                          {{ index + 1 }}.
+                          <div class="text-start ms-2">{{ item.name }}</div>
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          class="bg-gray w-25 border-1px text-white"
+                          type="number"
+                          min="1"
+                          max="99"
+                          v-model="item.count"
                         />
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      </td>
+                      <td>{{ item.price }} сом</td>
+                      <td>- {{ item.discount }} %</td>
+                      <td>
+                        {{ itemTotalPrice(item.count, item.price_discount) }}
+                        сом<br />
+                      </td>
+                      <td>
+                        <button
+                          @click="deleteProduct(index)"
+                          class="delete-product"
+                        >
+                          <img
+                            src="@/assets/images/icons/close-icon.png"
+                            alt="search"
+                          />
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
               <div class="d-flex justify-content-between cart-buttons">
                 <button class="button-type-1 ms-5">Отмена</button>
                 <button
@@ -789,5 +791,9 @@ button.active {
 .delete-product {
   background: transparent;
   border: transparent;
+}
+.cart-list-holder {
+  max-height: 525px;
+  overflow-y: auto;
 }
 </style>

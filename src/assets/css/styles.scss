@@ -1429,10 +1429,20 @@ span.product-old-price {
     width: 280px;
     position: absolute;
     bottom: 15px;
-    right: -185px;
+    right: -220px;
 }.bg-black_2{
      background: rgba(23, 23, 25, 1);
 
+ }
+ .product-card-menu-item {
+    border-bottom: 4px solid #19191B;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    & + .product-card-menu-item {
+        border: transparent;
+    }
  }
 .img-card {
     background: #363636;
@@ -1457,12 +1467,22 @@ span.product-old-price {
     object-fit: cover;
 }
 .product-card  {
-    height: 200px;
+    height: 357px;
     border-radius: 22px;
     overflow: hidden;
     max-width: 500px;
-    margin-right: 10px;
     margin-top: 40px;
+}
+
+.product-card-menu-btn {
+    width: 20px;
+    .edit-card {
+        right: 15px;
+        top: 10px;
+        left: auto;
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+    }
 }
 
 .add-user-modal .form label {
