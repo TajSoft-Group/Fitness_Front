@@ -795,5 +795,20 @@ button.active {
 .cart-list-holder {
   max-height: 525px;
   overflow-y: auto;
+  scrollbar-width: thin; /* Устанавливает ширину скроллбара */
+  scrollbar-color: #282829 #090909;
+}
+
+.cart-list-holder::-webkit-scrollbar {
+  width: 10px;
+}
+
+.cart-list-holder::-webkit-scrollbar-track {
+  background: #282829;
+}
+
+.cart-list-holder::-webkit-scrollbar-thumb {
+  background: #090909;
+  border-radius: 6px;
 }
 </style>
