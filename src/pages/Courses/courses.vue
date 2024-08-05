@@ -610,7 +610,11 @@ export default {
         ...this.cursData,
       })
         .then((response) => {
+          console.log("response", response);
           this.Delay("loading", 1);
+          this.messageSuccess = response.data.message;
+          this.addStatus = true;
+          this.addStatusDelay();
           console.log(this.cursData);
         })
         .catch((error) => {
