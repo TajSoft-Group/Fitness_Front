@@ -325,7 +325,7 @@
             @click="
               toggleModal('.pay-curs'),
                 (addCurs = curs),
-                (cursData.courses_id = curs.id)
+                (cursData.services_id = curs.id)
             "
             v-for="curs in cursList"
             class="uslug-card uslug-card-responsive position-relative"
@@ -441,7 +441,7 @@ export default {
       cursList: "",
       cursData: {
         user_id: "",
-        courses_id: "",
+        services_id: "",
         count: "",
       },
       modal: "auto",
@@ -483,12 +483,20 @@ export default {
       }
     },
     coursesFn() {
-      posts("http://fitness.abdurazzoq.beget.tech/public/enroll/courses", {
-        ...this.cursData,
-      })
+      const token = Cookies.get("token");
+      posts(
+        "http://fitness.abdurazzoq.beget.tech/public/enroll/services",
+        {
+          ...this.cursData,
+        },
+        token
+      )
         .then((response) => {
           this.Delay("loading", 1);
           console.log(this.cursData);
+          this.messageSuccess = response.data.message;
+          this.addStatus = true;
+          this.addStatusDelay();
         })
         .catch((error) => {
           this.error = error;
