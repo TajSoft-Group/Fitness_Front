@@ -606,9 +606,14 @@ export default {
       }
     },
     coursesFn() {
-      posts("http://fitness.abdurazzoq.beget.tech/public/enroll/courses", {
-        ...this.cursData,
-      })
+      const token = Cookies.get("token");
+      posts(
+        "http://fitness.abdurazzoq.beget.tech/public/enroll/courses",
+        {
+          ...this.cursData,
+        },
+        token
+      )
         .then((response) => {
           console.log("response", response);
           this.Delay("loading", 1);
