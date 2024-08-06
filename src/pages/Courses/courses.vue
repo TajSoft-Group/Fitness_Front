@@ -41,9 +41,16 @@
             >
               Список клиентов
             </button>
-            <button @click="toggleModal('.add-curs')" class="add-user-btn">
+            <!-- <button @click="toggleModal('.add-curs')" class="add-user-btn">
               Добавить
-            </button>
+            </button> -->
+
+            
+            <!-- @click="toggleModal('.add-curs')" -->
+            <button class="add-user-btn" @click="toggleModal('.add-curs')">Добавить</button>
+            <button class="add-user-btn ms-3"><router-link to="/new-course" class="text-dark">Добавить v2</router-link> </button>
+
+
             <transition
               name="bounce"
               v-if="addStatus"

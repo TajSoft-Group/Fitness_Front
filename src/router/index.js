@@ -20,6 +20,7 @@ import Lockers from "@/pages/lockers.vue";
 import finance from "@/pages/finance.vue";
 import Cash from "@/pages/Cash.vue";
 import courses from "@/pages/Courses/courses.vue";
+import newCourse from "@/pages/Courses/newCourse.vue";
 
 const routes = [
   {
@@ -123,6 +124,11 @@ const routes = [
     path: '/courses',
     name: 'courses',
     component: courses
+  },
+  {
+    path: '/new-course',
+    name: 'new-course',
+    component: newCourse
   },
 
 ];

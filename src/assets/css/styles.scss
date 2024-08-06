@@ -2059,3 +2059,50 @@ a{
 .pb-150 {
     padding-bottom: 150px;
 }
+
+
+/* CIRCLE CHECKBOX */
+
+.form-recipients .form-check-input{
+    appearance: auto;
+    width: 40px;
+    outline: none;
+    box-shadow: none;
+}
+.form-check-input {
+    display: none;
+}
+
+.form-check-input + label::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #505050;
+    background-color: #1E1E20;
+    vertical-align: middle;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.form-check-input:checked + label::before {
+    background-color: #1E1E20;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" viewBox="0 0 19 14" fill="none"><path d="M17 2L7 12L2 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-color: #D0FD3E;
+}
+
+.form-check-input + label {
+    color: white;
+    cursor: pointer;
+}
+.cardBlack{
+    background: #1E1E2050;
+    border-radius: 12px;
+    padding: 30px;
+    padding-right: 30px;
+}
