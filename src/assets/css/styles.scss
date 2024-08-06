@@ -2040,3 +2040,22 @@ a{
     }
 }
 
+.scroll-new {
+    max-height: 300px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #282829 #090909;
+}
+
+.control {
+    box-shadow: none!important;
+}
+
+.menu {
+    margin-top: 0!important;
+    scrollbar-width: thin;
+}
+
+.mb-150 {
+    margin-bottom: 150px;
+}

@@ -184,22 +184,27 @@
             src="@/assets/images/icons/row-right.png"
           />
           <div
-            :class="{ 'd-block': presentMenu }"
-            class="menu-type-1 pt-4 px-4"
+               :class="{ 'd-block': presentMenu }"
+            class="menu-type-1 pt-4 ps-3"
           >
-            <h1>Все тренеры</h1>
-            <div
-              role="button"
-              v-for="treners in DataUsers"
-              @click="
+            <h1 class="ps-2">Все тренеры</h1>
+            <div style="max-height: 300px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #282829 #090909;">
+              <div
+                  role="button"
+                  v-for="treners in DataUsers"
+                  @click="
                 (idTr = treners.id),
                   (presentMenu = false),
                   (activeTR = treners.name + ' ' + treners.surname)
               "
-              class="statistics h-auto m-0 p-2"
-            >
-              <hr class="m-0 p-1" />
-              {{ treners.name + " " + treners.surname }}
+                  class="statistics h-auto m-0 p-2"
+              >
+                <hr class="m-0 p-1" />
+                {{ treners.name + " " + treners.surname }}
+              </div>
             </div>
           </div>
         </div>
@@ -328,7 +333,7 @@
     class="add-user-modal pay-curs d-none d-flex justify-content-center align-items-center"
   >
     <div @click.stop class="content">
-      <div class="title">оплата курса</div>
+      <div class="title">Оплата курса</div>
       <form
         class="form"
         @submit.prevent="coursesFn(), toggleModal('.pay-curs')"
@@ -360,7 +365,7 @@
           <label for="name">Клиенты</label>
           <pre>{{ selectedClient }}</pre>
           <VueSelect
-            class="custom-select"
+            class="custom-select scroll-new"
             v-model="cursData.user_id"
             :options="clients"
             :isClearable="false"

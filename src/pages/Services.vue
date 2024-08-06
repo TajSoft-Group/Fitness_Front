@@ -281,22 +281,24 @@
           />
           <div
             :class="{ 'd-block': presentMenu }"
-            class="menu-type-1 pt-4 px-4"
+            class="menu-type-1 pt-4 ps-3"
           >
-            <h1>Все пользователи</h1>
-            <div
-              role="button"
-              v-for="treners in userData"
-              @click="
+            <h1 class="ps-2">Все пользователи</h1>
+            <div class="scroll-new">
+              <div
+                  role="button"
+                  v-for="treners in userData"
+                  @click="
                 (cursData.user_id = treners.id),
                   (presentMenu = false),
                   (presentMenu = false),
                   (activeTR = treners.name + ' ' + treners.surname)
               "
-              class="statistics h-auto m-0 p-2"
-            >
-              <hr class="m-0 p-1" />
-              {{ treners.name + " " + treners.surname }}
+                  class="statistics h-auto m-0 p-2"
+              >
+                <hr class="m-0 p-1" />
+                {{ treners.name + " " + treners.surname }}
+              </div>
             </div>
           </div>
         </div>
