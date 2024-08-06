@@ -394,13 +394,13 @@
       </div>
       <div class="col-3">
         <div class="user-page-card">
-          <div class="title">Танцы</div>
+          <div class="title">Силовая нагрузка</div>
           <div class="desc-number">18</div>
         </div>
       </div>
       <div class="col-3">
         <div class="user-page-card">
-          <div class="title">Массаж</div>
+          <div class="title">Кардио нагрузка</div>
           <div class="desc-number">15</div>
         </div>
       </div>
