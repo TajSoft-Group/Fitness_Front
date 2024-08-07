@@ -47,7 +47,7 @@
 
             
             <!-- @click="toggleModal('.add-curs')" -->
-            <button class="add-user-btn" @click="toggleModal('.add-curs')">Добавить</button>
+            <!-- <button class="add-user-btn" @click="toggleModal('.add-curs')">Добавить</button> -->
             <button class="add-user-btn ms-3" type="button"><router-link to="/new-course" class="text-dark">Добавить v2</router-link> </button>
 
 
