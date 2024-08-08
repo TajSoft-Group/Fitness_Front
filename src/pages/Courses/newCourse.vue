@@ -29,11 +29,11 @@
                 <div @click.stop  class="col content cardBlack">
                     <div class="menu-type-2 w-50 m-auto d-flex justify-content-between">
                         <div class="form-recipients">
-                            <input autocomplete="off" class="form-check-input" type="checkbox" id="ind" name="type" value="1" v-model="individual">
+                            <input autocomplete="off" class="form-check-input" type="checkbox" id="ind" name="type" :checked="individual" value="1" v-model="individual">
                             <label for="ind" class="text-white">Индивидуальные</label>
                         </div>
                         <div class="form-recipients">
-                            <input autocomplete="off" class="form-check-input" type="checkbox" id="type" name="type" checked value="2" v-model="group">
+                            <input autocomplete="off" class="form-check-input" type="checkbox" id="type" name="type" :checked="group" value="2" v-model="group">
                             <label for="type" class="text-white">Групповые</label>
                         </div>
                     </div>
@@ -284,7 +284,8 @@
   import posts from "@/components/axios/posts.js";
   import gets from "@/components/axios/get.js"
   import form_Data from "@/components/axios/formData.js";
-import { Fragment } from "vue";
+  import { Fragment } from "vue";
+  import router from "@/router";
   export default {
     data(){
       return{
@@ -292,8 +293,8 @@ import { Fragment } from "vue";
         images: [],
         imagesPost: [],
         addCurs:'',
-        individual : false,
-        group : true,
+        individual : true,
+        group : false,
         formData: {
           title:"",
           img:"",
@@ -337,7 +338,7 @@ import { Fragment } from "vue";
                 },
             }
           ],
-          description : 'sex',
+          description : 'none',
           create_date:'31.03.2024',
           direction_id:"1",
           user_count:"1",
@@ -403,17 +404,6 @@ import { Fragment } from "vue";
           reader.readAsDataURL(file);
         }
       },
-      getInfoUsers(){
-        posts('http://fitness.abdurazzoq.beget.tech/public/users', {"form": "0", "to": '21'})
-            .then(response => {
-              this.userData = response.data.users;
-              this.Delay('loading', 1)
-            })
-            .catch(error => {
-              this.error = error;
-              this.Delay('loading', 1)
-            });
-      },
       getInfo (url,dataStore,id) {
   
         gets(url)
@@ -435,7 +425,6 @@ import { Fragment } from "vue";
             title: "",
             description: "",
         });
-        console.log('works');
       },
       RemoveBenefits(index) {
         this.formData.benefits_course.splice(index, 1);
@@ -467,7 +456,6 @@ import { Fragment } from "vue";
                     steps: "",
                 },
             });
-        console.log('works');
       },
       RemoveTrainingDays(index) {
         this.formData.training_days.splice(index, 1);
@@ -478,7 +466,6 @@ import { Fragment } from "vue";
             link: "",
             description: ""
         });
-        console.log('works');
       },
       RemoveExercises(idx, index) {
         this.formData.training_days[idx].exercises.splice(index, 1);
@@ -522,10 +509,11 @@ import { Fragment } from "vue";
                   // await this.getInfo('http://fitness.abdurazzoq.beget.tech/public/api/coach/all','DataUsers', 1)
                   // await this.getInfo('http://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
                   // await this.getInfoUsers()
-                  this.Delay('addStatus', 7);
                   router.push("/courses");
+                  this.Delay('addStatus', 7);
                 } else {
                   console.error(`Запрос завершился с ошибкой: ${response.status}`);
+                  router.push("/courses");
                 }
               } catch (error) {
                 console.error('Ошибка при отправке данных:', error);

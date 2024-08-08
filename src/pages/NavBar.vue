@@ -32,14 +32,18 @@ export default {
               <li :class="{active: ActiveMenu === '/courses'}">
                 <router-link to="/courses" class="trigger-hover">Курсы</router-link>
                 <ul class="hidden-hover bg-gray p-0 position-absolute">
-                  <li :class="{active: ActiveMenu === '/individual-courses'}"><router-link to="/individual-courses" class="m-3">Курсы индивидуальные</router-link></li>
-                  <li :class="{active: ActiveMenu === '/reviews-page'}"><router-link to="/reviews-page" class="m-3">Курсы индивидуальные Отзывы</router-link></li>
-                  <li :class="{active: ActiveMenu === '/cash'}"><router-link to="/cash" class="m-3">касса</router-link></li>
+                  <li :class="{active: ActiveMenu === '/individual-courses'}"><router-link to="/individual-courses" class="mx-3 my-2 p-3">Курсы индивидуальные</router-link></li>
+                  <li :class="{active: ActiveMenu === '/reviews-page'}"><router-link to="/reviews-page" class="mx-3 my-2 p-3">Курсы индивидуальные Отзывы</router-link></li>
                 </ul>
               </li>
-              <li :class="{active: ActiveMenu === '/newsletters'}"><router-link to="/newsletters">Рассылки</router-link></li>
-              <li><a href="#">Управление</a></li>
-              <li :class="{active: ActiveMenu === '/finance'}"><router-link to="/finance">Финансы</router-link></li>
+              <li :class="{active: (ActiveMenu === '/finance' || ActiveMenu === '/newsletters') }" class="trigger-hover">
+                <a>Управление</a>
+                <ul class="hidden-hover bg-gray p-0 position-absolute">
+                  <li :class="{active: ActiveMenu === '/finance'}"><router-link to="/finance" class="m-3 p-3">Финансы</router-link></li>
+                  <li :class="{active: ActiveMenu === '/newsletters'}"><router-link to="/newsletters" class="m-3 p-3">Рассылки</router-link></li>
+                </ul>
+              </li>
+              <li :class="{active: ActiveMenu === '/cash'}"><router-link to="/cash">Касса</router-link></li>
               <li :class="{active: ActiveMenu === '/lockers'}"><router-link to="/lockers">Шкафчики</router-link></li>
               <li :class="{active: ActiveMenu === '/product'}"><router-link to="/product">Продукты</router-link></li>
             </ul>
@@ -55,4 +59,8 @@ export default {
 
 <style scoped>
 /* Add your styles here */
+  .hidden-hover{
+    margin-top: 23px;
+    background: #2c2c2e;
+  }
 </style>

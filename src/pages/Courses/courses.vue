@@ -27,7 +27,7 @@
         </div>
       </div> -->
 
-      <div class="col">
+      <div class="col mb-4">
         <div
           class="d-flex justify-content-between title-block align-items-center"
         >
@@ -48,7 +48,7 @@
             
             <!-- @click="toggleModal('.add-curs')" -->
             <!-- <button class="add-user-btn" @click="toggleModal('.add-curs')">Добавить</button> -->
-            <button class="add-user-btn ms-3" type="button"><router-link to="/new-course" class="text-dark">Добавить v2</router-link> </button>
+            <button class="add-user-btn ms-3" type="button"><router-link to="/new-course" class="text-dark w-100 h-100 align-content-center">Добавить</router-link> </button>
 
 
             <transition
@@ -429,18 +429,35 @@
     </div>
   </div>
 
-  <div class="container">
+  <div class="container pt-3">
     <div class="row">
-      <div class="col">
-        <div class="row">
-          <div
+          <!-- class="uslug-card uslug-card-responsive p-0 position-relative" -->
+          <div class="col-md-4" 
+            v-for="curs in cursList" 
+            @click="
+              toggleModal('.pay-curs'),
+                (addCurs = curs),
+                (cursData.courses_id = curs.id)"
+          >
+            <div class="w-100 h-100 courses-card position-relative mb-3 p-0">
+              <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>
+              <img class="w-100 h-100" :src="'http://fitness.abdurazzoq.beget.tech/public/' + curs.img" alt="">
+              <div class="at-bottom position-absolute bottom-0 ps-4">
+                <h5>{{ curs.title }}</h5>
+                <p class="m-0">{{ curs.discount_price }} TJS <b class="text-white mx-1">|</b> <s class="text-white">{{ curs.price }} TJS</s></p>
+                <p class="m-0 mb-2 text-white text-capitalize">{{ curs.type_courses }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- <div
             @click="
               toggleModal('.pay-curs'),
                 (addCurs = curs),
                 (cursData.courses_id = curs.id)
             "
             v-for="curs in cursList"
-            class="uslug-card uslug-card-responsive p-0 position-relative"
+            class="uslug-card uslug-card-responsive position-relative"
           >
             <div class="uslug-card-holder">
               <div
@@ -464,10 +481,8 @@
                 <div class="h6">{{ curs.type_courses }}</div>
               </div>
             </div>
-          </div>
-        </div>
+          </div> -->
       </div>
-    </div>
   </div>
 
   <!--  <div class="container">-->
@@ -1030,4 +1045,5 @@ button.add-button {
   background: #090909;
   border-radius: 6px;
 }
+
 </style>

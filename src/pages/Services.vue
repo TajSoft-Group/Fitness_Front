@@ -319,35 +319,22 @@
     </div>
   </div>
 
-  <div class="container">
+  <div class="container mt-5">
     <div class="row">
-      <div class="col">
-        <div class="row">
-          <div
-            @click="
-              toggleModal('.pay-curs'),
-                (addCurs = curs),
-                (cursData.services_id = curs.id)
-            "
-            v-for="curs in cursList"
-            class="uslug-card uslug-card-responsive position-relative"
-          >
-            <!--            <div class="position-absolute bg-red top-0 right border-radius-25 px-3 me-3 mt-2">-{{curs.discount+'%'}}</div>-->
-            <img
-              :src="'http://fitness.abdurazzoq.beget.tech/public/' + curs.img"
-            />
-            <div class="product-info">
-              <div class="product-title mb-2 border-color-yellow">
-                {{ curs.name }}
-              </div>
-              <div class="product-price color-yellow d-flex">
-                {{ curs.price_visit }} TJS
-                <span class="product-old-price text-white"
-                  ><s>{{ curs.price }}</s>
-                </span>
-              </div>
-              <div class="h6">{{ curs.type_courses }}</div>
-            </div>
+      <div class="col-md-4" 
+        v-for="curs in cursList" 
+        @click="
+          toggleModal('.pay-curs'),
+            (addCurs = curs),
+            (cursData.courses_id = curs.id)"
+      >
+        <div class="w-100 h-100 courses-card position-relative mb-3 p-0">
+          <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>
+          <img class="w-100 h-100" :src="'http://fitness.abdurazzoq.beget.tech/public/' + curs.img" alt="">
+          <div class="at-bottom position-absolute bottom-0 ps-4">
+            <h5>{{ curs.title }}</h5>
+            <p class="m-0">{{ curs.discount_price }} TJS <b class="text-white mx-1">|</b> <s class="text-white">{{ curs.price }} TJS</s></p>
+            <p class="m-0 mb-2 text-white text-capitalize">{{ curs.type_courses }}</p>
           </div>
         </div>
       </div>
