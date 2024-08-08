@@ -571,7 +571,7 @@ import { Fragment } from "vue";
     mounted() {
       this.getInfo('http://fitness.abdurazzoq.beget.tech/public/api/coach/all','DataUsers', 1)
       this.getInfo('http://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
-      this.getInfoUsers()
+      // this.getInfoUsers()
     },
     watch: {
       modal() {
