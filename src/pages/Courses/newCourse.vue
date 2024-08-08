@@ -84,7 +84,7 @@
                       </div>
                       <div class="d-flex justify-content-between align-items-start my-4 mt-5 listInput mx-5 px-2">
                         <input required autocomplete="off" type="text" class="" placeholder="Цена" id="price" v-model="formData.price">
-                        <input required autocomplete="off" type="text" class="" placeholder="Скидка" id="discount" v-model="formData.discount">
+                        <input autocomplete="off" type="text" class="" placeholder="Скидка" id="discount" v-model="formData.discount">
                         <input required autocomplete="off" type="text" class="" placeholder="Итого" id="total" v-model="formData.discount_price">
 
                         <label for="discount_price" class="text-end d-none">Итого: <span v-if="formData.price!==''">{{formData.discount_price=formData.price-Math.round((formData.price/100) * formData.discount)}}</span></label><!--        <div class="form position-relative">-->
@@ -153,7 +153,7 @@
                                                         <div class="d-flex mt-2 mb-4">
                                                             <input required autocomplete="off" type="text" placeholder="Заголовок" v-model="formData.training_days[index].exercises[index2].title">
                                                         </div>
-                                                        <input required autocomplete="off" type="text" class="mb-4" placeholder="Ссылка на видео" v-model="formData.training_days[index].exercises[index2].link">
+                                                        <input autocomplete="off" type="text" class="mb-4" placeholder="Ссылка на видео" v-model="formData.training_days[index].exercises[index2].link">
                                                         <textarea required type="text" placeholder="Описание" class="description pt-2" v-model="formData.training_days[index].exercises[index2].description"></textarea>
                                                     </div>
                                                     <div class="cardBlack button float-end" @click="AppendExercises(index)">
