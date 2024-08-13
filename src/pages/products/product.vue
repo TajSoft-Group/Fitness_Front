@@ -265,6 +265,15 @@
           style="display: none"
         />
       </div>
+      <div class="form position-relative">
+        <label for="barcode">Штрих-код (поднести к сканеру)*</label>
+        <input
+            type="text"
+            placeholder="Отсканируйте штрих-код товара!"
+            id="barcode"
+            v-model="formData.barcode"
+        />
+      </div>
 
       <div class="form position-relative">
         <label for="name">Категория*</label>
@@ -369,6 +378,7 @@ export default {
         discount: "",
         description: "",
         result: "",
+        barcode : "",
         category_id: "",
       },
       imagesPost: [],

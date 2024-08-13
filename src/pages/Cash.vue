@@ -1,4 +1,5 @@
 <template>
+
   <div
     @click="toggleModal('.clients-list')"
     class="base-modal clients-list d-none d-flex justify-content-center align-items-center"
@@ -7,7 +8,7 @@
       <div class="base-modal-top">
         <div class="cart-modal-top">
           <div class="cart-modal-top-title">наличные<br />Бонусы</div>
-          <div class="cart-modal-top-title-2">500 TJS<br />20</div>
+          <div class="cart-modal-top-title-2">{{ currentUser.cards[0].balance }} TJS<br /> {{ currentUser.cards[1].balance }}</div>
         </div>
       </div>
       <div class="content">
@@ -15,30 +16,48 @@
           class="form"
           @submit.prevent="submitForm(), toggleModal('.clients-list')"
         >
-          <label for="title">Оплата наличными</label>
-          <input type="text" placeholder="Наличные" id="title" />
-          <label for="title">Оплата бонусами</label>
-          <input type="text" placeholder="Бонусы" id="title" />
+          <div class="d-flex justify-content-around">
+            <div class="form-recipients">
+              <input autocomplete="off" class="form-check-input" type="radio" id="cash" name="type" value="cash" v-model="type">
+              <label for="cash" class="text-white">Наличными</label>
+            </div>
+            <div class="form-recipients">
+              <input autocomplete="off" class="form-check-input" type="radio" id="card" name="type" value="card" v-model="type">
+              <label for="card" class="text-white">Картой</label>
+            </div>
+            <div class="form-recipients">
+              <input autocomplete="off" class="form-check-input" type="radio" id="bonus" name="type" value="bonus" v-model="type">
+              <label for="bonus" class="text-white">Бонусами</label>
+            </div>
+          </div>
+          <div v-show="type==='cash'">
+            <label for="title">Оплата наличными</label>
+            <input type="text" placeholder="Наличные" id="title" v-model="payment"/>
+          </div>
+          <div v-show="type==='bonus' || type==='card'">
+            <label class="mx-0 mt-3">С вашего счёта будет снято {{ totalPrice.toFixed(2) }} <span v-show="type==='bonus'">баллов</span> <span v-show="type==='card'">TJS</span></label>
+          </div>
           <div class="cart-text">
             <div class="cart-text-row">
               <span>Сумма без скидки</span>
-              <span>333.00 TJS</span>
+              <span>{{ (totalWithoutDiscount).toFixed(2) }} TJS</span>
             </div>
             <div class="cart-text-row">
               <span>Сумма скидки</span>
-              <span>0.00 TJS</span>
+              <span>{{ (totalWithoutDiscount - totalPrice).toFixed(2) }} TJS</span>
             </div>
-            <div class="cart-text-row">
-              <span>Оплата бонусами</span>
-              <span></span>
-            </div>
-            <div class="cart-text-row">
+            <div class="cart-text-row d-flex align-items-center">
               <span>Получение бонусов</span>
-              <span></span>
+              <span v-show="type!=='bonus'">от общей суммы ( {{ currentUser.cards[1].percent }} )</span>
+              <span v-show="type==='bonus'" class="text-danger h6 my-0">начисление бонусов недоступно!</span>
             </div>
-            <div class="cart-text-row cart-total">
+            <div class="cart-text-row cart-total pb-0">
               <span>ИТОГО</span>
-              <span>={{ totalPrice }} TJS</span>
+              <span>={{ totalPrice.toFixed(2) }} TJS</span>
+            </div>
+            <div class="cart-text-row">
+              <span>Сдача</span>
+              <span>={{ payment > 0 ? payment - totalPrice.toFixed(2) : "0" }} TJS</span>
             </div>
           </div>
           <div class="d-flex justify-content-between add-user-buttons">
@@ -49,62 +68,67 @@
             >
               Отмена
             </button>
-            <button class="submit" type="submit">Добавить</button>
+            <button class="submit" type="submit">Оплатить</button>
           </div>
         </form>
       </div>
     </div>
   </div>
 
-  <div class="cash container">
-    <div class="row">
-      <div class="col position-relative">
-        <div
-          :class="{ 'search-input': searchActive.length > 0 }"
-          class="d-flex justify-content-between align-items-center search-block"
-        >
-          <img src="@/assets/images/icons/search.png" alt="search" />
-          <input
-            v-model="searchActive"
-            type="text"
-            id="searchInput"
-            placeholder="Поиск по номеру телефона"
-          />
-          <button
-            v-if="searchActive.length > 0"
-            class="button-close"
-            @click="clearSearch"
-          ></button>
-        </div>
-        <div class="col">
+  <div class="cash container mt-5">
+      <div class="row">
+        <div class="col-md-12 position-relative">
+          <h2>Касса</h2>
           <div
-            v-if="searchActive"
-            class="users-block bg-gray search-result-block"
+            :class="{ 'search-input': searchActive.length > 0 }"
+            class="d-flex justify-content-between align-items-center search-block mt-4"
           >
-            <div>
-              <div
-                v-for="(searchItem, key) in searchResult"
-                :key="key"
-                class="search-result-row"
-              >
-                <div class="search-result-row__title">
-                  <h2>{{ outputSearchTitle(key) }}</h2>
-                  <h2 class="search-result-row__count">
-                    Найдено: {{ searchItem.length }}
-                  </h2>
-                </div>
+            <img src="@/assets/images/icons/search.png" alt="search" />
+            <input
+              v-model="searchActive"
+              @keydown="isBarcode"
+              type="text"
+              id="searchInput"
+              autocomplete="off"
+              ref="myInput"
+              placeholder="Поиск по номеру телефона"
+            />
+            <button
+              v-if="searchActive.length > 0"
+              class="button-close"
+              @click="clearSearch"
+            ></button>
+          </div>
+          <div class="col">
+            <div
+              v-if="searchActive"
+              class="users-block bg-gray search-result-block"
+            >
+              <div>
                 <div
-                  v-for="item in searchItem"
-                  :key="item.id"
-                  @click="selectItem(item)"
-                  class="search-result-row__item"
+                  v-for="(searchItem, key) in searchResult"
+                  :key="key"
+                  class="search-result-row"
                 >
-                  <span v-if="key === 'users'"
-                    >{{ item.name }} {{ item.surname }}</span
+                  <div class="search-result-row__title">
+                    <h2>{{ outputSearchTitle(key) }}</h2>
+                    <h2 class="search-result-row__count">
+                      Найдено: {{ searchItem.length }}
+                    </h2>
+                  </div>
+                  <div
+                    v-for="item in searchItem"
+                    :key="item.id"
+                    @click="selectItem(item)"
+                    class="search-result-row__item"
                   >
-                  <span v-if="key === 'courses'">{{ item.title }}</span>
-                  <span v-if="key === 'products'">{{ item.title }}</span>
-                  <span v-if="key === 'services'">{{ item.name }}</span>
+                    <span v-if="key === 'users'"
+                      >{{ item.name }} {{ item.surname }}</span
+                    >
+                    <span v-if="key === 'courses'">{{ item.title }}</span>
+                    <span v-if="key === 'products'">{{ item.title }}</span>
+                    <span v-if="key === 'services'">{{ item.name }}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -113,22 +137,22 @@
       </div>
       <div class="row">
         <div class="col-7">
-          <div class="row statistics-holder justify-content-between">
-            <div class="col-7 h-auto statistics-container-left">
-              <div class="statistics statistics-left mr-3 h-auto bg-gray">
+          <div class="d-flex w-100 justify-content-between mt-0 pt-3">
+            <div class="col-7">
+              <div class="statistics statistics-left h-auto bg-gray mt-3 me-3">
                 <div class="left d-flex align-items-center">
                   <div
                     class="teacher-img img-width-60 border-2px border-color-yellow"
                   >
-                    <img v-if="currentUser" src="@/assets/images/avatar.jpg" />
+                    <img v-if="currentUser" src="@/assets/images/avatar-user-empty.png" />
                     <img v-else src="@/assets/images/avatar-user-empty.png" />
                   </div>
-                  <div v-if="currentUser">
+                  <div v-if="currentUser" class="w-100">
                     <div class="h5">
                       {{ currentUser.name }} {{ currentUser.surname }}
                     </div>
                     <div class="d-flex justify-content-between">
-                      <span v-if="currentUser.username">{{
+                      <span v-if="currentUser.username" class="me-2">{{
                         currentUser.username
                       }}</span>
                       <span
@@ -147,38 +171,38 @@
                         class="color-yellow"
                         >{{ currentUser.cards[0].name }}</span
                       >
-                      <span>20 баллов</span>
+                      <span>{{ currentUser.cards[1].balance }} баллов</span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-5 statistics bg-gray h-auto">
-              <div class="d-flex justify-content-between">
+            <div class="col-5 px-0">
+              <div class="d-flex justify-content-between statistics bg-gray h-auto mt-3">
                 <div>
-                  <div class="fs-5">Цена:</div>
-                  <div class="fs-5">Бонус:</div>
+                  <div class="fs-6">Цена:</div>
+                  <div class="fs-6">Бонус:</div>
                   <div class="h5">Итого:</div>
                 </div>
-                <div class="ms-5 ps-5">
-                  <div class="fs-5">333 c</div>
-                  <div class="fs-5">20</div>
-                  <div class="h5">{{ totalPrice }} c</div>
+                <div class="">
+                  <div class="fs-6">{{ cart.length > 0 ? cart.at(-1).price : 0 }} c</div>
+                  <div class="fs-6">{{ currentUser.cards[1].balance }}</div>
+                  <div class="h5">{{ totalPrice.toFixed(2) }} c</div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row cart-container">
-            <div class="users-block p-4">
-              <div class="cart-list-holder">
-                <table id="dataTable">
+          <div class="d-flex w-100">
+            <div class="users-block py-2 rounded-5 mt-3 p-5 w-100">
+              <div class="cart-list-holder mb-5">
+                <table id="dataTable" class="cartTable">
                   <thead>
                     <tr>
-                      <th class="col-3 text-start">Название</th>
+                      <th class="col-3 text-start"> &nbsp; Название</th>
                       <th>Кол-во (шт)</th>
                       <th>Цена</th>
                       <th>Скидка</th>
-                      <th>Итого</th>
+                      <th class="total">Итого</th>
                       <th>&nbsp;</th>
                     </tr>
                   </thead>
@@ -187,22 +211,27 @@
                       <td class="col-2">
                         <div class="d-flex">
                           {{ index + 1 }}.
-                          <div class="text-start ms-2">{{ item.name }}</div>
+                          <div class="text-start ms-2" v-if="item.name">{{ item.name }}</div>
+                          <div class="text-start ms-2" v-if="item.title && !item.name">{{ item.title }}</div>
                         </div>
                       </td>
                       <td>
-                        <input
-                          class="bg-gray w-25 border-1px text-white"
-                          type="number"
-                          min="1"
-                          max="99"
-                          v-model="item.count"
-                        />
+                        <div class="d-flex justify-content-center align-items-center">
+                          <a @click="itemCnt('-', index)" class="counter d-flex align-items-center justify-content-center">-</a>
+                          <input
+                              class="bg-gray w-25 border-1px text-white mx-1 countInp"
+                              type="number"
+                              min="1"
+                              max="99"
+                              v-model="item.count"
+                          />
+                          <a @click="itemCnt('+', index)" class="counter d-flex align-items-center justify-content-center">+</a>
+                        </div>
                       </td>
                       <td>{{ item.price }} сом</td>
                       <td>- {{ item.discount }} %</td>
                       <td>
-                        {{ itemTotalPrice(item.count, item.price_discount) }}
+                        {{ itemTotalPrice(item.count, item.price_discount).toFixed(2) }}
                         сом<br />
                       </td>
                       <td>
@@ -232,151 +261,153 @@
             </div>
           </div>
         </div>
-        <div class="col-5 statistics bg-gray h-auto p-4">
-          <h3 class="pt-3 statistics-title">ПРОДУКТЫ</h3>
-          <div class="scroll-container">
-            <div class="scroll-content">
-              <div class="row">
-                <div class="col product-catalog">
-                  <button
-                    class="mt-3 py-2 me-3"
-                    :class="{
+        <div class="col-5 pt-1">
+          <div class="statistics bg-gray h-auto p-4 mt-4">
+            <h4 class="pt-3 statistics-title">ПРОДУКТЫ</h4>
+            <div class="scroll-container">
+              <div class="scroll-content">
+                <div class="row">
+                  <div class="col product-catalog">
+                    <button
+                        class="py-2 me-3"
+                        :class="{
                       active: !activeProductCategory,
                     }"
-                    @click="toggleProduct(null)"
-                  >
-                    Все
-                  </button>
-                  <button
-                    class="mt-3 py-2 me-3"
-                    v-for="(item, index) in productCategories"
-                    :key="index"
-                    :class="{
+                        @click="toggleProduct(null)"
+                    >
+                      Все
+                    </button>
+                    <button
+                        class="py-2 me-3"
+                        v-for="(item, index) in productCategories"
+                        :key="index"
+                        :class="{
                       active: activeProductCategory?.id === item.id,
                     }"
-                    @click="toggleProduct(item)"
-                  >
-                    {{ item.name }}
-                  </button>
+                        @click="toggleProduct(item)"
+                    >
+                      {{ item.name }}
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="row flex-nowrap">
-                  <div
-                    v-for="item in productList"
-                    @click="selectItem(item)"
-                    class="product-card p-0 position-relative"
-                  >
-                    <img
-                      :src="`http://fitness.abdurazzoq.beget.tech/public/${item.img[0]}`"
-                    />
-                    <div class="product-info">
-                      <div class="product-title mb-2">{{ item.title }}</div>
-                      <div class="product-price color-yellow d-flex">
-                        {{ item.price_one }} TJS
-                        <span class="product-old-price text-white"
-                          ><s>{{ item.oldPrice }} c</s>
+                <div class="row">
+                  <div class="row flex-nowrap">
+                    <div
+                        v-for="item in productList"
+                        @click="selectItem(item);"
+                        class="product-card p-0 position-relative"
+                    >
+                      <img
+                          :src="`http://fitness.abdurazzoq.beget.tech/public/${item.img[0]}`"
+                      />
+                      <div class="product-info">
+                        <div class="product-title mb-0">{{ item.title }}</div>
+                        <div class="product-price color-yellow d-flex">
+                          {{ item.price_one }} TJS
+                          <span class="product-old-price text-white"
+                          ><s>{{}} c</s>
                         </span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="scroll-container">
-            <div class="scroll-content">
-              <div class="row">
-                <h3 class="pt-3 statistics-title">УСЛУГИ</h3>
-                <div class="col product-catalog">
-                  <button
-                    class="mt-3 py-2 me-3"
-                    :class="{
+            <div class="scroll-container">
+              <div class="scroll-content">
+                <div class="row">
+                  <h4 class="pt-3 statistics-title">УСЛУГИ</h4>
+                  <div class="col product-catalog">
+                    <button
+                        class="py-2 me-3"
+                        :class="{
                       active: !activeServiceType,
                     }"
-                    @click="toggleService(null)"
-                  >
-                    Все
-                  </button>
-                  <button
-                    class="mt-3 py-2 me-3"
-                    v-for="(item, index) in serviceType"
-                    :key="index"
-                    :class="{
+                        @click="toggleService(null)"
+                    >
+                      Все
+                    </button>
+                    <button
+                        class="py-2 me-3"
+                        v-for="(item, index) in serviceType"
+                        :key="index"
+                        :class="{
                       active: activeServiceType?.name === item.name,
                     }"
-                    @click="toggleService(item)"
-                  >
-                    {{ item.name }}
-                  </button>
-                </div>
-              </div>
-              <div class="row flex-nowrap uslugi-holder">
-                <div
-                  v-for="item in serviceList"
-                  class="uslug-card p-0 position-relative"
-                  @click="selectItem(item)"
-                >
-                  <img
-                    :src="`http://fitness.abdurazzoq.beget.tech/public/${item.img[0]}`"
-                  />
-                  <div class="product-info">
-                    <div class="product-title mb-2 border-color-yellow">
+                        @click="toggleService(item)"
+                    >
                       {{ item.name }}
-                    </div>
-                    <div class="product-price color-yellow d-flex">
-                      {{ item.price_visit }} TJS
-                      <span class="product-old-price text-white"
+                    </button>
+                  </div>
+                </div>
+                <div class="row flex-nowrap uslugi-holder">
+                  <div
+                      v-for="item in serviceList"
+                      class="uslug-card p-0 position-relative"
+                      @click="selectItem(item)"
+                  >
+                    <img
+                        :src="`http://fitness.abdurazzoq.beget.tech/public/${item.img[0]}`"
+                    />
+                    <div class="product-info">
+                      <div class="product-title mb-0 border-color-yellow">
+                        {{ item.name }}
+                      </div>
+                      <div class="product-price color-yellow d-flex">
+                        {{ item.price_visit }} TJS
+                        <span class="product-old-price text-white"
                         >/ 1 посещение
                       </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="scroll-container">
-            <div class="scroll-content">
-              <div class="row">
-                <h3 class="statistics-title">КУРСЫ</h3>
-                <div v-if="courseTypes" class="col product-catalog">
-                  <button
-                    class="mt-3 py-2 me-3"
-                    :class="{
+            <div class="scroll-container">
+              <div class="scroll-content">
+                <div class="row">
+                  <h4 class="statistics-title">КУРСЫ</h4>
+                  <div v-if="courseTypes" class="col product-catalog">
+                    <button
+                        class="py-2 me-3"
+                        :class="{
                       active: !activeCurseType,
                     }"
-                    @click="toggleCourse(null)"
-                  >
-                    Все
-                  </button>
-                  <button
-                    class="mt-3 py-2 me-3"
-                    v-for="(item, index) in courseTypes"
-                    :key="index"
-                    :class="{
+                        @click="toggleCourse(null)"
+                    >
+                      Все
+                    </button>
+                    <button
+                        class="py-2 me-3"
+                        v-for="(item, index) in courseTypes"
+                        :key="index"
+                        :class="{
                       active: activeCurseType?.id === item.id,
                     }"
-                    @click="toggleCourse(item)"
-                  >
-                    {{ item.name }}
-                  </button>
+                        @click="toggleCourse(item)"
+                    >
+                      {{ item.name }}
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div v-if="coursesList.length" class="row flex-nowrap">
-                <div
-                  v-for="course in coursesList"
-                  class="uslug-card p-0 position-relative"
-                  @click="selectItem(course)"
-                >
-                  <img
-                    :src="`http://fitness.abdurazzoq.beget.tech/public/${course.img}`"
-                  />
-                  <div class="product-info">
-                    <div class="product-title mb-2 border-color-yellow">
-                      {{ course.title }}
-                    </div>
-                    <div class="product-price color-yellow d-flex">
-                      {{ course.price }} TJS
+                <div v-if="coursesList.length" class="row flex-nowrap">
+                  <div
+                      v-for="course in coursesList"
+                      class="uslug-card p-0 position-relative"
+                      @click="selectItem(course)"
+                  >
+                    <img
+                        :src="`http://fitness.abdurazzoq.beget.tech/public/${course.img}`"
+                    />
+                    <div class="product-info">
+                      <div class="product-title mb-0 border-color-yellow">
+                        {{ course.title }}
+                      </div>
+                      <div class="product-price color-yellow d-flex">
+                        {{ course.price }} TJS
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -386,19 +417,51 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
 import posts from "@/components/axios/posts.js";
 import gets from "@/components/axios/get.js";
+import product from "@/pages/products/product.vue";
 
 export default {
   data() {
     return {
       searchActive: "",
       searchResult: null,
-      currentUser: null,
+      // type: 'cash','card','bonus',
+      type: 'cash',
+      payment: "",
+      FormData: {
+        cards_id: "0",
+        services_id: [
+          // {
+          //   id:"7",
+          //   count:"2"
+          // },
+        ],
+        course_id: [],
+        product_id: [],
+        payment: 0,
+        payment_type : "purchase",
+        create_add: new Date()
+      },
+      currentUser: {
+        name: 'Имя',
+        surname: 'Фамилия',
+        username: 'Телефон',
+        cards: [
+          {
+            balance: '0',
+            name: "Карта"
+          },
+          {
+            balance: '0',
+            name: "Бонус",
+            percent : 0,
+          }
+        ],
+      },
       cart: [],
       modal: "auto",
       modalSelector: "",
@@ -416,9 +479,14 @@ export default {
   computed: {
     totalPrice() {
       return this.cart.reduce((total, item) => {
-        return total + parseFloat(item.price_discount);
+        return total + (parseFloat(item.price_discount) * parseFloat(item.count ? item.count : 1 ));
       }, 0);
     },
+    totalWithoutDiscount() {
+      return this.cart.reduce((total, item) => {
+        return total + (parseFloat(item.price) * parseFloat(item.count ? item.count : 1 ));
+      }, 0);
+    }
   },
   watch: {
     // whenever question changes, this function will run
@@ -429,6 +497,7 @@ export default {
         .then((response) => {
           if (response && response.data) {
             this.searchResult = response.data;
+            this.simulateEnterKeyPress()
           }
         })
         .catch((error) => {
@@ -534,76 +603,140 @@ export default {
       this.updateToggleModal();
     },
   },
+  mounted() {
+    this.getCourseTypes();
+    this.getProductCategories();
+    this.getServiceTypes();
+  },
   methods: {
+    itemCnt: function (action, item) {
+      if (action === '+') {
+        if(this.cart[item].count < 99)
+          this.cart[item].count += 1
+      } else {
+        if (this.cart[item].count > 1)
+          this.cart[item].count -= 1
+      }
+
+
+      this.FormData.product_id = this.cart
+          .filter(value => value.type === 'product')
+          .map(value => ({ id: value.id, count: value.count }));
+      this.FormData.course_id = this.cart
+          .filter(value => value.type === 'course')
+          .map(value => ({ id: value.id, count: value.count }));
+      this.FormData.services_id = this.cart
+          .filter(value => value.type === 'service')
+          .map(value => ({ id: value.id, count: value.count }));
+
+    },
+    simulateEnterKeyPress() {
+      const event = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        keyCode: 13, // Deprecated, but still widely used
+        code: 'Enter',
+        which: 13, // Deprecated, but still widely used
+        bubbles: true
+      });
+
+      // Dispatch the event on the target element
+      const inputElement = this.$refs.myInput; // Replace with your element reference
+      if (inputElement) {
+        inputElement.dispatchEvent(event);
+      }
+    },
+    isBarcode() {
+      const barcode = Number(this.searchActive);
+      if (!isNaN(barcode) && this.searchActive.length === 13) {
+        if (this.searchResult && Array.isArray(this.searchResult.products)) {
+          const products = this.searchResult.products;
+
+          // Example: Assign product info to a variable or do further processing
+          let firstProduct = products[0];
+
+          if (products.length > 1) {
+            firstProduct = products.find(item => item.barcode === this.searchActive);
+          }
+          console.log('First product:', firstProduct);
+          // You can use firstProduct to populate a variable or UI elements
+          this.selectItem(firstProduct); // Example: store it in a data property
+          this.searchActive = "";
+        } else {
+          console.error('Products array is missing or searchResult is not initialized.');
+        }
+      } else {
+        console.log('Invalid barcode');
+      }
+    },
     deleteProduct(index) {
       this.cart.splice(index, 1);
     },
     getCourseTypes() {
-      gets("http://fitness.abdurazzoq.beget.tech/public/api/courses_get_type ")
-        .then((response) => {
-          this.courseTypes = response.data;
-        })
-        .catch((error) => {
-          this.error = error;
-          this.Delay("loading", 1);
-        });
+      gets("http://fitness.abdurazzoq.beget.tech/public/api/courses_get_type")
+          .then((response) => {
+            this.courseTypes = response.data;
+          })
+          .catch((error) => {
+            this.error = error;
+            this.Delay("loading", .5);
+          });
     },
     getCourses(id) {
       return gets(
-        `http://fitness.abdurazzoq.beget.tech/public/api/courses/type/${id}`
+          `http://fitness.abdurazzoq.beget.tech/public/api/courses/type/${id}`
       )
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          this.error = error;
-          this.Delay("loading", 1);
-        });
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            this.error = error;
+            this.Delay("loading", .5);
+          });
     },
     getProducts(id) {
       return gets(
-        `http://fitness.abdurazzoq.beget.tech/public/product/category/${id}`
+          `http://fitness.abdurazzoq.beget.tech/public/product/category/${id}`
       )
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          this.error = error;
-          this.Delay("loading", 1);
-        });
+          .then((response) => {
+            return response.data;
+          })
+          .catch((error) => {
+            this.error = error;
+            this.Delay("loading", 1);
+          });
     },
     getProductCategories() {
       gets("http://fitness.abdurazzoq.beget.tech/public/category")
-        .then((response) => {
-          this.productCategories = response.data;
-        })
-        .catch((error) => {
-          this.error = error;
-          this.Delay("loading", 1);
-        });
+          .then((response) => {
+            this.productCategories = response.data;
+          })
+          .catch((error) => {
+            this.error = error;
+            this.Delay("loading", 1);
+          });
     },
     getServiceTypes() {
       gets("http://fitness.abdurazzoq.beget.tech/public/api/services/name")
-        .then((response) => {
-          this.serviceType = response.data.data;
-        })
-        .catch((error) => {
-          this.error = error;
-          this.Delay("loading", 1);
-        });
+          .then((response) => {
+            this.serviceType = response.data.data;
+          })
+          .catch((error) => {
+            this.error = error;
+            this.Delay("loading", 1);
+          });
     },
     getService(id) {
       return gets(
-        `http://fitness.abdurazzoq.beget.tech/public/api/services/find_by_name/${id}`
+          `http://fitness.abdurazzoq.beget.tech/public/api/services/find_by_name/${id}`
       )
-        .then((response) => {
-          // this.productList = response.data;
-          return response.data;
-        })
-        .catch((error) => {
-          this.error = error;
-          this.Delay("loading", 1);
-        });
+          .then((response) => {
+            // this.productList = response.data;
+            return response.data;
+          })
+          .catch((error) => {
+            this.error = error;
+            this.Delay("loading", 1);
+          });
     },
     toggleCourse(item) {
       this.activeCurseType = item;
@@ -647,6 +780,24 @@ export default {
         item.discount = item.discount || 0;
         item.price_discount = item.price - (item.price / 100) * item.discount;
         this.cart.push(item);
+
+        switch (item.type){
+          case "product":
+            this.FormData.product_id = this.cart
+                .filter(value => value.type === item.type)
+                .map(value => ({ id: value.id, count: value.count }));
+            break;
+          case "course":
+            this.FormData.course_id = this.cart
+                .filter(value => value.type === item.type)
+                .map(value => ({ id: value.id, count: value.count }));
+            break;
+          case "service":
+            this.FormData.services_id = this.cart
+                .filter(value => value.type === item.type)
+                .map(value => ({ id: value.id, count: value.count }));
+            break;
+        }
       }
     },
     itemTotalPrice(count, price) {
@@ -666,43 +817,36 @@ export default {
       }
     },
     async submitForm() {
+      if(this.type==='cards'){
+        this.FormData.cards_id = this.currentUser.cards[0].id;
+        this.FormData.payment_type = "purchase";
+      }else{
+        this.FormData.cards_id = this.currentUser.cards[1].id;
+        this.FormData.payment_type = "withdrawal_from_bonus";
+      }
+      this.FormData.payment = this.totalPrice.toFixed(2);
+
       let FormData = this.formData;
-      FormData.img = this.imagesPost;
-      FormData.coach_id = this.idTr;
+
       try {
-        const response = await form_Data(
-          "http://fitness.abdurazzoq.beget.tech/api/courses/create",
-          FormData
+        const response = await posts(
+            "http://fitness.abdurazzoq.beget.tech/public/transaction/create",
+            this.FormData
         );
         if (response.status === 200) {
-          this.addStatus = true;
-          await this.getInfo(
-            "http://fitness.abdurazzoq.beget.tech/public/api/coach/all",
-            "DataUsers",
-            1
-          );
-          await this.getInfo(
-            "http://fitness.abdurazzoq.beget.tech/api/courses/all",
-            "cursList",
-            2
-          );
-          await this.getInfoUsers();
-          this.Delay("addStatus", 7);
+          console.log(200)
         } else {
           console.error(`Запрос завершился с ошибкой: ${response.status}`);
         }
       } catch (error) {
         console.error("Ошибка при отправке данных:", error);
       }
+
+
     },
     clearSearch() {
       this.searchActive = "";
     },
-  },
-  mounted() {
-    this.getCourseTypes();
-    this.getProductCategories();
-    this.getServiceTypes();
   },
 };
 </script>
@@ -717,8 +861,9 @@ export default {
     padding: 35px;
   }
   .statistics-title {
-    font-size: 22px !important;
+    font-size: 18px !important;
     padding-left: 15px;
+    margin-bottom: 10px;
   }
 }
 button.active {
@@ -810,5 +955,46 @@ button.active {
 .cart-list-holder::-webkit-scrollbar-thumb {
   background: #090909;
   border-radius: 6px;
+}
+.cartTable th, .cartTable td{
+  font-size: 16px;
+}
+.cartTable tr{
+  height: 60px;
+}
+.counter{
+  display: block;
+  cursor: pointer;
+  background: #D0FD3E;
+  color: #000;
+  font-weight: bolder;
+  width: 20px !important;
+  height: 20px !important;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  user-select: none;
+}
+.total{
+  width: 100px;
+}
+.countInp{
+  border-radius: 8px;
+  padding: 4px 0 4px 10px !important;
+  font-size: 14px;
+}
+input{
+  outline: none;
+}
+.product-card{
+  height: 140px !important;
+}
+.button-type-1{
+  padding: 18px 25px;
+  font-size: 18px;
+  border-radius: 15px;
+  min-width: auto;
+}
+.users-block.py-2 {
+  padding-bottom: 20px !important;
 }
 </style>

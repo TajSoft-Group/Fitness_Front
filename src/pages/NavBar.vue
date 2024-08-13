@@ -38,14 +38,14 @@ export default {
               </li>
               <li :class="{active: (ActiveMenu === '/finance' || ActiveMenu === '/newsletters') }" class="trigger-hover">
                 <a>Управление</a>
-                <ul class="hidden-hover bg-gray p-0 position-absolute">
-                  <li :class="{active: ActiveMenu === '/finance'}"><router-link to="/finance" class="m-3 p-3">Финансы</router-link></li>
-                  <li :class="{active: ActiveMenu === '/newsletters'}"><router-link to="/newsletters" class="m-3 p-3">Рассылки</router-link></li>
+                <ul class="hidden-hover bg-gray p-0 position-absolute mt-0 pt-4 rounded-3">
+                  <li :class="{active: ActiveMenu === '/finance'}"><router-link to="/finance" class="mx-3 p-3 my-2 p-3 mt-0">Финансы</router-link></li>
+                  <li :class="{active: ActiveMenu === '/newsletters'}"><router-link to="/newsletters" class="mx-3 p-3 my-2 p-3 mt-0">Рассылки</router-link></li>
                 </ul>
               </li>
-              <li :class="{active: ActiveMenu === '/cash'}"><router-link to="/cash">Касса</router-link></li>
               <li :class="{active: ActiveMenu === '/lockers'}"><router-link to="/lockers">Шкафчики</router-link></li>
               <li :class="{active: ActiveMenu === '/product'}"><router-link to="/product">Продукты</router-link></li>
+              <li :class="{active: ActiveMenu === '/cash'}"><router-link to="/cash">Касса</router-link></li>
             </ul>
           </div>
           <router-link to="/login"><div class="user-icon">
