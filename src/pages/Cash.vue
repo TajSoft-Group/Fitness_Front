@@ -1,4 +1,20 @@
 <template>
+  <section class="mb-4">
+    <div class="container">
+      <div class="row relative">
+        <div :class="[success ? 'show-false' : 'show-add']"  class="added-user-message">
+          <div class="result-true">
+            <div class="result-true-card d-flex align-items-center">
+              <img class="m-4 img-width-40" src="@/assets/images/icons/check_add.png">
+              <div class="result-true-content ">
+                <div class="result-true-title">Транзакция <span class="color-yellow">успешно</span> проведена</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <div
     @click="toggleModal('.clients-list')"
@@ -55,7 +71,7 @@
               <span>ИТОГО</span>
               <span>={{ totalPrice.toFixed(2) }} TJS</span>
             </div>
-            <div class="cart-text-row">
+            <div class="cart-text-row" v-show="type==='cash'">
               <span>Сдача</span>
               <span>={{ payment > 0 ? payment - totalPrice.toFixed(2) : "0" }} TJS</span>
             </div>
@@ -430,10 +446,11 @@ export default {
       searchActive: "",
       searchResult: null,
       // type: 'cash','card','bonus',
+      success: false,
       type: 'cash',
       payment: "",
       FormData: {
-        cards_id: "0",
+        cards_id: "",
         services_id: [
           // {
           //   id:"7",
@@ -443,10 +460,10 @@ export default {
         course_id: [],
         product_id: [],
         payment: 0,
-        payment_type : "purchase",
+        payment_type : "cash",
         create_add: new Date()
       },
-      currentUser: {
+      currentUser:{
         name: 'Имя',
         surname: 'Фамилия',
         username: 'Телефон',
@@ -609,6 +626,11 @@ export default {
     this.getServiceTypes();
   },
   methods: {
+    Delay(target,t){
+      setTimeout(()=>{
+        this[target]=false
+      },t*1000)
+    },
     itemCnt: function (action, item) {
       if (action === '+') {
         if(this.cart[item].count < 99)
@@ -820,13 +842,14 @@ export default {
       if(this.type==='cards'){
         this.FormData.cards_id = this.currentUser.cards[0].id;
         this.FormData.payment_type = "purchase";
-      }else{
+      }
+
+      if(this.type==='bonus'){
         this.FormData.cards_id = this.currentUser.cards[1].id;
         this.FormData.payment_type = "withdrawal_from_bonus";
       }
-      this.FormData.payment = this.totalPrice.toFixed(2);
 
-      let FormData = this.formData;
+      this.FormData.payment = this.totalPrice.toFixed(2);
 
       try {
         const response = await posts(
@@ -834,7 +857,42 @@ export default {
             this.FormData
         );
         if (response.status === 200) {
-          console.log(200)
+          this.success = true;
+          this.Delay('success',2)
+          // this.delay
+          this.payment = 0;
+          this.FormData = {
+            cards_id: "",
+            services_id: [
+              // {
+              //   id:"7",
+              //   count:"2"
+              // },
+            ],
+            course_id: [],
+            product_id: [],
+            payment: 0,
+            payment_type : "cash",
+            create_add: new Date()
+          };
+          this.cart = [];
+          this.currentUser = {
+            name: 'Имя',
+            surname: 'Фамилия',
+            username: 'Телефон',
+            cards: [
+              {
+                balance: '0',
+                name: "Карта"
+              },
+              {
+                balance: '0',
+                name: "Бонус",
+                percent : 0,
+              }
+            ]
+          };
+
         } else {
           console.error(`Запрос завершился с ошибкой: ${response.status}`);
         }

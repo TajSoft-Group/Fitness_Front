@@ -3,15 +3,15 @@
         <div class="container">
         <div class="row relative">
             <div :class="[addStatus ? 'show-false' : 'show-add']"  class="added-user-message">
-            <div class="result-true">
-                <div class="result-true-card d-flex align-items-center">
-                <img class="m-4 img-width-40" src="@/assets/images/icons/check_add.png">
-                <div class="result-true-content ">
-                    <div class="result-true-title">Пользователь <span class="color-yellow">{{formData.name+' '+formData.surname}}</span> добавлен</div>
-                    <div class="result-true-body mt-2">Новый пользователь успешно добавлен в список клиентов</div>
-                </div>
-                </div>
-            </div>
+              <div class="result-true">
+                  <div class="result-true-card d-flex align-items-center">
+                    <img class="m-4 img-width-40" src="@/assets/images/icons/check_add.png">
+                    <div class="result-true-content ">
+                        <div class="result-true-title">Пользователь <span class="color-yellow">{{formData.name+' '+formData.surname}}</span> добавлен</div>
+                        <div class="result-true-body mt-2">Новый пользователь успешно добавлен в список клиентов</div>
+                    </div>
+                  </div>
+              </div>
             </div>
     
             <div class="col mt-2">
