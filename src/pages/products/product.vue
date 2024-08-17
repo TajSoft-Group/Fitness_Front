@@ -498,7 +498,15 @@ export default {
                 FormData
             );
             this.edit=false;
-            this.deletedProduct = '';
+            this.FormData = {
+              title: "",
+              price_one: "",
+              discount: "",
+              description: "",
+              result: "",
+              barcode : "",
+              category_id: "",
+            };
           }else{
             response = await form_Data(
                 "http://fitness.abdurazzoq.beget.tech/public/product_create",
