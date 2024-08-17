@@ -489,7 +489,7 @@ export default {
         let FormData = {...this.formData};
         FormData.img = this.imagesPost[0];
         try {
-          let responseт зь;
+          let response;
           if(this.edit){
             console.log('yes');
             delete FormData.img
