@@ -497,6 +497,8 @@ export default {
                 `http://fitness.abdurazzoq.beget.tech/public/product/${ FormData.id }`,
                 FormData
             );
+            this.edit=false;
+            this.deletedProduct = '';
           }else{
             response = await form_Data(
                 "http://fitness.abdurazzoq.beget.tech/public/product_create",
