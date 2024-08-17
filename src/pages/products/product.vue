@@ -155,6 +155,7 @@
               class="col bg-black h-auto statistics m-0 p-4 position-absolute edit-card"
             >
               <div
+                  @click="(edit = true); (formData = product); addCardHoliday = true"
                 class="d-flex align-items-center justify-content-between p-3 product-card-menu-item"
               >
                 <p class="m-0">Редактировать</p>
@@ -219,10 +220,11 @@
   <div
     @click="addCardHoliday = !addCardHoliday"
     v-if="addCardHoliday"
-    class="add-user-modal d-flex justify-content-center align-items-center"
+    class="add-user-modal d-flex justify-content-center my-1 align-items-center"
   >
     <div @click.stop class="content">
-      <div class="title">ДОБАВИТЬ ПРОДУКТ</div>
+      <div class="title" v-show="!edit">ДОБАВИТЬ ПРОДУКТ</div>
+      <div class="title" v-show="edit">РЕДАКТИРОВАТЬ ПРОДУКТ</div>
       <div class="form position-relative">
         <label for="surname">Заголовок*</label>
         <input
@@ -245,7 +247,7 @@
         ></textarea>
       </div>
 
-      <div class="form position-relative">
+      <div class="form position-relative" v-if="!edit">
         <label for="phone">Выберите фото*</label>
         <div class="img-card row p-3 justify-content-between">
           <div
@@ -347,9 +349,16 @@
         <button
           class="submit"
           type="button"
-          @click="addCategory('FormData'), (addCardHoliday = false)"
+          @click="addCategory('FormData'); (addCardHoliday = false)"  v-if="!edit"
         >
           Добавить
+        </button>
+        <button
+            class="submit"
+            type="button"
+            @click="addCategory('FormData'); (addCardHoliday = false)" v-if="edit"
+        >
+          Изменить
         </button>
       </div>
     </div>
@@ -360,10 +369,12 @@ import gets from "@/components/axios/get.js";
 import form_Data from "@/components/axios/formData.js";
 import posts from "@/components/axios/posts.js";
 import deletes from "@/components/axios/deletes.js";
+import Patch from "@/components/axios/Patch.js";
 
 export default {
   data() {
     return {
+      edit: false,
       dllStatus: false,
       areyousure: false,
       deletedProduct: "",
@@ -475,14 +486,24 @@ export default {
             console.log(error);
           });
       } else if (typeAdd === "FormData") {
-        let FormData = this.formData;
+        let FormData = {...this.formData};
         FormData.img = this.imagesPost[0];
         try {
-          console.log(FormData);
-          const response = await form_Data(
-            "http://fitness.abdurazzoq.beget.tech/public/product_create",
-            FormData
-          );
+          let responseт зь;
+          if(this.edit){
+            console.log('yes');
+            delete FormData.img
+            response = await Patch(
+                `http://fitness.abdurazzoq.beget.tech/public/product/${ FormData.id }`,
+                FormData
+            );
+          }else{
+            response = await form_Data(
+                "http://fitness.abdurazzoq.beget.tech/public/product_create",
+                FormData
+            );
+          }
+
           console.log(response);
           if (response.status === 200) {
             this.addStatus = true;
