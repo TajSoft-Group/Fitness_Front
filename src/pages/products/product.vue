@@ -2,8 +2,9 @@
   <div class="container">
     <div class="row relative">
       <div
-        @click="toggleModal('.user-delete-modal')"
-        class="add-user-modal user-delete-modal d-none d-flex justify-content-center align-items-center"
+          @click="toggleModal('.user-delete-modal')"
+          class="add-user-modal user-delete-modal d-flex justify-content-center align-items-center"
+          v-if="areyousure"
       >
         <div @click.stop class="content">
           <div class="text-center mb-5">
@@ -20,9 +21,7 @@
                 </button>
                 <button
                   @click="
-                    toggleModal('.user-delete-modal'),
-                      (dllStatus = true),
-                      StatusDelay('dllStatus')
+                    toggleModal('.user-delete-modal'), deleteProduct(deletedProduct.id);
                   "
                   class="submit red"
                   type="button"
@@ -35,22 +34,28 @@
         </div>
       </div>
 
-      <transition v-if="dllStatus" name="bounce" class="z-3 added-user-message">
-        <div class="result-true del-result">
-          <div class="result-true-card d-flex align-items-center">
-            <img
-              class="m-4 img-width-40"
-              src="@/assets/images/icons/dell.png"
-            />
-            <div class="result-true-content">
-              <div class="result-true-title">Продукт успешно удален</div>
-              <div class="result-true-body mt-2">
-                Продукт “Батончик протеиновый” был удален
+      <section class="mb-4">
+        <div class="container">
+          <div class="row relative">
+            <div :class="[dllStatus ? 'show-false' : 'show-add']"  class="added-user-message">
+              <div class="result-true del-result">
+                <div class="result-true-card d-flex align-items-center">
+                  <img
+                      class="m-4 img-width-40"
+                      src="@/assets/images/icons/dell.png"
+                  />
+                  <div class="result-true-content">
+                    <div class="result-true-title">Продукт успешно удален</div>
+                    <div class="result-true-body mt-2">
+                      Продукт “{{ deletedProduct.title }}” был удален
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </transition>
+      </section>
 
       <div class="col">
         <div
@@ -125,7 +130,7 @@
 
   <div class="container">
     <div class="row">
-      <div v-for="product in productList" class="col-3 position-relative">
+      <div v-for="(product, index) in productList" :key="index" class="col-3 position-relative">
         <div class="product-card p-0 position-relative">
           <img
             :src="'http://fitness.abdurazzoq.beget.tech/public/' + product.img"
@@ -150,8 +155,7 @@
               class="col bg-black h-auto statistics m-0 p-4 position-absolute edit-card"
             >
               <div
-                @click="(dllStatus = true), addStatusDelay('dllStatus')"
-                class="d-flex align-items-center justify-content-between px-3 py-4 product-card-menu-item"
+                class="d-flex align-items-center justify-content-between p-3 product-card-menu-item"
               >
                 <p class="m-0">Редактировать</p>
                 <img
@@ -160,7 +164,8 @@
                 />
               </div>
               <div
-                class="d-flex align-items-center justify-content-between px-3 py-4 product-card-menu-item"
+                  @click="(areyousure = true); (deletedProduct = product)"
+                class="d-flex align-items-center justify-content-between p-3 product-card-menu-item"
               >
                 <p class="m-0 blocked">Удалить</p>
                 <img
@@ -354,11 +359,14 @@
 import gets from "@/components/axios/get.js";
 import form_Data from "@/components/axios/formData.js";
 import posts from "@/components/axios/posts.js";
+import deletes from "@/components/axios/deletes.js";
 
 export default {
   data() {
     return {
       dllStatus: false,
+      areyousure: false,
+      deletedProduct: "",
       images: [],
       addCardHoliday: false,
       presentMenu: false,
@@ -392,6 +400,22 @@ export default {
     },
   },
   methods: {
+    deleteProduct(id){
+      console.log(id)
+      deletes(`http://fitness.abdurazzoq.beget.tech/public/product/${ parseInt(id) }`)
+          .then(
+              (response) =>
+              {
+                console.log(response);
+                this.dllStatus = true;
+                this.areyousure=false;
+                let index = this.productList.findIndex(item => item.id === id);
+                if (index !== -1) {
+                  this.productList.splice(index, 1);
+                }
+                setTimeout(()=>{ this.dllStatus=false; },2000)
+              })
+    },
     Delay(target, t) {
       setTimeout(() => {
         this[target] = false;
@@ -551,5 +575,12 @@ button.add-button {
   min-width: 43px;
   min-height: 43px;
   padding: 0;
+}
+.edit-card{
+  font-size: 14px;
+  right: 20px;
+}
+.product-card-menu-item{
+  cursor: pointer;
 }
 </style>
