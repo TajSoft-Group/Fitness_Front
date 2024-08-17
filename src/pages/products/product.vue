@@ -345,7 +345,7 @@
         </div>
       </div>
       <div class="d-flex justify-content-between add-user-buttons">
-        <button @click="addCardHoliday = false" class="dont">Отмена</button>
+        <button @click="(addCardHoliday = false); editNull()" class="dont">Отмена</button>
         <button
           class="submit"
           type="button"
@@ -411,6 +411,18 @@ export default {
     },
   },
   methods: {
+    editNull(){
+      this.edit = false;
+      this.FormData = {
+        title: "",
+        price_one: "",
+        discount: "",
+        description: "",
+        result: "",
+        barcode : "",
+        category_id: "",
+      };
+    },
     deleteProduct(id){
       console.log(id)
       deletes(`http://fitness.abdurazzoq.beget.tech/public/product/${ parseInt(id) }`)
@@ -497,16 +509,7 @@ export default {
                 `http://fitness.abdurazzoq.beget.tech/public/product/${ FormData.id }`,
                 FormData
             );
-            this.edit=false;
-            this.FormData = {
-              title: "",
-              price_one: "",
-              discount: "",
-              description: "",
-              result: "",
-              barcode : "",
-              category_id: "",
-            };
+            this.editNull()
           }else{
             response = await form_Data(
                 "http://fitness.abdurazzoq.beget.tech/public/product_create",
