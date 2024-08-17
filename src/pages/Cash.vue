@@ -176,8 +176,7 @@
                           currentUser.cards.length &&
                           currentUser.cards[0].balance
                         "
-                        >{{ currentUser.cards[0].balance }} TJS</span
-                      >
+                        >{{ currentUser.cards[0].balance }} TJS</span>
                     </div>
                     <div class="d-flex justify-content-between">
                       <span
@@ -298,8 +297,8 @@
                         v-for="(item, index) in productCategories"
                         :key="index"
                         :class="{
-                      active: activeProductCategory?.id === item.id,
-                    }"
+                          active: activeProductCategory?.id === item.id,
+                        }"
                         @click="toggleProduct(item)"
                     >
                       {{ item.name }}
@@ -319,9 +318,9 @@
                       <div class="product-info">
                         <div class="product-title mb-0">{{ item.title }}</div>
                         <div class="product-price color-yellow d-flex">
-                          {{ item.price_one }} TJS
+                          {{ item.price_discount }} TJS
                           <span class="product-old-price text-white"
-                          ><s>{{}} c</s>
+                          ><s>{{ item.price_one }} c</s>
                         </span>
                         </div>
                       </div>
@@ -346,6 +345,7 @@
                     </button>
                     <button
                         class="py-2 me-3"
+                        v-show="serviceList"
                         v-for="(item, index) in serviceType"
                         :key="index"
                         :class="{
@@ -363,9 +363,7 @@
                       class="uslug-card p-0 position-relative"
                       @click="selectItem(item)"
                   >
-                    <img
-                        :src="`http://fitness.abdurazzoq.beget.tech/public/${item.img[0]}`"
-                    />
+                    <img :src="`http://fitness.abdurazzoq.beget.tech/public/${item?.img?.[0] ? item.img[0] : ''}`" />
                     <div class="product-info">
                       <div class="product-title mb-0 border-color-yellow">
                         {{ item.name }}
@@ -485,12 +483,15 @@ export default {
       courseTypes: [],
       activeCurseType: null,
       coursesList: [],
+      courses: [],
       productCategories: [],
       activeProductCategory: null,
       productList: [],
+      products: [],
       serviceType: [],
       activeServiceType: null,
       serviceList: [],
+      services: [],
     };
   },
   computed: {
@@ -590,28 +591,27 @@ export default {
     // activeServiceType
     activeServiceType: {
       async handler(type) {
-        if (this.getService.length) {
-          if (type) {
-            this.serviceList = [];
-            const data = await this.getService(type.name);
-            this.serviceList.push(data.data);
-          } else {
-            this.serviceList = [];
-            this.serviceType.forEach(async (item) => {
-              const data = await this.getService(item.name);
-              this.serviceList.push(data.data);
-            });
+        this.serviceList = []; // Clear the service list initially
+        if (type) {
+          // Find service by type name
+          const foundService = this.getService(type.name);
+          if (foundService) {
+            this.serviceList.push(foundService);
           }
+        } else {
+          // Show all services if no specific type is selected
+          const allServices = this.getService();
+          this.serviceList = allServices;
         }
       },
       immediate: true,
     },
     serviceType: {
       async handler(types) {
-        types.forEach(async (item) => {
+        for (const item of types) {
           const data = await this.getService(item.name);
-          this.serviceList.push(data.data);
-        });
+          this.serviceList.push(data);
+        }
       },
       once: true,
       deep: true,
@@ -621,6 +621,9 @@ export default {
     },
   },
   mounted() {
+    this.loadService();
+    this.loadCourses();
+    this.loadProducts();
     this.getCourseTypes();
     this.getProductCategories();
     this.getServiceTypes();
@@ -631,7 +634,7 @@ export default {
         this[target]=false
       },t*1000)
     },
-    itemCnt: function (action, item) {
+    itemCnt(action, item) {
       if (action === '+') {
         if(this.cart[item].count < 99)
           this.cart[item].count += 1
@@ -639,7 +642,6 @@ export default {
         if (this.cart[item].count > 1)
           this.cart[item].count -= 1
       }
-
 
       this.FormData.product_id = this.cart
           .filter(value => value.type === 'product')
@@ -655,14 +657,13 @@ export default {
     simulateEnterKeyPress() {
       const event = new KeyboardEvent('keydown', {
         key: 'Enter',
-        keyCode: 13, // Deprecated, but still widely used
+        keyCode: 13,
         code: 'Enter',
-        which: 13, // Deprecated, but still widely used
+        which: 13,
         bubbles: true
       });
 
-      // Dispatch the event on the target element
-      const inputElement = this.$refs.myInput; // Replace with your element reference
+      const inputElement = this.$refs.myInput;
       if (inputElement) {
         inputElement.dispatchEvent(event);
       }
@@ -673,15 +674,13 @@ export default {
         if (this.searchResult && Array.isArray(this.searchResult.products)) {
           const products = this.searchResult.products;
 
-          // Example: Assign product info to a variable or do further processing
           let firstProduct = products[0];
 
           if (products.length > 1) {
             firstProduct = products.find(item => item.barcode === this.searchActive);
           }
           console.log('First product:', firstProduct);
-          // You can use firstProduct to populate a variable or UI elements
-          this.selectItem(firstProduct); // Example: store it in a data property
+          this.selectItem(firstProduct);
           this.searchActive = "";
         } else {
           console.error('Products array is missing or searchResult is not initialized.');
@@ -704,11 +703,18 @@ export default {
           });
     },
     getCourses(id) {
+      return this.courses.filter((val)=>{
+        return val.type === id;
+      })
+    },
+    loadCourses() {
       return gets(
-          `http://fitness.abdurazzoq.beget.tech/public/api/courses/type/${id}`
+          `http://fitness.abdurazzoq.beget.tech/public/api/courses/all`
       )
           .then((response) => {
-            return response.data;
+            this.courses = response.data;
+            this.courses.forEach((value)=>{ value.type='course'; })
+            this.coursesList = this.courses;
           })
           .catch((error) => {
             this.error = error;
@@ -716,16 +722,23 @@ export default {
           });
     },
     getProducts(id) {
+      return this.products.filter((value)=>{
+        return value.category === id;
+      })
+    },
+    loadProducts() {
       return gets(
-          `http://fitness.abdurazzoq.beget.tech/public/product/category/${id}`
+          `http://fitness.abdurazzoq.beget.tech/public/product/all`
       )
-          .then((response) => {
-            return response.data;
-          })
-          .catch((error) => {
-            this.error = error;
-            this.Delay("loading", 1);
-          });
+      .then((response) => {
+        this.products = response.data;
+        this.products.forEach((value)=>{ value.type='product'; })
+        this.productList = this.products;
+      })
+      .catch((error) => {
+        this.error = error;
+        this.Delay("loading", 1);
+      });
     },
     getProductCategories() {
       gets("http://fitness.abdurazzoq.beget.tech/public/category")
@@ -747,19 +760,34 @@ export default {
             this.Delay("loading", 1);
           });
     },
-    getService(id) {
-      return gets(
-          `http://fitness.abdurazzoq.beget.tech/public/api/services/find_by_name/${id}`
-      )
+    getService(name = null) {
+      if (name === null) {
+        return this.services;
+      } else {
+        return this.services.find(service => { console.log('services.name',service.name); console.log('setted name',name);  return service.name === name });
+      }
+    },
+    loadService() {
+      return gets(`http://fitness.abdurazzoq.beget.tech/public/api/services/all`)
           .then((response) => {
-            // this.productList = response.data;
-            return response.data;
+            if (response && response.data && response.data.data) {
+              this.services = response.data.data;
+              this.services.forEach((service) => {
+                service.type = 'service';
+              });
+              this.serviceList = this.services;
+            } else {
+              console.error('Unexpected response structure:', response);
+              this.error = 'Failed to load services. Please try again later.';
+            }
           })
           .catch((error) => {
-            this.error = error;
+            console.error('API request failed:', error);
+            this.error = 'Failed to load services. Please try again later.';
             this.Delay("loading", 1);
           });
     },
+
     toggleCourse(item) {
       this.activeCurseType = item;
     },
@@ -787,13 +815,12 @@ export default {
       }
     },
     selectItem(item) {
-      console.log("item cart", item);
       if (item.type && item.type == "user") {
         this.currentUser = item;
         this.clearSearch();
       }
       if (item.type && item.type !== "user") {
-        item.count = 1;
+        console.log('sex')
         if (item.type === "service") {
           item.price = item.price_visit;
           item.title = item.name;
@@ -801,7 +828,16 @@ export default {
         item.price = item.price || item.price_one || 0;
         item.discount = item.discount || 0;
         item.price_discount = item.price - (item.price / 100) * item.discount;
-        this.cart.push(item);
+
+        let checkFromCartIdx = this.cart.findIndex((val) => val.id === item.id && val.type === item.type);
+
+        if (checkFromCartIdx === -1) {
+          item.count = 1;
+          this.cart.push(item);
+        } else {
+          console.log('sex Active', checkFromCartIdx)
+          this.itemCnt('+', checkFromCartIdx);
+        }
 
         switch (item.type){
           case "product":
@@ -930,14 +966,14 @@ button.active {
 }
 
 .scroll-container {
-  overflow-x: auto; /* Включает горизонтальную прокрутку */
-  white-space: nowrap; /* Запрещает перенос строк, чтобы все элементы были в одной строке */
-  -ms-overflow-style: none; /* Скрывает скроллбар в IE и Edge */
-  scrollbar-width: none; /* Скрывает скроллбар в Firefox */
+  overflow-x: auto;
+  white-space: nowrap;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .scroll-container::-webkit-scrollbar {
-  display: none; /* Скрывает скроллбар в Chrome, Safari и Opera */
+  display: none;
 }
 
 .scroll-content {
@@ -998,7 +1034,7 @@ button.active {
 .cart-list-holder {
   max-height: 525px;
   overflow-y: auto;
-  scrollbar-width: thin; /* Устанавливает ширину скроллбара */
+  scrollbar-width: thin;
   scrollbar-color: #282829 #090909;
 }
 
