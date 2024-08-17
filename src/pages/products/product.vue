@@ -413,7 +413,7 @@ export default {
   methods: {
     editNull(){
       this.edit = false;
-      this.FormData = {
+      this.formData = {
         title: "",
         price_one: "",
         discount: "",
