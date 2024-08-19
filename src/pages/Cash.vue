@@ -318,7 +318,7 @@
                       <div class="product-info">
                         <div class="product-title mb-0">{{ item.title }}</div>
                         <div class="product-price color-yellow d-flex">
-                          {{ item.price_discount }} TJS
+                          {{ (item.price_one-(item.price_one * item.discount)/100) }} TJS
                           <span class="product-old-price text-white"
                           ><s>{{ item.price_one }} c</s>
                         </span>
@@ -369,7 +369,7 @@
                         {{ item.name }}
                       </div>
                       <div class="product-price color-yellow d-flex">
-                        {{ item.price_visit }} TJS
+                        {{ item.price }} TJS
                         <span class="product-old-price text-white"
                         >/ 1 посещение
                       </span>
@@ -449,14 +449,7 @@ export default {
       payment: "",
       FormData: {
         cards_id: "",
-        services_id: [
-          // {
-          //   id:"7",
-          //   count:"2"
-          // },
-        ],
-        course_id: [],
-        product_id: [],
+        items: [],
         payment: 0,
         payment_type : "cash",
         create_add: new Date()
@@ -642,17 +635,6 @@ export default {
         if (this.cart[item].count > 1)
           this.cart[item].count -= 1
       }
-
-      this.FormData.product_id = this.cart
-          .filter(value => value.type === 'product')
-          .map(value => ({ id: value.id, count: value.count }));
-      this.FormData.course_id = this.cart
-          .filter(value => value.type === 'course')
-          .map(value => ({ id: value.id, count: value.count }));
-      this.FormData.services_id = this.cart
-          .filter(value => value.type === 'service')
-          .map(value => ({ id: value.id, count: value.count }));
-
     },
     simulateEnterKeyPress() {
       const event = new KeyboardEvent('keydown', {
@@ -819,43 +801,22 @@ export default {
         this.currentUser = item;
         this.clearSearch();
       }
-      if (item.type && item.type !== "user") {
-        console.log('sex')
-        if (item.type === "service") {
-          item.price = item.price_visit;
-          item.title = item.name;
-        }
+      if (item.type && item.type !== "user"){
         item.price = item.price || item.price_one || 0;
         item.discount = item.discount || 0;
         item.price_discount = item.price - (item.price / 100) * item.discount;
-
+        if (item.type === "service") {
+          item.title = item.name;
+        }
         let checkFromCartIdx = this.cart.findIndex((val) => val.id === item.id && val.type === item.type);
 
         if (checkFromCartIdx === -1) {
           item.count = 1;
           this.cart.push(item);
         } else {
-          console.log('sex Active', checkFromCartIdx)
           this.itemCnt('+', checkFromCartIdx);
         }
 
-        switch (item.type){
-          case "product":
-            this.FormData.product_id = this.cart
-                .filter(value => value.type === item.type)
-                .map(value => ({ id: value.id, count: value.count }));
-            break;
-          case "course":
-            this.FormData.course_id = this.cart
-                .filter(value => value.type === item.type)
-                .map(value => ({ id: value.id, count: value.count }));
-            break;
-          case "service":
-            this.FormData.services_id = this.cart
-                .filter(value => value.type === item.type)
-                .map(value => ({ id: value.id, count: value.count }));
-            break;
-        }
       }
     },
     itemTotalPrice(count, price) {
@@ -885,6 +846,18 @@ export default {
         this.FormData.payment_type = "withdrawal_from_bonus";
       }
 
+      this.FormData.items = this.cart.map(item => {
+        return {
+          id: item.id,
+          title: item.title || item.name,
+          price: item.price,
+          count: item.count || 1,
+          price_discount: item.price_discount,
+          type: item.type,
+          img: item.img[0] || item.img
+        };
+      });
+
       this.FormData.payment = this.totalPrice.toFixed(2);
 
       try {
@@ -899,14 +872,7 @@ export default {
           this.payment = 0;
           this.FormData = {
             cards_id: "",
-            services_id: [
-              // {
-              //   id:"7",
-              //   count:"2"
-              // },
-            ],
-            course_id: [],
-            product_id: [],
+            items: [],
             payment: 0,
             payment_type : "cash",
             create_add: new Date()

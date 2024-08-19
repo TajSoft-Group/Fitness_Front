@@ -177,6 +177,7 @@
           type="text"
           placeholder="Введите название услуги"
           id="name"
+          required
           v-model="formData.name"
         />
         <div class="form position-relative">
@@ -186,6 +187,7 @@
             v-model="formData.description"
             placeholder="Введите текст"
             class="description"
+            required
           ></textarea>
         </div>
         <div class="form position-relative">
@@ -211,21 +213,40 @@
             ref="fileInput"
             @change="handleFileChange"
             style="display: none"
+            required
           />
         </div>
-        <label for="price_visit">Цена за посещение</label>
+
+        <div class="d-flex">
+          <div class="me-3">
+            <label for="price_visit">Цена</label>
+            <input
+                type="text"
+                placeholder="Цена за посещение"
+                id="price_visit"
+                v-model="formData.price"
+                required
+            />
+          </div>
+          <div>
+            <label for="price_visit">Скидка</label>
+            <input
+                type="text"
+                placeholder="Скидка"
+                id="discount"
+                v-model="formData.discount"
+                required
+            />
+          </div>
+        </div>
+
+        <label for="price_visit">Количество посещений</label>
         <input
-          type="text"
-          placeholder="Цена за посещение"
-          id="price_visit"
-          v-model="formData.price_visit"
-        />
-        <label for="status">Статус</label>
-        <input
-          type="text"
-          placeholder="Скидка"
-          id="status"
-          v-model="formData.status"
+            type="text"
+            placeholder="Количество посещений"
+            id="visit_count"
+            v-model="formData.visit_count"
+            required
         />
         <div class="d-flex justify-content-between add-user-buttons">
           <button @click="toggleModal('.add-curs')" class="dont" type="button">
@@ -333,7 +354,7 @@
           <img class="w-100 h-100" :src="'http://fitness.abdurazzoq.beget.tech/public/' + curs.img" alt="">
           <div class="at-bottom position-absolute bottom-0 ps-4">
             <h5>{{ curs.name }}</h5>
-            <p class="m-0">{{ curs.price_visit }} TJS </p>
+            <p class="m-0">{{ curs.price }} TJS </p>
             <p class="m-0 mb-2 text-white text-capitalize">{{ curs.type_courses }}</p>
           </div>
         </div>
@@ -422,8 +443,10 @@ export default {
         img: "",
         name: "",
         description: "",
-        price_visit: "",
-        status: "",
+        price: "",
+        discount : "",
+        visit_count: "",
+        status: 1,
       },
       DataUsers: null,
       userData: null,
