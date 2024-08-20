@@ -73,11 +73,11 @@
                 </tbody>
               </table>
               <div class="w-100">
-                <div class="d-flex justify-content-around">
+                <div class="d-flex justify-content-between">
                   <span class="fw-bold">ИТОГО</span>
                   <span class="fw-bold"><span class="color-yellow">{{ userTransactions.summary.total_amount.toFixed(2) }}</span> TJS</span>
                 </div>
-                <div class="d-flex justify-content-around">
+                <div class="d-flex justify-content-between">
                   <span class="fw-bold">Транзакции</span>
                   <span class="fw-bold"><span class="color-yellow">{{ userTransactions.summary.total_transactions }}</span> раз(а)</span>
                 </div>
