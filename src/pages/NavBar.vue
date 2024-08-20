@@ -39,6 +39,7 @@ export default {
               <li :class="{active: (ActiveMenu === '/finance' || ActiveMenu === '/newsletters') }" class="trigger-hover">
                 <a>Управление</a>
                 <ul class="hidden-hover bg-gray p-0 position-absolute mt-0 pt-4 rounded-3">
+                  <li :class="{active: ActiveMenu === '/transactions'}"><router-link to="/transactions" class="mx-3 p-3 my-2 p-3 mt-0">Транзакции</router-link></li>
                   <li :class="{active: ActiveMenu === '/finance'}"><router-link to="/finance" class="mx-3 p-3 my-2 p-3 mt-0">Финансы</router-link></li>
                   <li :class="{active: ActiveMenu === '/newsletters'}"><router-link to="/newsletters" class="mx-3 p-3 my-2 p-3 mt-0">Рассылки</router-link></li>
                 </ul>

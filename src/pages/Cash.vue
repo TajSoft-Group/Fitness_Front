@@ -460,10 +460,12 @@ export default {
         username: 'Телефон',
         cards: [
           {
+            id: "",
             balance: '0',
             name: "Карта"
           },
           {
+            id: "",
             balance: '0',
             name: "Бонус",
             percent : 0,
@@ -836,8 +838,8 @@ export default {
       }
     },
     async submitForm() {
+      this.FormData.cards_id = this.currentUser.cards[0].id;
       if(this.type==='cards'){
-        this.FormData.cards_id = this.currentUser.cards[0].id;
         this.FormData.payment_type = "purchase";
       }
 

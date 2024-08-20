@@ -21,6 +21,7 @@ import finance from "@/pages/finance.vue";
 import Cash from "@/pages/Cash.vue";
 import courses from "@/pages/Courses/courses.vue";
 import newCourse from "@/pages/Courses/newCourse.vue";
+import transactions from "@/pages/transactions/transactions.vue";
 
 const routes = [
   {
@@ -129,6 +130,11 @@ const routes = [
     path: '/new-course',
     name: 'new-course',
     component: newCourse
+  },
+  {
+    path: '/transactions',
+    name: 'transactions',
+    component: transactions
   },
 
 ];
