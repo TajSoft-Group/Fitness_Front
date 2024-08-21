@@ -1,7 +1,12 @@
 <template>
+  <div @click="statusPicker=false"  v-if="statusPicker" class="user-page-card cards-modal d-flex justify-content-center align-items-center">
+    <div @click.stop class="content">
+      <DataPicker @date-selected="filterTransactionsByDate" />
+    </div>
+  </div>
   <div class="container">
     <div class="row">
-      <div class="col-md-12 mb-5">
+      <div class="col-md-12 mb-5 d-flex justify-content-between align-items-end">
         <div
             :class="{ 'search-input': searchActive.length > 0 }"
             class="d-flex justify-content-between align-items-center search-block"
@@ -14,10 +19,13 @@
               placeholder="Поиск по всем параметрам"
           />
         </div>
+        <div @click="statusPicker=!statusPicker" class="dpi filter-icon d-flex justify-content-center align-items-center">
+          <img height="29" width="37" src="@/assets/images/icons/filter.png" alt="user">
+        </div>
       </div>
     </div>
     <div class="row" v-if="transactions!==[]">
-      <template v-for="(transaction, index) in transactions" :key="index">
+      <template v-for="(transaction, index) in filteredTransactions" :key="index">
         <div class="col-md-12">
           <h3 class="mt-3 fw-bolder">{{ index }}</h3>
         </div>
@@ -105,18 +113,43 @@
 <script>
   import gets from "@/components/axios/get.js";
   import Cookies from "js-cookie";
+  import DataPicker from "@/pages/transactions/DataPicker.vue";
   export default {
-    components: {},
+    components: {DataPicker},
     data() {
       return {
+        dates: {
+          dateFrom: '',
+          dateTo: '',
+        },
+        transactions: [],
+        filteredTransactions: [],
         isLoading : true,
+        statusPicker:false,
         selectedUser: null,
         selectedDate: null,
         searchActive: "",
-        transactions: []
       };
     },
     methods: {
+      filterTransactionsByDate(selectedDates) {
+        this.dates = selectedDates;
+
+        // Convert date strings to Date objects for comparison
+        const dateFrom = new Date(this.dates.dateFrom);
+        const dateTo = new Date(this.dates.dateTo);
+
+        // Filter transactions by key (date)
+        this.filteredTransactions = Object.keys(this.transactions).reduce((filtered, key) => {
+          const transactionDate = new Date(key); // Convert the key (which is a date) to a Date object
+
+          if (transactionDate >= dateFrom && transactionDate <= dateTo) {
+            filtered[key] = this.transactions[key];
+          }
+          this.statusPicker = false;
+          return filtered;
+        }, {});
+      },
       toggleUserTransactions(username, date) {
         if (this.selectedUser === username && this.selectedDate === date) {
           this.selectedUser = null;
@@ -126,19 +159,19 @@
           this.selectedDate = date; // Set selectedDate to the clicked date
         }
       },
-      loadData(){
+      loadData() {
         const token = Cookies.get("token");
-        gets('http://fitness.abdurazzoq.beget.tech/public/api/transactions',token)
-        .then((response) => {
-          this.transactions = response.data;
-          console.log(this.transactions);
-          this.isLoading = false;
-        })
-        .catch((error) => {
-          this.error = error;
-          this.Delay("loading", 1);
-        });
-      }
+        gets('http://fitness.abdurazzoq.beget.tech/public/api/transactions', token)
+            .then((response) => {
+              this.transactions = response.data;
+              this.filteredTransactions = this.transactions; // Initially, show all transactions
+              this.isLoading = false;
+            })
+            .catch((error) => {
+              this.error = error;
+              this.Delay("loading", 1);
+            });
+      },
     },
     mounted() {
       this.loadData()
