@@ -16,77 +16,36 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-6">
-        <div class="bg-gray card-block">
+      <div class="col-4">
+        <div class="bg-gray card-block h-auto">
           <div class="d-flex justify-content-between">
             <div class="card-left">
               <div class="card-title">Продажа</div>
               <div class="card-quantity">0</div>
-              <div class="card-statistics d-flex align-items-center">
-                <div class="d-flex percentage align-items-center justify-content-center">
-                  <div>
-                    <img class="arrow-down" height="12" src="@/assets/images/icons/arrow-up.png">
-                    <img height="12" src="@/assets/images/icons/arrow-up.png">
-                  </div>
-                  <div class="div">0%</div>
-                </div>
-                <div>от предыдущего периода</div>
-              </div>
-            </div>
-            <div class="card-right d-flex align-items-end">
-              <img width="152" height="115" src="@/assets/images/icons/vector.png" alt="vector">
             </div>
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-4">
         <div class="">
-          <div class="bg-gray card-block ">
+          <div class="bg-gray card-block h-auto">
             <div class="d-flex justify-content-between">
               <div class="card-left">
-                <div class="card-title">Выручка</div>
-                <div class="card-quantity">0 TJS</div>
-                <div class="card-statistics d-flex align-items-center">
-                  <div class="d-flex percentage align-items-center justify-content-center">
-                    <div>
-                      <img class="arrow-down" height="12" src="@/assets/images/icons/arrow-up.png">
-                      <img height="12" src="@/assets/images/icons/arrow-up.png">
-                    </div>
-                    <div class="div">0%</div>
-                  </div>
-                  <div>от предыдущего периода</div>
-                </div>
-              </div>
-              <div class="card-right d-flex align-items-end">
-                <img width="152" height="115" src="@/assets/images/icons/vector.png" alt="vector">
+                <div class="card-title">Новые пользователи</div>
+                <div class="card-quantity">0</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
 
       <div v-for="i in staticInfo" class="col-4">
         <div class="">
-          <div class="bg-gray card-block ">
+          <div class="bg-gray card-block h-auto">
             <div class="d-flex justify-content-between">
               <div class="card-left">
                 <div class="card-title">{{i.name}}</div>
                 <div class="card-quantity">{{i.cash}}</div>
-                <div class="card-statistics d-flex align-items-center">
-                  <div :class="[i.staticUp ? 'statistics-up': 'statistics-down' ]" class=" d-flex percentage align-items-center justify-content-center">
-                    <div>
-                      <img :class="{'d-none':i.staticUp}" class="arrow-down" height="12" src="@/assets/images/icons/arrow-up.png">
-                      <img :class="{'d-none':!i.staticUp}" class="" height="12" src="@/assets/images/icons/arrow-up.png">
-                    </div>
-                    <div class="div">{{i.cash[0]}}%</div>
-                  </div>
-                  <div>от предыдущего периода</div>
-                </div>
               </div>
             </div>
           </div>
@@ -114,7 +73,7 @@ export default {
   },
   methods:{
     setup(){
-
+      // posts()
     },
     addStatusDelay(){
       setTimeout(()=>{

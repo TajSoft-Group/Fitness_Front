@@ -292,8 +292,8 @@
           ></textarea>
         </div>
         <div class="position-relative">
-          <label for="name">выберите пользователя</label>
-          <input type="text" id="present" v-model="activeTR" />
+          <label for="name">Выберите пользователя</label>
+          <input type="text" id="present" v-model="activeTR" @click="presentMenu = !presentMenu" />
           <img
             @click="presentMenu = !presentMenu"
             :class="{ 'rotate-90': presentMenu }"
@@ -323,7 +323,10 @@
             </div>
           </div>
         </div>
-        <label for="title">количество</label>
+        <div class="d-flex align-items-center justify-content-between">
+          <label for="title">Количество</label>
+          <p class="m-0"> Кол-во посещений: <span class="color-yellow fw-bold">{{ cursData.count *  addCurs.visit_count }}</span> </p>
+        </div>
         <input
           type="text"
           placeholder="Введите количество"
@@ -454,7 +457,7 @@ export default {
       cursData: {
         user_id: "",
         services_id: "",
-        count: "",
+        count: 1,
       },
       modal: "auto",
       error: null,
@@ -496,6 +499,7 @@ export default {
     },
     coursesFn() {
       const token = Cookies.get("token");
+      this.cursData.count = (this.cursData.count *  this.addCurs.visit_count)
       posts(
         "http://fitness.abdurazzoq.beget.tech/public/enroll/services",
         {
@@ -535,7 +539,7 @@ export default {
         "http://fitness.abdurazzoq.beget.tech/public/users",
         {
           form: "0",
-          to: "21",
+          to: "0",
         },
         token
       )

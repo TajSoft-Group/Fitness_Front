@@ -184,50 +184,20 @@
         <div class="d-flex justify-content-between">
           <div class="card-left">
             <div class="h5 mh-40">Новые пользователи</div>
-            <div class="fw-bolder h1 mb-0">123</div>
+            <div class="fw-bolder h1 mb-0">{{ (statistic.new_users) ? (statistic.new_users) : 0 }}</div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-3 mb-3">
+    <div class="col-3 mb-3" v-for="service in statistic.services">
       <div class="bg-gray card-block h-100 m-0">
         <div class="d-flex justify-content-between">
           <div class="card-left">
-            <div class="h5 mh-40">Абонемент</div>
-            <div class="fw-bolder h1 mb-0">340</div>
+            <div class="h5 mh-40">{{ service.service_name }}</div>
+            <div class="fw-bolder h1 mb-0">{{ service.count ? service.count : 0 }}</div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-3 mb-3">
-      <div class="bg-gray card-block h-100 m-0">
-          <div class="d-flex justify-content-between">
-            <div class="card-left">
-              <div class="h5 mh-40">Курсы индивидуальные</div>
-              <div class="fw-bolder h1 mb-0">101</div>
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class="col-3 mb-3">
-        <div class="bg-gray card-block h-100 m-0">
-          <div class="d-flex justify-content-between">
-            <div class="card-left">
-              <div class="h5 mh-40">Групповые курсы</div>
-              <div class="fw-bolder h1 mb-0">0</div>
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class="col-3 mb-3">
-        <div class="bg-gray card-block h-100 m-0">
-          <div class="d-flex justify-content-between">
-            <div class="card-left">
-              <div class="h5 mh-40">Услуги</div>
-              <div class="fw-bolder h1 mb-0">0</div>
-            </div>
-          </div>
-        </div>
     </div>
   </div>
 </div>
@@ -412,6 +382,7 @@ export default {
   components: { posts, get },
   data() {
     return {
+      statistic: "",
       formData: {
         name: "",
         surname: "",
@@ -441,15 +412,36 @@ export default {
         { form: "0", to: "0" },
         token
       )
-        .then((response) => {
-          this.DataUsers = response.data.users;
-          this.loading = false;
-          console.log(this.DataUsers);
-        })
-        .catch((error) => {
-          this.error = error;
-          this.loading = false;
-         });
+      .then((response) => {
+        this.DataUsers = response.data.users;
+        this.loading = false;
+        console.log(this.DataUsers);
+      })
+      .catch((error) => {
+        this.error = error;
+        this.loading = false;
+      });
+
+      let currentDate = new Date();
+      let oneMonthBack = new Date();
+      oneMonthBack.setMonth(currentDate.getMonth() - 1);
+
+      oneMonthBack = oneMonthBack.toISOString().split('T')[0];
+      currentDate = currentDate.toISOString().split('T')[0];
+      console.log(oneMonthBack, currentDate);
+
+
+      posts(
+          "http://fitness.abdurazzoq.beget.tech/public/count",
+          { start_date: oneMonthBack, end_date: currentDate },
+          token
+      )
+      .then((response) => {
+        this.statistic = response.data;
+      })
+      .catch((error) => {
+        this.error = error;
+      });
     },
 
     submitForm() {

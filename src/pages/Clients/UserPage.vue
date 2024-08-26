@@ -141,22 +141,10 @@
       <p class="text-center mt-3 text-gray">При удалении аккаунт пользователя все данные будут уничтожены</p>
       <div class="courses mt-3">
         <div class="cards-infos delete-user-info">
-          <div class="info">
-            <div class="d-flex justify-content-between mr-6 ml-6">
-              <div>Абонемент:</div>
-              <div>12</div>
-            </div>
-            <div class="d-flex justify-content-between mr-6 ml-6">
-              <div>Массаж:</div>
-              <div>12</div>
-            </div>
-            <div class="d-flex justify-content-between mr-6 ml-6">
-              <div>Танцы:</div>
-              <div>5</div>
-            </div>
-            <div class="d-flex justify-content-between mr-6 ml-6">
-              <div>Йога:</div>
-              <div>8</div>
+          <div class="info ms-5 ps-4 pe-0 me-5">
+            <div class="d-flex justify-content-between" v-for="(service, index) in user.services">
+              <div>{{ service.service_name }}:</div>
+              <div>{{ service.count }}</div>
             </div>
           </div>
           <div class="d-flex justify-content-between add-user-buttons">
@@ -182,8 +170,8 @@
 <!--      </div>-->
       <div class="courses mt-3">
         <div class="cards-infos delete-user-info">
-          <div class="info">
-            <div class="d-flex justify-content-around w-100" v-for="(service, index) in user.services">
+          <div class="info ms-5 ps-4 pe-0 me-5">
+            <div class="d-flex justify-content-between" v-for="(service, index) in user.services">
               <div>{{ service.service_name }}:</div>
               <div>{{ service.count }}</div>
             </div>
@@ -225,7 +213,7 @@
       </div>
     </div>
   </div>
-  <div @click="toggleModal('.take-money-modal')" class="add-user-modal take-money-modal d-none d-flex justify-content-center align-items-center">
+  <div v-if="false" @click="toggleModal('.take-money-modal')" class="add-user-modal take-money-modal d-none d-flex justify-content-center align-items-center">
     <div @click.stop  class="content">
       <h5>СНЯТЬ НАЛИЧНЫЕ</h5>
       <div class="courses mt-3">
@@ -258,7 +246,7 @@
       </div>
     </div>
   </div>
-  <div @click="toggleModal('.up-card-modal')" class="add-user-modal up-card-modal d-none d-flex justify-content-center align-items-center">
+  <div v-if="false" @click="toggleModal('.up-card-modal')" class="add-user-modal up-card-modal d-none d-flex justify-content-center align-items-center">
     <div @click.stop  class="content">
       <h5>ПОВЫСИТЬ КАРТУ</h5>
       <div class="courses mt-3">
@@ -291,7 +279,7 @@
       </div>
     </div>
   </div>
-  <div @click="toggleModal('.down-card-modal')" class="add-user-modal down-card-modal d-none d-flex justify-content-center align-items-center">
+  <div v-if="false" @click="toggleModal('.down-card-modal')" class="add-user-modal down-card-modal d-none d-flex justify-content-center align-items-center">
     <div @click.stop  class="content">
       <h5>ПОНИЗИТЬ КАРТУ</h5>
       <div class="courses mt-3">
@@ -324,7 +312,7 @@
       </div>
     </div>
   </div>
-  <div @click="toggleModal('.pin-card-modal')" class="add-user-modal pin-card-modal d-none d-flex justify-content-center align-items-center">
+  <div v-if="false" @click="toggleModal('.pin-card-modal')" class="add-user-modal pin-card-modal d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="content">
       <h5>ЗАКРЕПИТЬ КАРТУ</h5>
       <div class="courses mt-3">
@@ -345,7 +333,7 @@
       </div>
     </div>
   </div>
-  <div @click="toggleModal('.unpin-card-modal')" class="add-user-modal unpin-card-modal d-none d-flex justify-content-center align-items-center">
+  <div v-if="false" @click="toggleModal('.unpin-card-modal')" class="add-user-modal unpin-card-modal d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="content">
       <h5>ОТКРЕПИТЬ КАРТУ</h5>
       <div class="courses mt-3">
@@ -386,7 +374,8 @@
         <h5 class="page-title credit-cards-title">Карты</h5>
       </div>
     </div>
-    <div @click="toggleModal('.cards-modal')" class="row">
+    <!--    @click="toggleModal('.cards-modal')"-->
+    <div class="row">
       <div  class="col-6">
         <div v-if="user.cards.length>0" class="credit-card">
           <img src="@/assets/images/card.png">
@@ -401,7 +390,7 @@
         </div>
         <div v-else class="h3 color-yellow ms-4">карты отсутствуют</div>
       </div>
-      <div class="col-6">
+      <div class="col-6" >
         <div v-if="user.cards.length>0" class="credit-card">
           <img src="@/assets/images/card.png">
           <div class="info ">
@@ -416,7 +405,7 @@
     </div>
   </div>
 
-  <div @click="toggleModal('.cards-modal')" class="cards-modal d-none d-flex justify-content-center align-items-center">
+  <div v-if="false" @click="toggleModal('.cards-modal')" class="cards-modal d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="content">
       <div class="cards-header d-flex justify-content-between align-items-center">
         <div class="titles">
@@ -511,9 +500,10 @@
     </div>
   </div>
 
-  <section class="my-5">
+  <section>
     <div class="container">
       <div class="row">
+        <h5 class="page-title credit-cards-title">Транзакции</h5>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
             <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Основная карта</button>

@@ -74,9 +74,9 @@
                   <td v-if="item.type === 'service'">Услуга</td>
                   <td v-if="item.type === 'product'">Продукт</td>
                   <td v-if="item.type === 'course'">Курс</td>
-                  <td>{{ item.price_discount }}</td>
+                  <td>{{ item.type==="service" ? item.price : item.price_discount }}</td>
                   <td>{{ item.count }}</td>
-                  <td>{{ (item.total_price_discount).toFixed(2) }}</td>
+                  <td>{{ item.type==="service" ? (item.price).toFixed(2) : (item.total_price_discount).toFixed(2) }}</td>
                 </tr>
                 </tbody>
               </table>
