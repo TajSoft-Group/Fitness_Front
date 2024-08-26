@@ -177,157 +177,60 @@
     </div>
   </div>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-4">
-        <div class="bg-gray card-block">
-          <div class="d-flex justify-content-between">
-            <div class="card-left">
-              <div class="card-title">Новые пользователи</div>
-              <div class="card-quantity">123</div>
-              <div class="card-statistics d-flex align-items-center">
-                <div
-                  class="d-flex percentage align-items-center justify-content-center"
-                >
-                  <div>
-                    <img
-                      class="arrow-down"
-                      height="12"
-                      src="@/assets/images/icons/arrow-up.png"
-                    />
-                    <img height="12" src="@/assets/images/icons/arrow-up.png" />
-                  </div>
-                  <div class="div">0%</div>
-                </div>
-                <div>от предыдущего периода</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="bg-gray card-block">
-          <div class="d-flex justify-content-between">
-            <div class="card-left">
-              <div class="card-title">Абонемент</div>
-              <div class="card-quantity">340</div>
-              <div class="card-statistics d-flex align-items-center">
-                <div
-                  class="d-flex percentage statistics-up align-items-center justify-content-center"
-                >
-                  <div>
-                    <img
-                      class="arrow-down d-none"
-                      height="12"
-                      src="@/assets/images/icons/arrow-up.png"
-                    />
-                    <img height="12" src="@/assets/images/icons/arrow-up.png" />
-                  </div>
-                  <div class="div">10%</div>
-                </div>
-                <div>от предыдущего периода</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-4">
-        <div class="">
-          <div class="bg-gray card-block">
-            <div class="d-flex justify-content-between">
-              <div class="card-left">
-                <div class="card-title">Курсы индивидуальные</div>
-                <div class="card-quantity">101</div>
-                <div class="card-statistics d-flex align-items-center">
-                  <div
-                    class="d-flex percentage align-items-center justify-content-center"
-                  >
-                    <div>
-                      <img
-                        class="arrow-down"
-                        height="12"
-                        src="@/assets/images/icons/arrow-up.png"
-                      />
-                      <img
-                        height="12"
-                        src="@/assets/images/icons/arrow-up.png"
-                      />
-                    </div>
-                    <div class="div">0%</div>
-                  </div>
-                  <div>от предыдущего периода</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="">
-          <div class="bg-gray card-block">
-            <div class="d-flex justify-content-between">
-              <div class="card-left">
-                <div class="card-title">Курсы групповые</div>
-                <div class="card-quantity">0</div>
-                <div class="card-statistics d-flex align-items-center">
-                  <div
-                    class="d-flex percentage align-items-center justify-content-center"
-                  >
-                    <div>
-                      <img
-                        class="arrow-down"
-                        height="12"
-                        src="@/assets/images/icons/arrow-up.png"
-                      />
-                      <img
-                        height="12"
-                        src="@/assets/images/icons/arrow-up.png"
-                      />
-                    </div>
-                    <div class="div">0%</div>
-                  </div>
-                  <div>от предыдущего периода</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="">
-          <div class="bg-gray card-block">
-            <div class="d-flex justify-content-between">
-              <div class="card-left">
-                <div class="card-title">Услуги</div>
-                <div class="card-quantity">0</div>
-                <div class="card-statistics d-flex align-items-center">
-                  <div
-                    class="d-flex percentage align-items-center justify-content-center"
-                  >
-                    <div>
-                      <img
-                        class="arrow-down"
-                        height="12"
-                        src="@/assets/images/icons/arrow-up.png"
-                      />
-                      <img
-                        height="12"
-                        src="@/assets/images/icons/arrow-up.png"
-                      />
-                    </div>
-                    <div class="div">0%</div>
-                  </div>
-                  <div>от предыдущего периода</div>
-                </div>
-              </div>
-            </div>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-3 mb-3">
+      <div class="bg-gray card-block h-100 m-0">
+        <div class="d-flex justify-content-between">
+          <div class="card-left">
+            <div class="h5 mh-40">Новые пользователи</div>
+            <div class="fw-bolder h1 mb-0">123</div>
           </div>
         </div>
       </div>
     </div>
+    <div class="col-3 mb-3">
+      <div class="bg-gray card-block h-100 m-0">
+        <div class="d-flex justify-content-between">
+          <div class="card-left">
+            <div class="h5 mh-40">Абонемент</div>
+            <div class="fw-bolder h1 mb-0">340</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 mb-3">
+      <div class="bg-gray card-block h-100 m-0">
+          <div class="d-flex justify-content-between">
+            <div class="card-left">
+              <div class="h5 mh-40">Курсы индивидуальные</div>
+              <div class="fw-bolder h1 mb-0">101</div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col-3 mb-3">
+        <div class="bg-gray card-block h-100 m-0">
+          <div class="d-flex justify-content-between">
+            <div class="card-left">
+              <div class="h5 mh-40">Групповые курсы</div>
+              <div class="fw-bolder h1 mb-0">0</div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col-3 mb-3">
+        <div class="bg-gray card-block h-100 m-0">
+          <div class="d-flex justify-content-between">
+            <div class="card-left">
+              <div class="h5 mh-40">Услуги</div>
+              <div class="fw-bolder h1 mb-0">0</div>
+            </div>
+          </div>
+        </div>
+    </div>
   </div>
-
+</div>
   <div class="container relative">
     <div class="row">
       <div class="col">
@@ -479,7 +382,7 @@
           <div class="d-flex justify-content-between">
             <div class="left">
               Общее количество пользователей:
-              <span class="users-quantity">2504</span>
+              <span class="users-quantity" v-if="DataUsers">{{ DataUsers.length }}</span>
             </div>
             <div class="right">
               <a class="active" href="#">1</a>
@@ -535,18 +438,18 @@ export default {
       const token = Cookies.get("token");
       posts(
         "http://fitness.abdurazzoq.beget.tech/public/users",
-        { form: "0", to: "21" },
+        { form: "0", to: "0" },
         token
       )
         .then((response) => {
           this.DataUsers = response.data.users;
-          this.Delay("loading", 1);
+          this.loading = false;
           console.log(this.DataUsers);
         })
         .catch((error) => {
           this.error = error;
-          this.Delay("loading", 1);
-        });
+          this.loading = false;
+         });
     },
 
     submitForm() {
@@ -593,4 +496,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.mh-40{
+  min-height: 38px;
+}
+</style>

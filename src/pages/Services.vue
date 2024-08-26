@@ -268,19 +268,19 @@
         class="form"
         @submit.prevent="coursesFn(), toggleModal('.pay-curs')"
       >
-        <label for="title">тип курса</label>
-        <input
-          type="text"
-          placeholder="Введите название курса"
-          id="title"
-          v-model="addCurs.type_courses"
-        />
+<!--        <label for="title">тип курса</label>-->
+<!--        <input-->
+<!--          type="text"-->
+<!--          placeholder="Введите название курса"-->
+<!--          id="title"-->
+<!--          v-model="addCurs.type_courses"-->
+<!--         />-->
         <label for="title">название курса</label>
         <input
           type="text"
           placeholder="Введите название курса"
           id="title"
-          v-model="addCurs.title"
+          v-model="addCurs.name"
         />
         <div class="form position-relative">
           <label for="phone">Описание*</label>
@@ -347,7 +347,7 @@
         @click="
           toggleModal('.pay-curs'),
             (addCurs = curs),
-            (cursData.courses_id = curs.id)"
+            (cursData.services_id = curs.id)"
       >
         <div class="w-100 h-100 courses-card position-relative mb-3 p-0">
 <!--          <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>-->

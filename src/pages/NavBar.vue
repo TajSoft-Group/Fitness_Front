@@ -36,7 +36,7 @@ export default {
                   <li :class="{active: ActiveMenu === '/reviews-page'}"><router-link to="/reviews-page" class="mx-3 my-2 p-3 mt-0">Курсы индивидуальные Отзывы</router-link></li>
                 </ul>
               </li>
-              <li :class="{active: (ActiveMenu === '/finance' || ActiveMenu === '/newsletters') }" class="trigger-hover">
+              <li :class="{active: (ActiveMenu === '/finance' || ActiveMenu === '/transactions' || ActiveMenu === '/newsletters') }" class="trigger-hover">
                 <a>Управление</a>
                 <ul class="hidden-hover bg-gray p-0 position-absolute mt-0 pt-4 rounded-3">
                   <li :class="{active: ActiveMenu === '/transactions'}"><router-link to="/transactions" class="mx-3 p-3 my-2 p-3 mt-0">Транзакции</router-link></li>
@@ -64,4 +64,13 @@ export default {
     margin-top: 23px;
     background: #2c2c2e;
   }
+
+@media screen and (max-width: 1290px){
+  .menu ul{
+    gap: 18px;
+  }
+  .menu ul li a{
+    font-size: 14px;
+  }
+}
 </style>

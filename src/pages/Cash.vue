@@ -256,7 +256,7 @@
                         >
                           <img
                             src="@/assets/images/icons/close-icon.png"
-                            alt="search"
+                            alt="close"
                           />
                         </button>
                       </td>
@@ -1058,5 +1058,8 @@ input{
 }
 .users-block.py-2 {
   padding-bottom: 20px !important;
+}
+.delete-product img{
+  width: 10px;
 }
 </style>

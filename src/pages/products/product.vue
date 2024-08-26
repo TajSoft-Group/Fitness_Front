@@ -45,9 +45,13 @@
                       src="@/assets/images/icons/dell.png"
                   />
                   <div class="result-true-content">
-                    <div class="result-true-title">Продукт успешно удален</div>
-                    <div class="result-true-body mt-2">
+                    <div class="result-true-title" v-if="!deletedCategory">Продукт успешно удален</div>
+                    <div class="result-true-title" v-else>Категория успешно удалена</div>
+                    <div class="result-true-body mt-2" v-if="!deletedCategory">
                       Продукт “{{ deletedProduct.title }}” был удален
+                    </div>
+                    <div class="result-true-body mt-2" v-else>
+                      Категория “{{ deletedCategory.name }}” была удалена
                     </div>
                   </div>
                 </div>
@@ -110,9 +114,9 @@
   <div class="container mt-4">
     <div class="row">
       <div class="col">
-        <div class="product-catalog">
-          <button
-            class="mt-3 py-2 me-3"
+        <div class="product-catalog d-flex align-items-center">
+          <div
+            class="mt-3 py-2 ps-3 pe-0 me-3"
             v-for="(item, index) in buttonsCategory"
             :key="index"
             :class="{
@@ -121,8 +125,12 @@
             }"
             @click="toggleButton(index, item.name)"
           >
-            {{ item.name }}
-          </button>
+            <span class="d-flex align-items-center justify-content-between position-relative">
+              <span class="me-5" v-if="item.name!=='+'">{{ item.name }}</span>
+              <span v-else></span>
+              <span class="category-close mx-2 fw-bolder p-3 pe-0" style="position: absolute;right: 0;cursor: pointer" v-if="(item.name!=='+' && item.name!=='Все')" @click="deleteCategory(item.id)">&times;</span>
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -376,6 +384,7 @@ export default {
     return {
       edit: false,
       dllStatus: false,
+      deletedCategory: false,
       areyousure: false,
       deletedProduct: "",
       images: [],
@@ -581,6 +590,22 @@ export default {
         reader.readAsDataURL(file);
       }
     },
+    deleteCategory(id){
+      console.log(id)
+      deletes(`http://fitness.abdurazzoq.beget.tech/public/category/delete/${ parseInt(id) }`)
+          .then(
+              (response) =>
+              {
+                console.log(response);
+                this.dllStatus = true;
+                this.deletedCategory = this.buttonsCategory.find(item => item.id === id)
+                let index = this.buttonsCategory.findIndex(item => item.id === id);
+                if (index !== -1) {
+                  this.buttonsCategory.splice(index, 1);
+                }
+                setTimeout(()=>{ this.dllStatus=false; this.deletedCategory=false; },2000)
+              })
+    }
   },
   mounted() {
     this.getInfo(
@@ -616,5 +641,33 @@ button.add-button {
 }
 .product-card-menu-item{
   cursor: pointer;
+}
+.active .category-close{
+  color: #000;
+}
+.category-close{
+  font-size: 29px;
+  line-height: 0;
+}
+.product-catalog div {
+  border: none;
+  color: white;
+  background: rgb(58, 58, 60);
+  border-radius: 50px;
+  min-width: 100px;
+  font-weight: 500;
+  font-size: 14px;
+}
+.product-catalog div.active {
+  background-color: #c3ff00;
+  color: #333;
+}
+div.add-button{
+  background: url(/src/assets/images/icons/add.png) center;
+  color: #333;
+  border-radius: 50%;
+  min-width: 43px;
+  min-height: 43px;
+  padding: 0;
 }
 </style>
