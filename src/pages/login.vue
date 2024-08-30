@@ -43,6 +43,7 @@
 
 <script>
 import axios from "axios";
+import router from "@/router/index.js";
 
 export default {
   data() {
@@ -68,7 +69,10 @@ export default {
           .then(response => {
             const t = response.data.token;
             this.setCookie('token', t, 31)
-            this.statusReg=this.getCookie('token')
+            // this.statusReg=this.getCookie('token')
+            setTimeout(()=>{
+              router.push("/");
+            },0)
           })
           .catch(error => {
             console.error('Ошибка при отправке данных:', error);

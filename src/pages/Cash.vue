@@ -437,6 +437,7 @@
 import posts from "@/components/axios/posts.js";
 import gets from "@/components/axios/get.js";
 import product from "@/pages/products/product.vue";
+import Cookies from "js-cookie";
 
 export default {
   data() {
@@ -455,6 +456,7 @@ export default {
         create_add: new Date()
       },
       currentUser:{
+        id: null,
         name: 'Имя',
         surname: 'Фамилия',
         username: 'Телефон',
@@ -849,6 +851,32 @@ export default {
       }
 
       this.FormData.items = this.cart.map(item => {
+
+        if(item.type==='service'){
+          // user_id: "",
+          // services_id: "",
+          // count: 1,
+          let cursData = {
+            user_id: this.currentUser.id,
+            services_id: item.id,
+            count: item.count || 1,
+          }
+          const token = Cookies.get("token");
+          cursData.count = (cursData.count *  item.visit_count)
+          posts(
+              "http://fitness.abdurazzoq.beget.tech/public/enroll/services",
+              {
+                ...cursData,
+              },
+              token
+          )
+          .then((response) => {
+            console.log(cursData);
+          })
+          .catch((error) => {
+            this.error = error;
+          });
+        }
         return {
           id: item.id,
           title: item.title || item.name,

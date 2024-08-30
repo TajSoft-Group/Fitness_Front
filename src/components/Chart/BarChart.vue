@@ -85,7 +85,7 @@ export default defineComponent({
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: Array.from({ length: 24 }, (_, i) => `${i}:00`),
+          data: Array.from({ length: 24 }, (_, i) => `${(i+1)}`),
           axisLine: {
             show: false,
             lineStyle: {
@@ -127,8 +127,8 @@ export default defineComponent({
               color: '#FF2424',
               width: 3.3
             },
-            showSymbol: false,
-            smooth: true
+            smooth: true,
+            showSymbol: false
           },
           {
             name: 'Курсы (групповые)',

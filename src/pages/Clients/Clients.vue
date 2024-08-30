@@ -203,7 +203,7 @@
 </div>
   <div class="container relative">
     <div class="row">
-      <div class="col">
+      <div class="col-12">
         <div
           :class="{ 'search-input': searchActive.length > 0 }"
           class="d-flex justify-content-between align-items-center search-block"
@@ -299,45 +299,46 @@
     </div>
   </div>
   <div class="container">
+    <!-- User Data Table -->
     <div class="row">
+      <div class="w-100 d-flex justify-content-end mt-4">
+        <div class="">
+          <span>Отображение строк:</span>
+          <select name="" id="" v-model="itemsPerPage" onchange="currentPage=1" class="form-select" data-bs-theme="dark">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+            <option>100</option>
+            <option>250</option>
+          </select>
+        </div>
+      </div>
       <div class="col">
-        <div class="users-block">
-          <table id="dataTable">
+        <div class="card rounded-5 mt-4 p-5"  data-bs-theme="dark">
+          <table class="">
             <thead>
-              <tr>
-                <th>ФИО</th>
-                <th>Телефон</th>
-                <th>Статус</th>
-                <th>Абонемент</th>
-                <th>Курсы</th>
-                <th>Услуги</th>
-              </tr>
+                <tr class="text-start">
+                  <th>ФИО</th>
+                  <th>Имя пользователя</th>
+                  <th>Возраст</th>
+                  <th>Вес, Рост</th>
+                  <th>ОС</th>
+                  <th>Услуги</th>
+                </tr>
             </thead>
-            <tbody v-show="!loading" v-for="users in DataUsers" :key="users.id">
-              <tr>
+            <tbody v-show="!loading">
+              <tr v-for="user in paginatedUsers" :key="user.id" class="text-start">
                 <td>
-                  <router-link
-                    :to="{ name: 'UserPage', params: { id: users.id } }"
-                    >{{ users.name + " " + users.surname }}</router-link
-                  >
+                  <RouterLink :to="`/user-page/${user.id}`">{{ user.name + ' ' + user.surname }}</RouterLink>
                 </td>
-                <td>{{ users.username }}</td>
-                <td>{{ users.status }}</td>
-                <td class="d-flex justify-content-center">
-                  <div class="abonent">1</div>
-                </td>
-                <td>Кардио</td>
-                <td class="d-flex justify-content-center">
-                  <div class="uslugi blue">1</div>
-                  <div class="uslugi red">1</div>
-                  <div class="uslugi green">1</div>
-                </td>
-              </tr>
-            </tbody>
-            <tbody v-if="loading">
-              <tr>
-                <td class="color-yellow w-100 d-flex justify-content-center">
-                  Загрузка...
+                <td>{{ user.username }}</td>
+                <td>{{ user.age ? `${user.age} ${getAgeSuffix(user.age)}` : "- лет" }}</td>
+                <td>{{ user.weight ? (user.weight + 'кг,') : "- кг, " }} &nbsp; {{ user.height ? (user.height + 'см') : "- см"}}</td>
+                <td v-if="user.mobile_id===1"><span class="badge bg-success">Android</span></td>
+                <td v-else-if="user.mobile_id===2"><span class="badge bg-secondary">IOS</span></td>
+                <td v-else><span class="badge bg-warning text-black">Другое</span></td>
+                <td>
+                  <span class="badge bg-success">{{ user.services.length }} услуги</span>
                 </td>
               </tr>
             </tbody>
@@ -346,6 +347,7 @@
       </div>
     </div>
 
+    <!-- Pagination Controls -->
     <div class="row">
       <div class="col">
         <div class="user-block-bottom">
@@ -355,22 +357,30 @@
               <span class="users-quantity" v-if="DataUsers">{{ DataUsers.length }}</span>
             </div>
             <div class="right">
-              <a class="active" href="#">1</a>
-              <a href="#">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              <a href="#">5</a>
-              <a href="#">6</a>
-              <a href="#">7</a>
-              <a href="#">8</a>
-              <a href="#">9</a>
-              <a href="#">10</a>
-              <a>...</a>
-              <a href="#">30</a>
+              <a
+                  v-for="page in totalPages"
+                  :key="page"
+                  href="#"
+                  @click.prevent="changePage(page)"
+                  :class="{ active: currentPage === page }">
+                {{ page }}
+              </a>
+              <a v-if="totalPages > 10">...</a>
+              <a v-if="totalPages > 10" href="#" @click.prevent="changePage(totalPages)">
+                {{ totalPages }}
+              </a>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div v-if="isLoading" class="overlay w-100 h-100 position-fixed top-0 start-0 z-3" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="position-fixed top-50 start-50 translate-middle z-3 text-center">
+      <div class="spinner-border text-warning" role="status">
+        <span class="sr-only"></span>
+      </div>
+      <div class="mt-2 text-light text-center">Идет загрузка...</div>
     </div>
   </div>
 </template>
@@ -382,7 +392,11 @@ export default {
   components: { posts, get },
   data() {
     return {
+      usedClasses: new Set(),
       statistic: "",
+      isLoading : true,
+      currentPage: 1,
+      itemsPerPage: 10,
       formData: {
         name: "",
         surname: "",
@@ -396,7 +410,7 @@ export default {
         mobile_id: "",
         password: "",
       },
-      DataUsers: null,
+      DataUsers: [],
       error: null,
       loading: true,
       searchActive: "",
@@ -404,7 +418,52 @@ export default {
       addCard: false,
     };
   },
+  computed: {
+    paginatedUsers() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.DataUsers.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.DataUsers.length / this.itemsPerPage);
+    },
+    pagesToShow() {
+      const range = 2; // Number of pages to show on each side of the current page
+      const pages = [];
+
+      for (let i = 1; i <= this.totalPages; i++) {
+        if (i === 1 || i === this.totalPages || (i >= this.currentPage - range && i <= this.currentPage + range)) {
+          pages.push(i);
+        }
+      }
+
+      // Add ellipsis if needed
+      if (pages[0] > 1) pages.unshift('...');
+      if (pages[pages.length - 1] < this.totalPages) pages.push('...');
+
+      return pages;
+    },
+  },
   methods: {
+    getAgeSuffix(age) {
+      const lastDigit = age % 10;
+      const lastTwoDigits = age % 100;
+
+      if (lastTwoDigits >= 11 && lastTwoDigits <= 19)
+        return 'лет';
+
+      if (lastDigit === 1)
+        return 'год';
+
+      if (lastDigit >= 2 && lastDigit <= 4)
+        return 'года';
+
+      return 'лет';
+    },
+    changePage(page) {
+      if (page === '...' || page === this.currentPage) return;
+      this.currentPage = page;
+    },
     getInfo() {
       const token = Cookies.get("token");
       posts(
@@ -415,7 +474,6 @@ export default {
       .then((response) => {
         this.DataUsers = response.data.users;
         this.loading = false;
-        console.log(this.DataUsers);
       })
       .catch((error) => {
         this.error = error;
@@ -428,8 +486,6 @@ export default {
 
       oneMonthBack = oneMonthBack.toISOString().split('T')[0];
       currentDate = currentDate.toISOString().split('T')[0];
-      console.log(oneMonthBack, currentDate);
-
 
       posts(
           "http://fitness.abdurazzoq.beget.tech/public/count",
@@ -438,6 +494,7 @@ export default {
       )
       .then((response) => {
         this.statistic = response.data;
+        this.isLoading = false;
       })
       .catch((error) => {
         this.error = error;
@@ -450,7 +507,6 @@ export default {
         ...this.formData,
       })
         .then((response) => {
-          console.log(this.formData);
           if (response.status === 200) {
             this.addStatus = true;
             this.getInfo();
@@ -492,4 +548,20 @@ export default {
 .mh-40{
   min-height: 38px;
 }
+.abonent, .uslugi { margin-top: 0; }
+
+.card{
+  --bs-body-bg: #2c2c2e85 !important;
+  border: none;
+}
+.card table tr{
+  height: 50px;
+}
+/* Combined Background and Text Colors */
+.bg-green-text-white { background-color: #28a745; color: #ffffff; } /* Green background, white text */
+.bg-red-text-white { background-color: #dc3545; color: #ffffff; } /* Red background, white text */
+.bg-blue-text-white { background-color: #007bff; color: #ffffff; } /* Blue background, white text */
+.bg-yellow-text-dark { background-color: #ffc107; color: #343a40; } /* Yellow background, dark text */
+.bg-purple-text-white { background-color: #6f42c1; color: #ffffff; }
+
 </style>

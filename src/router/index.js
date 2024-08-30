@@ -17,7 +17,7 @@ import product from "@/pages/products/product.vue";
 import MobileInformation from "@/pages/MobileInformation.vue";
 import login from "@/pages/login.vue";
 import Lockers from "@/pages/lockers.vue";
-import finance from "@/pages/finance.vue";
+import finance from "@/pages/Finance/finance.vue";
 import Cash from "@/pages/Cash.vue";
 import courses from "@/pages/Courses/courses.vue";
 import newCourse from "@/pages/Courses/newCourse.vue";
