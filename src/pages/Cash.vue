@@ -46,9 +46,9 @@
               <label for="bonus" class="text-white">Бонусами</label>
             </div>
           </div>
-          <div v-show="type==='cash'">
+          <div v-if="type==='cash'">
             <label for="title">Оплата наличными</label>
-            <input type="text" placeholder="Наличные" id="title" v-model="payment"/>
+            <input type="text" placeholder="Наличные" id="title" v-model="payment" required/>
           </div>
           <div v-show="type==='bonus' || type==='card'">
             <label class="mx-0 mt-3">С вашего счёта будет снято {{ totalPrice.toFixed(2) }} <span v-show="type==='bonus'">баллов</span> <span v-show="type==='card'">TJS</span></label>

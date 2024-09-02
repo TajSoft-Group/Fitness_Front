@@ -208,13 +208,28 @@
           :class="{ 'search-input': searchActive.length > 0 }"
           class="d-flex justify-content-between align-items-center search-block"
         >
-          <img src="@/assets/images/icons/search.png" alt="search" />
-          <input
-            v-model="searchActive"
-            type="text"
-            id="searchInput"
-            placeholder="Поиск по всем параметрам"
-          />
+          <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center">
+              <img src="@/assets/images/icons/search.png" alt="search" />
+              <input
+                  v-model="searchActive"
+                  type="text"
+                  id="searchInput"
+                  placeholder="Поиск по всем параметрам"
+              />
+            </div>
+            <div class="d-flex mx-4">
+              <div class="">
+                <select name="" id="" v-model="itemsPerPage" onchange="currentPage=1" class="form-select px-4 py-3 rounded-4 bg-gray border-0 text-gray" data-bs-theme="dark">
+                  <option value="10"> Отображение строк: 10 </option>
+                  <option value="25"> Отображение строк: 25 </option>
+                  <option value="50"> Отображение строк: 50 </option>
+                  <option value="100"> Отображение строк: 100 </option>
+                  <option value="250"> Отображение строк: 250 </option>
+                </select>
+              </div>
+            </div>
+          </div>
           <router-link to="user-locked">Заблокированные</router-link>
         </div>
       </div>
@@ -301,18 +316,6 @@
   <div class="container">
     <!-- User Data Table -->
     <div class="row">
-      <div class="w-100 d-flex justify-content-end mt-4">
-        <div class="">
-          <span>Отображение строк:</span>
-          <select name="" id="" v-model="itemsPerPage" onchange="currentPage=1" class="form-select" data-bs-theme="dark">
-            <option>10</option>
-            <option>25</option>
-            <option>50</option>
-            <option>100</option>
-            <option>250</option>
-          </select>
-        </div>
-      </div>
       <div class="col">
         <div class="card rounded-5 mt-4 p-5"  data-bs-theme="dark">
           <table class="">
@@ -556,6 +559,9 @@ export default {
 }
 .card table tr{
   height: 50px;
+}
+.search-block img{
+  top: auto !important;
 }
 /* Combined Background and Text Colors */
 .bg-green-text-white { background-color: #28a745; color: #ffffff; } /* Green background, white text */

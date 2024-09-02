@@ -57,11 +57,11 @@ export default defineComponent({
         },
         legend: {
           data: [
-            { name: 'Абонемент', icon: 'circle', textStyle: { color: '#fff' }, itemStyle: { color: '#FF2424' } },
-            { name: 'Курсы (групповые)', icon: 'circle', textStyle: { color: '#fff' }, itemStyle: { color: '#F1972E' } },
-            { name: 'Курсы (индивидуальные)', icon: 'circle', textStyle: { color: '#fff' }, itemStyle: { color: '#FDDE3E' } },
-            { name: 'Новые пользователи', icon: 'circle', textStyle: { color: '#fff' }, itemStyle: { color: '#D0FD3E' } },
-            { name: 'Услуги', icon: 'circle', textStyle: { color: '#fff' }, itemStyle: { color: '#49CCCC' } }
+            { name: 'Абонемент', icon: 'circle', textStyle: { color: '#fff' }, itemStyle: { color: '#FF2424', marginRight: '10px' } },
+            { name: 'Курсы (групповые)', icon: 'circle', textStyle: { color: '#fff' }, itemStyle: { color: '#F1972E', marginRight: '10px' } },
+            { name: 'Курсы (индивидуальные)', icon: 'circle', textStyle: { color: '#fff' }, itemStyle: { color: '#FDDE3E', marginRight: '10px' } },
+            { name: 'Новые пользователи', icon: 'circle', textStyle: { color: '#fff' }, itemStyle: { color: '#D0FD3E', marginRight: '10px' } },
+            { name: 'Услуги', icon: 'circle', textStyle: { color: '#fff' }, itemStyle: { color: '#49CCCC'  } }
           ],
           textStyle: {
             fontSize: '18px',
