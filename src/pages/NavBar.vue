@@ -46,6 +46,7 @@ export default {
               </li>
               <li :class="{active: ActiveMenu === '/lockers'}"><router-link to="/lockers">Шкафчики</router-link></li>
               <li :class="{active: ActiveMenu === '/product'}"><router-link to="/product">Продукты</router-link></li>
+              <li :class="{active: ActiveMenu === '/warehouse'}"><router-link to="/warehouse">Склад</router-link></li>
               <li :class="{active: ActiveMenu === '/cash'}"><router-link to="/cash">Касса</router-link></li>
             </ul>
           </div>

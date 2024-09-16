@@ -62,7 +62,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <bar-chart class="statistics bg-gray p-4" />
+        <bar-chart ref="chartComponent" :start-date="dates.dateFrom" :end-date="dates.dateTo" class="statistics bg-gray p-4" />
       </div>
     </div>
   </div>
@@ -114,6 +114,7 @@ export default {
             this.statistic = response.data;
             this.isLoading = false;
             this.statusPicker = false;
+            this.$refs.chartComponent.reloadData(this.dates.dateFrom, this.dates.dateTo);
           })
           .catch((error) => {
             this.error = error;

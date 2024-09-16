@@ -22,6 +22,7 @@ import Cash from "@/pages/Cash.vue";
 import courses from "@/pages/Courses/courses.vue";
 import newCourse from "@/pages/Courses/newCourse.vue";
 import transactions from "@/pages/transactions/transactions.vue";
+import warehouse from "@/pages/warehouse/warehouse.vue";
 
 const routes = [
   {
@@ -120,6 +121,11 @@ const routes = [
     path: '/cash',
     name: 'cash',
     component: Cash
+  },
+  {
+    path: '/warehouse',
+    name: 'warehouse',
+    component: warehouse
   },
   {
     path: '/courses',
