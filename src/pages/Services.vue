@@ -162,12 +162,14 @@
     </div>
   </div>
 
+ <!-- add modal -->
   <div
     @click="toggleModal('.add-curs')"
     class="add-user-modal add-curs d-none d-flex justify-content-center align-items-center"
   >
     <div @click.stop class="content">
-      <div class="title">Создать услугу</div>
+      <div class="title" v-if="!edit">Создать услугу</div>
+      <div class="title" v-if="edit">Изменить услугу</div>
       <form
         class="form"
         @submit.prevent="submitForm(), toggleModal('.add-curs')"
@@ -190,7 +192,7 @@
             required
           ></textarea>
         </div>
-        <div class="form position-relative">
+        <div class="form position-relative" v-if="!edit">
           <label for="phone">Добавить фотографию</label>
           <div class="img-card row p-3 justify-content-between">
             <div
@@ -252,7 +254,8 @@
           <button @click="toggleModal('.add-curs')" class="dont" type="button">
             Отмена
           </button>
-          <button class="submit" type="submit">Добавить</button>
+          <button class="submit" type="submit" v-if="!edit">Добавить</button>
+          <button class="submit" type="submit" v-if="edit">Изменить</button>
         </div>
       </form>
     </div>
@@ -347,12 +350,12 @@
     <div class="row">
       <div class="col-md-4" 
         v-for="curs in cursList"
+      >
+        <div class="w-100 h-100 courses-card position-relative mb-3 p-0" 
         @click="
           toggleModal('.pay-curs'),
             (addCurs = curs),
-            (cursData.services_id = curs.id)"
-      >
-        <div class="w-100 h-100 courses-card position-relative mb-3 p-0">
+            (cursData.services_id = curs.id)">
 <!--          <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>-->
           <img class="w-100 h-100" :src="'http://fitness.abdurazzoq.beget.tech/public/' + curs.img" alt="">
           <div class="at-bottom position-absolute bottom-0 ps-4">
@@ -361,6 +364,17 @@
             <p class="m-0 mb-2 text-white text-capitalize">{{ curs.type_courses }}</p>
           </div>
         </div>
+        <div class="menu-btn">
+            <button class="bg-transparent border-0 position-absolute menu-icon"><img src="@/assets/images/icons/menu.png" alt=""></button>
+            <div class="menu">
+              <div class="menu-card">
+                <ul>
+                  <li @click="toggleModal('.add-curs'), (formData = curs, edit=true)" class="mb-0">Редактировать</li>
+                  <!-- <li class="text-danger">Удалить</li> -->
+                </ul>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
   </div>
@@ -437,8 +451,10 @@ import form_Data from "@/components/axios/formData.js";
 export default {
   data() {
     return {
+      editServices: "",
       activeTR: "",
       idTr: "",
+      edit : false,
       images: [],
       imagesPost: [],
       addCurs: "",
@@ -572,28 +588,53 @@ export default {
 
     async submitForm() {
       let FormData = this.formData;
-      FormData.img = this.imagesPost;
       try {
-        const response = await form_Data(
-          "http://fitness.abdurazzoq.beget.tech/public/services/create",
-          FormData
-        );
-        if (response.status === 200) {
-          this.addStatus = true;
-          await this.getInfo(
-            "http://fitness.abdurazzoq.beget.tech/public/api/coach/all",
-            "DataUsers",
-            1
+        if(!edit){
+          FormData.img = this.imagesPost;
+          const response = await form_Data(
+            "http://fitness.abdurazzoq.beget.tech/public/services/create",
+            FormData
           );
-          await this.getInfo(
-            "http://fitness.abdurazzoq.beget.tech/public/api/services/all",
-            "cursList",
-            2
+          if (response.status === 200) {
+            this.addStatus = true;
+            await this.getInfo(
+              "http://fitness.abdurazzoq.beget.tech/public/api/coach/all",
+              "DataUsers",
+              1
+            );
+            await this.getInfo(
+              "http://fitness.abdurazzoq.beget.tech/public/api/services/all",
+              "cursList",
+              2
+            );
+            await this.getInfoUsers();
+            this.Delay("addStatus", 7);
+          } else {
+            console.error(`Запрос завершился с ошибкой: ${response.status}`);
+          }
+        }else{
+          const response = await form_Data(
+            `http://fitness.abdurazzoq.beget.tech/public/services/update/${ FormData.id }`,
+            FormData
           );
-          await this.getInfoUsers();
-          this.Delay("addStatus", 7);
-        } else {
-          console.error(`Запрос завершился с ошибкой: ${response.status}`);
+          delete FormData.img;
+          if (response.status === 200) {
+            this.addStatus = true;
+            await this.getInfo(
+              "http://fitness.abdurazzoq.beget.tech/public/api/coach/all",
+              "DataUsers",
+            
+            );
+            await this.getInfo(
+              "http://fitness.abdurazzoq.beget.tech/public/api/services/all",
+              "cursList",
+              2
+            );
+            await this.getInfoUsers();
+            this.Delay("addStatus", 7);
+          } else {
+            console.error(`Запрос завершился с ошибкой: ${response.status}`);
+          }
         }
       } catch (error) {
         console.error("Ошибка при отправке данных:", error);
@@ -669,6 +710,53 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.menu-btn {
+  position: relative; /* Ensure the .menu is positioned relative to the .menu-btn */
+
+  .menu-icon {
+    z-index: 9;
+    right: 20px;
+    padding: 0 0 0 20px;
+    bottom: 30px;
+
+    img {
+      transform: scale(1.2); /* Updated for better support */
+    }
+  }
+
+  .menu-card {
+    display: none;
+    position: absolute;
+    right: 0px;
+    z-index: 9;
+    top: -30px;
+    background: #000;
+    border-radius: 14px;
+    padding: 20px 30px;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        cursor: pointer;
+        margin: 0;
+
+        &:first-of-type {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+  &:hover .menu-card {
+    display: block;
+  }
+}
+
+.fs-7 {
+  font-size: 14px;
+}
 button.active {
   background-color: #c3ff00;
   color: #333;
