@@ -23,6 +23,8 @@ import courses from "@/pages/Courses/courses.vue";
 import newCourse from "@/pages/Courses/newCourse.vue";
 import transactions from "@/pages/transactions/transactions.vue";
 import warehouse from "@/pages/warehouse/warehouse.vue";
+import warehousePage from "@/pages/warehouse/warehousePage.vue";
+import deleteAccount from "@/pages/deleteAccount.vue"
 
 const routes = [
   {
@@ -128,6 +130,12 @@ const routes = [
     component: warehouse
   },
   {
+    path: '/warehouseItem/:id',
+    name: 'warehousePage',
+    component: warehousePage,
+    props:true
+  },
+  {
     path: '/courses',
     name: 'courses',
     component: courses
@@ -141,6 +149,11 @@ const routes = [
     path: '/transactions',
     name: 'transactions',
     component: transactions
+  },
+  {
+    path: '/delete-account',
+    name: 'deleteAccount',
+    component: deleteAccount
   },
 
 ];
