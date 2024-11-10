@@ -99,8 +99,26 @@ export default {
         category_id: "",
       };
     },
-
-
+    async deleteWarehouse(){
+      let FormData = {...this.formData};
+      FormData.img = this.imagesPost[0];
+      FormData.balance = FormData.count;
+      FormData.created_at = new DateTime('now');
+        try {
+          let response;
+          console.log("yes");
+          response = await form_Data(
+            "http://fitness.abdurazzoq.beget.tech/public/wh/create",
+            FormData
+          );
+          console.log(response);
+          if (response.status === 201) {
+            this.addStatus = true;
+          } else {
+            console.error(`Запрос завершился с ошибкой: ${response.status}`);
+          }
+        } catch (error) { console.error('Error')}
+    },
     async addCategory() {
       let FormData = {...this.formData};
       FormData.img = this.imagesPost[0];
@@ -124,19 +142,16 @@ export default {
             );
           }
           console.log(response);
-          if (response.status === 200) {
+          if (response.status === 201 || response.status === 200) {
             this.addStatus = true;
-            await this.getInfo(
-              "http://fitness.abdurazzoq.beget.tech/public/wh",
-              "Warehouse"
-            );
-            await this.Delay("addStatus", 5);
-            this.Delay("addStatus", 5);
+            this.setup()
+            this.addModal = false;
+            this.editNull()
           } else {
             console.error(`Запрос завершился с ошибкой: ${response.status}`);
           }
         } catch (error) { console.error('Error')}
-      }
+    }
   },
   mounted() {
     this.setup()

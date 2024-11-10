@@ -46,12 +46,12 @@ export default {
               </li>
               <li :class="{active: ActiveMenu === '/lockers'}"><router-link to="/lockers">Шкафчики</router-link></li>
               <li :class="{active: ActiveMenu === '/product'}"><router-link to="/product">Продукты</router-link></li>
-              <li :class="{active: ActiveMenu === '/warehouse' || ActiveMenu.includes('/warehouse/') }"><router-link to="/warehouse">Склад</router-link></li>
+              <li :class="{active: ActiveMenu === '/warehouse' || ActiveMenu.includes('/warehouse/') || ActiveMenu.includes('/warehouseItem/') }"><router-link to="/warehouse">Склад</router-link></li>
               <li :class="{active: ActiveMenu === '/cash'}"><router-link to="/cash">Касса</router-link></li>
             </ul>
           </div>
           <router-link to="/login"><div class="user-icon">
-            <img height="24" width="24" src="@/assets/images/icons/user-icon.png" alt="user">
+            <img height="24" width="24" src="@/assets/images/icons/user-icon.png" alt="user" style="width: 100%;">
           </div></router-link>
         </header>
       </div>

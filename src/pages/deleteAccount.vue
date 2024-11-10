@@ -252,7 +252,7 @@ export default {
   <div class="container">
 
     <div class="row">
-      <div class="card card-body bg-dark my-5 rounded-4 p-5">
+      <div class="card card-body bg-dark my-5 rounded-4 p-5 delAccCard">
         <img src="@/assets/images/logo%20gum.png"  alt="">
         <h3 class="text-center">Удаление аккаунта</h3>
         <p class="mx-5 my-3">
@@ -296,7 +296,7 @@ export default {
   >
     <div @click.stop class="content bg-dark">
       <div class="text-center mb-5">
-        <img src="@/assets/images/icons/info.png" />
+        <img src="@/assets/images/icons/info.png" class="info"/>
       </div>
       <h3 class="text-center">
         Вы действительно хотите удалить аккаунт?
@@ -323,12 +323,11 @@ export default {
   </div>
 </template>
 <style>
-  img{
-    width: 250px;
+  .info img{
     display: block;
     margin: 0 auto;
   }
-  .card{
+  .delAccCard             .card{
     max-width: 70% !important;
     margin: 0 auto;
   }

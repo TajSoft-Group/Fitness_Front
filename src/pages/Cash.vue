@@ -841,7 +841,7 @@ export default {
     },
     async submitForm() {
       this.FormData.cards_id = this.currentUser.cards[0].id;
-      if(this.type==='cards'){
+      if(this.type==='card'){
         this.FormData.payment_type = "purchase";
       }
 

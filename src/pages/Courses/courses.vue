@@ -763,7 +763,7 @@ export default {
         "http://fitness.abdurazzoq.beget.tech/public/users",
         {
           form: "0",
-          to: "21",
+          to: "0",
         },
         token
       )
