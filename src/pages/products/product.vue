@@ -34,6 +34,39 @@
         </div>
       </div>
 
+      <div
+          @click="toggleModal('.user-delete-modal1')"
+          class="add-user-modal user-delete-modal1 d-flex justify-content-center align-items-center"
+          v-if="areyousure2"
+      >
+        <div @click.stop class="content">
+          <div class="text-center mb-5">
+            <img src="@/assets/images/icons/info.png" height="70px" />
+          </div>
+          <h3 class="text-center">
+            Вы действительно хотите удалить эту категорию ?
+          </h3>
+          <div class="courses mt-3">
+            <div class="cards-infos delete-user-info">
+              <div class="d-flex justify-content-between add-user-buttons">
+                <button @click="toggleModal('.user-delete-modal1')" class="dont">
+                  Отмена
+                </button>
+                <button
+                  @click="
+                    deleteCategory(deletedCategory.id);
+                  "
+                  class="submit red"
+                  type="button"
+                >
+                  Удалить
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <section class="mb-4">
         <div class="container">
           <div class="row relative">
@@ -128,7 +161,7 @@
             <span class="d-flex align-items-center justify-content-between position-relative">
               <span class="me-5" v-if="item.name!=='+'">{{ item.name }}</span>
               <span v-else></span>
-              <span class="category-close mx-2 fw-bolder p-3 pe-0" style="position: absolute;right: 0;cursor: pointer" v-if="(item.name!=='+' && item.name!=='Все')" @click="deleteCategory(item.id)">&times;</span>
+              <span class="category-close mx-2 fw-bolder p-3 pe-0" style="position: absolute;right: 0;cursor: pointer" v-if="(item.name!=='+' && item.name!=='Все')" @click="((areyousure2 = true), (deletedCategory = item))">&times;</span>
             </span>
           </div>
         </div>
@@ -386,6 +419,7 @@ export default {
       dllStatus: false,
       deletedCategory: false,
       areyousure: false,
+      areyousure2: false,
       deletedProduct: "",
       images: [],
       addCardHoliday: false,
@@ -598,6 +632,7 @@ export default {
               {
                 console.log(response);
                 this.dllStatus = true;
+                this.areyousure2 = false;
                 this.deletedCategory = this.buttonsCategory.find(item => item.id === id)
                 let index = this.buttonsCategory.findIndex(item => item.id === id);
                 if (index !== -1) {
