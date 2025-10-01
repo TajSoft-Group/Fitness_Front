@@ -51,7 +51,9 @@
             <input type="text" placeholder="Наличные" id="title" v-model="payment" required/>
           </div>
           <div v-show="type==='bonus' || type==='card'">
-            <label class="mx-0 mt-3">С вашего счёта будет снято {{ totalPrice.toFixed(2) }} <span v-show="type==='bonus'">баллов</span> <span v-show="type==='card'">TJS</span></label>
+            <label class="mx-0 mt-3" v-if="currentUser.cards[0].balance >= totalPrice" >С вашего счёта будет снято {{ totalPrice.toFixed(2) }} <span v-show="type==='bonus'">баллов</span> <span v-show="type==='card'">TJS</span></label>
+            <label class="mx-0 mt-3" v-else-if="type==='bonus' && currentUser.cards[1].balance >= totalPrice" >С вашего счёта будет снято {{ totalPrice.toFixed(2) }} <span v-show="type==='bonus'">баллов</span> <span v-show="type==='card'">TJS</span></label>
+            <label class="mx-0 mt-3 text-danger" v-else >У вас недостаточно средств для совершения покупки</label>
           </div>
           <div class="cart-text">
             <div class="cart-text-row">
@@ -64,7 +66,7 @@
             </div>
             <div class="cart-text-row d-flex align-items-center">
               <span>Получение бонусов</span>
-              <span v-show="type!=='bonus'">от общей суммы ( {{ currentUser.cards[1].percent }} )</span>
+              <span v-show="type!=='bonus'"> {{ (totalPrice.toFixed(2) * currentUser.cards[1].percent) / 100 }} GymКоинов</span>
               <span v-show="type==='bonus'" class="text-danger h6 my-0">начисление бонусов недоступно!</span>
             </div>
             <div class="cart-text-row cart-total pb-0">
@@ -841,7 +843,7 @@ export default {
     },
     async submitForm() {
       this.FormData.cards_id = this.currentUser.cards[0].id;
-      if(this.type==='cards'){
+      if(this.type==='card'){
         this.FormData.payment_type = "purchase";
       }
 

@@ -10,11 +10,20 @@ import { DateTime } from "luxon";
 export default {
   data(){
     return{
+      presentMenu : false,
       edit : false,
       addModal : false,
+      incomeModal: false,
       Warehouse: [],
       formData: {
         title: "",
+        count: "",
+        purchase: "",
+        sale: "",
+      },
+      formDataH: {
+        product_id: 0,
+        type: "income",
         count: "",
         purchase: "",
         sale: "",
@@ -24,6 +33,10 @@ export default {
     }
   },
   methods:{
+    openModal(type) {
+      this.incomeModal = true;
+      this.formDataH.type = type; // устанавливаем type в 'income' или 'expense'
+    },
     selectImage() {
       this.$refs.fileInput.click();
     },
@@ -68,7 +81,7 @@ export default {
       }, 3000);
     },
     getInfo(url, dataStore, id) {
-      gets(url)
+       gets(url)
         .then((response) => {
           console.log(response);
           this[dataStore] = [];
@@ -99,8 +112,52 @@ export default {
         category_id: "",
       };
     },
+    async incomeWarehouse(){
+      let formData = new FormData();
+      formData.append('product_id', this.formDataH.product_id);
+      formData.append('type', this.formDataH.type);
+      formData.append('count', this.formDataH.count);
+      formData.append('purchase', this.formDataH.purchase);
+      formData.append('sale', this.formDataH.sale);
+      formData.append('created_at', new Date().toISOString()); // текущая дата и время
 
+      try {
+        let response;
+        console.log("yes");
+        response = await fetch(
+          "http://fitness.abdurazzoq.beget.tech/public/whh/create",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          if (response.status === 201) {
+            this.addStatus = true;
 
+            this.formDataH= {
+              product_id: 0,
+              type: "income",
+              count: "",
+              purchase: "",
+              sale: "",
+            }
+
+            this.incomeModal = false;
+
+          } else {
+            console.error(`Запрос завершился с ошибкой: ${response.status}`);
+          }
+        } else {
+          console.error(`Запрос завершился с ошибкой: ${response.status}`);
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+      }
+    },
     async addCategory() {
       let FormData = {...this.formData};
       FormData.img = this.imagesPost[0];
@@ -124,19 +181,25 @@ export default {
             );
           }
           console.log(response);
-          if (response.status === 200) {
+          if (response.status === 201 || response.status === 200) {
             this.addStatus = true;
+<<<<<<< HEAD
             await this.getInfo(
               "https://api.mubingym.com/wh",
               "Warehouse"
             );
             await this.Delay("addStatus", 5);
             this.Delay("addStatus", 5);
+=======
+            this.setup()
+            this.addModal = false;
+            this.editNull()
+>>>>>>> 18abf8a27be08dcd8f62a43d136d9d2627ea8098
           } else {
             console.error(`Запрос завершился с ошибкой: ${response.status}`);
           }
         } catch (error) { console.error('Error')}
-      }
+    }
   },
   mounted() {
     this.setup()
@@ -147,103 +210,189 @@ export default {
 <template>
 
 
-<div
-    @click="addModal = !addModal"
-    v-if="addModal"
-    class="add-user-modal d-flex justify-content-center my-1 align-items-center"
-  >
-    <div @click.stop class="content">
-      <div class="title" v-show="!edit">ДОБАВИТЬ ТОВАР</div>
-      <div class="title" v-show="edit">РЕДАКТИРОВАТЬ ТОВАР</div>
-      <div class="form position-relative">
-        <label for="heading">Заголовок*</label>
-        <input
-          ref="inputText"
-          type="text"
-          placeholder="Введите название"
-          id="heading"
-          v-model="formData.title"
-          required
-        />
-      </div>
-      <div class="form position-relative">
-        <label for="count">Кол-во*</label>
-        <input
-          ref="inputText"
-          type="text"
-          placeholder="Введите количество"
-          id="count"
-          v-model="formData.count"
-          required
-        />
-      </div>
-
-      <div class="form position-relative" v-if="!edit">
-        <label for="phone">Выберите фото*</label>
-        <div class="img-card row p-3 justify-content-between">
-          <div
-            v-for="(image, index) in images"
-            :key="index"
-            class="card-add-img m-2"
-          >
-            <img :src="image" class="card-img-top" alt="Product Image" />
-          </div>
-          <div
-            v-show="images.length < 1"
-            class="card-button align-content-center text-center m-2"
-            @click="selectImage"
-          >
-            <button type="button" class="add-button">+</button>
-          </div>
+  <div
+      @click="addModal = !addModal"
+      v-if="addModal"
+      class="add-user-modal d-flex justify-content-center my-1 align-items-center"
+    >
+      <div @click.stop class="content">
+        <div class="title" v-show="!edit">ДОБАВИТЬ ТОВАР</div>
+        <div class="title" v-show="edit">РЕДАКТИРОВАТЬ ТОВАР</div>
+        <div class="form position-relative">
+          <label for="heading">Заголовок*</label>
+          <input
+            ref="inputText"
+            type="text"
+            placeholder="Введите название"
+            id="heading"
+            v-model="formData.title"
+            required
+          />
         </div>
-        <input
-          type="file"
-          ref="fileInput"
-          @change="handleFileChange"
-          style="display: none"
-        />
-      </div>
-      <div class="form position-relative">
-        <label for="purchase">Закупочная цена*</label>
-        <input
+        <div class="form position-relative">
+          <label for="count">Кол-во*</label>
+          <input
+            ref="inputText"
             type="text"
-            placeholder="Введите закупочную цену"
-            id="purchase"
-            v-model="formData.purchase"
+            placeholder="Введите количество"
+            id="count"
+            v-model="formData.count"
             required
-        />
-      </div>
+          />
+        </div>
 
-      
-      <div class="form position-relative">
-        <label for="sale">Продажная цена*</label>
-        <input
-            type="text"
-            placeholder="Введите продажную цену"
-            id="sale"
-            v-model="formData.sale"
-            required
-        />
-      </div>
+        <div class="form position-relative" v-if="!edit">
+          <label for="phone">Выберите фото*</label>
+          <div class="img-card row p-3 justify-content-between">
+            <div
+              v-for="(image, index) in images"
+              :key="index"
+              class="card-add-img m-2"
+            >
+              <img :src="image" class="card-img-top" alt="Product Image" />
+            </div>
+            <div
+              v-show="images.length < 1"
+              class="card-button align-content-center text-center m-2"
+              @click="selectImage"
+            >
+              <button type="button" class="add-button">+</button>
+            </div>
+          </div>
+          <input
+            type="file"
+            ref="fileInput"
+            @change="handleFileChange"
+            style="display: none"
+          />
+        </div>
+        <div class="form position-relative">
+          <label for="purchase">Закупочная цена*</label>
+          <input
+              type="text"
+              placeholder="Введите закупочную цену"
+              id="purchase"
+              v-model="formData.purchase"
+              required
+          />
+        </div>
 
-      <div class="d-flex justify-content-between add-user-buttons">
-        <button @click="(addCardHoliday = false); editNull()" class="dont">Отмена</button>
-        <button
-          class="submit"
-          type="button"
-          @click="addCategory(); (addCardHoliday = false)"  v-if="!edit"
-        >
-          Добавить
-        </button>
-        <button
+        
+        <div class="form position-relative">
+          <label for="sale">Продажная цена*</label>
+          <input
+              type="text"
+              placeholder="Введите продажную цену"
+              id="sale"
+              v-model="formData.sale"
+              required
+          />
+        </div>
+
+        <div class="d-flex justify-content-between add-user-buttons">
+          <button @click="(addCardHoliday = false); editNull()" class="dont">Отмена</button>
+          <button
             class="submit"
             type="button"
-            @click="addCategory(); (addCardHoliday = false)" v-if="edit"
-        >
-          Изменить
-        </button>
+            @click="addCategory(); (addCardHoliday = false)"  v-if="!edit"
+          >
+            Добавить
+          </button>
+          <button
+              class="submit"
+              type="button"
+              @click="addCategory(); (addCardHoliday = false)" v-if="edit"
+          >
+            Изменить
+          </button>
+        </div>
       </div>
-    </div>
+  </div>
+
+  <div
+      @click="incomeModal = !incomeModal"
+      v-if="incomeModal"
+      class="add-user-modal d-flex justify-content-center my-1 align-items-center"
+    >
+      <div @click.stop class="content">
+        <div class="title mb-3" v-show="formDataH.type==='income'">Приход товара</div>
+        <div class="title mb-3" v-show="formDataH.type==='expense'">Расход товара</div>
+        
+        <div class="position-relative">
+          <label for="name" class="color-yellow" style="margin: 10px 0px 10px 20px;">Выберите товар</label>
+          <input type="text" id="present" v-model="activeTR" @click="presentMenu = !presentMenu" />
+          <img
+            @click="presentMenu = !presentMenu"
+            :class="{ 'rotate-90': presentMenu }"
+            class="row-right-icon mt-2"
+            src="@/assets/images/icons/row-right.png"
+          />
+          <div :class="{ 'd-block': presentMenu }" class="menu-type-1 pt-4 ps-3">
+            <h1 class="ps-2">Все товары</h1>
+            <div class="scroll-new">
+              <div
+                role="button"
+                v-for="wh in Warehouse"
+                @click="
+                  formDataH.product_id = wh.id;
+                  presentMenu = false;
+                  activeTR = wh.title;
+                "
+                class="statistics h-auto m-0 p-2"
+              >
+                <hr class="m-0 p-1" />
+                {{ wh.title }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form position-relative">
+          <label for="count">Кол-во*</label>
+          <input
+            ref="inputText"
+            type="text"
+            placeholder="Введите количество"
+            id="count"
+            v-model="formDataH.count"
+            required
+          />
+        </div>
+
+        <div class="form position-relative">
+          <label for="purchase">Закупочная цена*</label>
+          <input
+              type="text"
+              placeholder="Введите закупочную цену"
+              id="purchase"
+              v-model="formDataH.purchase"
+              required
+          />
+        </div>
+
+        
+        <div class="form position-relative">
+          <label for="sale">Продажная цена*</label>
+          <input
+              type="text"
+              placeholder="Введите продажную цену"
+              id="sale"
+              v-model="formDataH.sale"
+              required
+          />
+        </div>
+
+        <div class="d-flex justify-content-between add-user-buttons">
+          <button @click="(addCardHoliday = false); editNull()" class="dont">Отмена</button>
+          <button
+            class="submit"
+            type="button"
+            @click="incomeWarehouse(); (addCardHoliday = false)"
+          >
+            Добавить
+          </button>
+        </div>
+      </div>
   </div>
 
 
@@ -255,10 +404,10 @@ export default {
             <div
                 class="user-add-btn d-flex justify-content-center align-items-center"
             >
-              <button @click="addModal = true" class="add-user-btn me-3 py-2 px-3">
+              <button @click="openModal('income')" class="add-user-btn me-3 py-2 px-3">
                 Приход
               </button>
-              <button @click="addModal = true" class="add-user-btn me-3 py-2 px-3">
+              <button @click="openModal('expense')" class="add-user-btn me-3 py-2 px-3">
                 Расход
               </button>
               <button @click="addModal = true" class="add-user-btn py-2 px-3">

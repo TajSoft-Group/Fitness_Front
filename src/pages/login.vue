@@ -69,6 +69,7 @@ export default {
           .then(response => {
             const t = response.data.token;
             this.setCookie('token', t, 31)
+            console.log(t);
             // this.statusReg=this.getCookie('token')
             setTimeout(()=>{
               router.push("/");

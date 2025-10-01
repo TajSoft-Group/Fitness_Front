@@ -8,7 +8,32 @@
       </div>
     </div>
   </div>
+  
+  <!-- B A L A N C E //balance -->
 
+  <section class="mb-4">
+    <div class="container">
+      <div class="row relative">
+        <div :class="[payed ? 'show-false' : 'show-add']"  class="added-user-message">
+          <div class="result-true">
+            <div class="result-true-card d-flex align-items-center">
+              <img
+                  class="m-4 img-width-40"
+                  src="@/assets/images/icons/check_add.png"
+              />
+              <div class="result-true-content">
+                <div class="result-true-title">Счёт успешно пополнен !</div>
+                <div class="result-true-body mt-2">
+                  {{user.name}}  ( Баланс: {{user.cards[0].balance}}  )  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
   <div class="container">
     <div class="row">
       <div class="col">
@@ -155,6 +180,7 @@
       </div>
     </div>
   </div>
+
 
   <div @click="toggleModal('.user-block-modal')" class="add-user-modal user-block-modal d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="content">
@@ -611,6 +637,7 @@ export default {
   name: 'UserPage',
   data() {
     return {
+      payed: false,
       formData: {
         gender:'',
         name: '',
@@ -707,10 +734,14 @@ export default {
       const pay={ owner_id: this.id, payment: payCash, payment_type: "refill"}
       posts('https://api.mubingym.com/api/payment', pay)
           .then(response => {
+            this.payed = true;
             console.log('ok',response)
+            this.toggleModal('.add-money-modal')
             this.getInfo()
+            setTimeout(()=>{ this.payed=false; },2000)
           })
           .catch(error => {
+            this.toggleModal('.add-money-modal')
             this.error = error;
           });
     }
@@ -728,6 +759,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  *{
+    user-select: none;    
+  }
   .credit-card{
     height: 250px;
   }

@@ -266,7 +266,7 @@
     class="add-user-modal pay-curs d-none d-flex justify-content-center align-items-center"
   >
     <div @click.stop class="content">
-      <div class="title">оплата курса</div>
+      <div class="title">Оплата курса</div>
       <form
         class="form"
         @submit.prevent="coursesFn(), toggleModal('.pay-curs')"
