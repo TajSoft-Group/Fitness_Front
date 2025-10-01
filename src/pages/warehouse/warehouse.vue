@@ -183,18 +183,12 @@ export default {
           console.log(response);
           if (response.status === 201 || response.status === 200) {
             this.addStatus = true;
-<<<<<<< HEAD
             await this.getInfo(
               "https://api.mubingym.com/wh",
               "Warehouse"
             );
             await this.Delay("addStatus", 5);
             this.Delay("addStatus", 5);
-=======
-            this.setup()
-            this.addModal = false;
-            this.editNull()
->>>>>>> 18abf8a27be08dcd8f62a43d136d9d2627ea8098
           } else {
             console.error(`Запрос завершился с ошибкой: ${response.status}`);
           }
