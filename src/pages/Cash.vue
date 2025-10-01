@@ -313,7 +313,7 @@
                         class="product-card p-0 position-relative"
                     >
                       <img
-                          :src="`http://fitness.abdurazzoq.beget.tech/public/${item.img[0]}`"
+                          :src="`https://api.mubingym.com/${item.img[0]}`"
                       />
                       <div class="product-info">
                         <div class="product-title mb-0">{{ item.title }}</div>
@@ -363,7 +363,7 @@
                       class="uslug-card p-0 position-relative"
                       @click="selectItem(item)"
                   >
-                    <img :src="`http://fitness.abdurazzoq.beget.tech/public/${item?.img?.[0] ? item.img[0] : ''}`" />
+                    <img :src="`https://api.mubingym.com/${item?.img?.[0] ? item.img[0] : ''}`" />
                     <div class="product-info">
                       <div class="product-title mb-0 border-color-yellow">
                         {{ item.name }}
@@ -413,7 +413,7 @@
                       @click="selectItem(course)"
                   >
                     <img
-                        :src="`http://fitness.abdurazzoq.beget.tech/public/${course.img}`"
+                        :src="`https://api.mubingym.com/${course.img}`"
                     />
                     <div class="product-info">
                       <div class="product-title mb-0 border-color-yellow">
@@ -506,7 +506,7 @@ export default {
   watch: {
     // whenever question changes, this function will run
     searchActive(queryString) {
-      posts("http://fitness.abdurazzoq.beget.tech/public/search_all", {
+      posts("https://api.mubingym.com/search_all", {
         name: queryString,
       })
         .then((response) => {
@@ -679,7 +679,7 @@ export default {
       this.cart.splice(index, 1);
     },
     getCourseTypes() {
-      gets("http://fitness.abdurazzoq.beget.tech/public/api/courses_get_type")
+      gets("https://api.mubingym.com/api/courses_get_type")
           .then((response) => {
             this.courseTypes = response.data;
           })
@@ -695,7 +695,7 @@ export default {
     },
     loadCourses() {
       return gets(
-          `http://fitness.abdurazzoq.beget.tech/public/api/courses/all`
+          `https://api.mubingym.com/api/courses/all`
       )
           .then((response) => {
             this.courses = response.data;
@@ -714,7 +714,7 @@ export default {
     },
     loadProducts() {
       return gets(
-          `http://fitness.abdurazzoq.beget.tech/public/product/all`
+          `https://api.mubingym.com/product/all`
       )
       .then((response) => {
         this.products = response.data;
@@ -727,7 +727,7 @@ export default {
       });
     },
     getProductCategories() {
-      gets("http://fitness.abdurazzoq.beget.tech/public/category")
+      gets("https://api.mubingym.com/category")
           .then((response) => {
             this.productCategories = response.data;
           })
@@ -737,7 +737,7 @@ export default {
           });
     },
     getServiceTypes() {
-      gets("http://fitness.abdurazzoq.beget.tech/public/api/services/name")
+      gets("https://api.mubingym.com/api/services/name")
           .then((response) => {
             this.serviceType = response.data.data;
           })
@@ -754,7 +754,7 @@ export default {
       }
     },
     loadService() {
-      return gets(`http://fitness.abdurazzoq.beget.tech/public/api/services/all`)
+      return gets(`https://api.mubingym.com/api/services/all`)
           .then((response) => {
             if (response && response.data && response.data.data) {
               this.services = response.data.data;
@@ -864,7 +864,7 @@ export default {
           const token = Cookies.get("token");
           cursData.count = (cursData.count *  item.visit_count)
           posts(
-              "http://fitness.abdurazzoq.beget.tech/public/enroll/services",
+              "https://api.mubingym.com/enroll/services",
               {
                 ...cursData,
               },
@@ -892,7 +892,7 @@ export default {
 
       try {
         const response = await posts(
-            "http://fitness.abdurazzoq.beget.tech/public/transaction/create",
+            "https://api.mubingym.com/transaction/create",
             this.FormData
         );
         if (response.status === 200) {

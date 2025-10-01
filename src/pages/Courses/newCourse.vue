@@ -338,7 +338,7 @@
     },
     methods:{
       coursesFn(){
-        posts('http://fitness.abdurazzoq.beget.tech/public/enroll/courses', {...this.cursData})
+        posts('https://api.mubingym.com/enroll/courses', {...this.cursData})
             .then(response => {
               this.Delay('loading', 1)
               console.log(this.cursData)
@@ -490,7 +490,7 @@
                 const response = form_Data('http://fitness.abdurazzoq.beget.tech/api/training/create', td);
                 if (response.status === 201) {
                   this.addStatus = true;
-                  // await this.getInfo('http://fitness.abdurazzoq.beget.tech/public/api/coach/all','DataUsers', 1)
+                  // await this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
                   // await this.getInfo('http://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
                   // await this.getInfoUsers()
                   router.push("/courses");
@@ -505,7 +505,7 @@
               }
             });
             this.addStatus = true;
-            // await this.getInfo('http://fitness.abdurazzoq.beget.tech/public/api/coach/all','DataUsers', 1)
+            // await this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
             // await this.getInfo('http://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
             // await this.getInfoUsers()
             this.Delay('addStatus', 7);
@@ -545,7 +545,7 @@
       },
     },
     mounted() {
-      this.getInfo('http://fitness.abdurazzoq.beget.tech/public/api/coach/all','DataUsers', 1)
+      this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
       this.getInfo('http://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
       // this.getInfoUsers()
     },

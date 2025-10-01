@@ -61,7 +61,7 @@ export default {
     },
     deleteProduct(id){
       console.log(id)
-      deletes(`http://fitness.abdurazzoq.beget.tech/public/product/${ parseInt(id) }`)
+      deletes(`https://api.mubingym.com/product/${ parseInt(id) }`)
           .then(
               (response) =>
               {
@@ -110,7 +110,7 @@ export default {
     // ///////////// //////////// => addCategory // => product
     async addCategory(typeAdd) {
       if (typeAdd === "addCategory") {
-        posts("http://fitness.abdurazzoq.beget.tech/public/category_create", {
+        posts("https://api.mubingym.com/category_create", {
           name: this.AddCategory,
         })
             .then((response) => {
@@ -118,12 +118,12 @@ export default {
               if (response.status === 200) {
                 this.addStatus = true;
                 this.getInfo(
-                    "http://fitness.abdurazzoq.beget.tech/public/category",
+                    "https://api.mubingym.com/category",
                     "buttonsCategory",
                     1
                 );
                 this.getInfo(
-                    "http://fitness.abdurazzoq.beget.tech/public/product/all",
+                    "https://api.mubingym.com/product/all",
                     "productList",
                     2
                 );
@@ -142,13 +142,13 @@ export default {
             console.log('yes');
             delete FormData.img
             response = await Patch(
-                `http://fitness.abdurazzoq.beget.tech/public/product/${ FormData.id }`,
+                `https://api.mubingym.com/product/${ FormData.id }`,
                 FormData
             );
             this.editNull()
           }else{
             response = await form_Data(
-                "http://fitness.abdurazzoq.beget.tech/public/product_create",
+                "https://api.mubingym.com/product_create",
                 FormData
             );
           }
@@ -157,12 +157,12 @@ export default {
           if (response.status === 200) {
             this.addStatus = true;
             await this.getInfo(
-                "http://fitness.abdurazzoq.beget.tech/public/category",
+                "https://api.mubingym.com/category",
                 "buttonsCategory",
                 1
             );
             await this.getInfo(
-                "http://fitness.abdurazzoq.beget.tech/public/product/all",
+                "https://api.mubingym.com/product/all",
                 "productList",
                 2
             );
@@ -219,7 +219,7 @@ export default {
     },
     deleteCategory(id){
       console.log(id)
-      deletes(`http://fitness.abdurazzoq.beget.tech/public/category/delete/${ parseInt(id) }`)
+      deletes(`https://api.mubingym.com/category/delete/${ parseInt(id) }`)
           .then(
               (response) =>
               {
@@ -236,12 +236,12 @@ export default {
   },
   mounted() {
     this.getInfo(
-        "http://fitness.abdurazzoq.beget.tech/public/category",
+        "https://api.mubingym.com/category",
         "buttonsCategory",
         1
     );
     this.getInfo(
-        "http://fitness.abdurazzoq.beget.tech/public/product/all",
+        "https://api.mubingym.com/product/all",
         "productList",
         2
     );
@@ -252,7 +252,7 @@ export default {
   <div class="container">
 
     <div class="row">
-      <div class="card card-body bg-dark my-5 rounded-4 p-5">
+      <div class="card card-body bg-dark my-5 rounded-4 p-5 delAccCard">
         <img src="@/assets/images/logo%20gum.png"  alt="">
         <h3 class="text-center">Удаление аккаунта</h3>
         <p class="mx-5 my-3">
@@ -296,7 +296,7 @@ export default {
   >
     <div @click.stop class="content bg-dark">
       <div class="text-center mb-5">
-        <img src="@/assets/images/icons/info.png" />
+        <img src="@/assets/images/icons/info.png" class="info"/>
       </div>
       <h3 class="text-center">
         Вы действительно хотите удалить аккаунт?
@@ -323,12 +323,11 @@ export default {
   </div>
 </template>
 <style>
-  img{
-    width: 250px;
+  .info img{
     display: block;
     margin: 0 auto;
   }
-  .card{
+  .delAccCard             .card{
     max-width: 70% !important;
     margin: 0 auto;
   }

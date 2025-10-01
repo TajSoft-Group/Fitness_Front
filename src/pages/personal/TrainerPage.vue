@@ -125,7 +125,7 @@
               >
                 <img
                   :src="
-                    'http://fitness.abdurazzoq.beget.tech/public/' + user.avatar
+                    'https://api.mubingym.com/' + user.avatar
                   "
                   alt=""
                 />
@@ -752,7 +752,7 @@ export default {
     getInfo() {
       const token = Cookies.get("token");
       gets(
-        `http://fitness.abdurazzoq.beget.tech/public/api/coach/${this.id}`,
+        `https://api.mubingym.com/api/coach/${this.id}`,
         token
       )
         .then((response) => {

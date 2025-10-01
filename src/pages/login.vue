@@ -65,7 +65,7 @@ export default {
         username: this.username,
         password: this.password
       };
-      axios.post('http://fitness.abdurazzoq.beget.tech/public/login_check', dataToSend)
+      axios.post('https://api.mubingym.com/login_check', dataToSend)
           .then(response => {
             const t = response.data.token;
             this.setCookie('token', t, 31)

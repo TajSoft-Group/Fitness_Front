@@ -275,7 +275,7 @@
                 <div class="user-list-item-img">
                   <img
                     v-if="trener.img"
-                    :src="`http://fitness.abdurazzoq.beget.tech/public/${trener.img}`"
+                    :src="`https://api.mubingym.com/${trener.img}`"
                     alt=""
                   />
                   <img v-else src="@/assets/images/user-photo.png" alt="" />
@@ -441,7 +441,7 @@
           >
             <div class="w-100 h-100 courses-card position-relative mb-3 p-0">
               <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>
-              <img class="w-100 h-100" :src="'http://fitness.abdurazzoq.beget.tech/public/' + curs.img" alt="">
+              <img class="w-100 h-100" :src="'https://api.mubingym.com/' + curs.img" alt="">
               <div class="at-bottom position-absolute bottom-0 ps-4">
                 <h5>{{ curs.title }}</h5>
                 <p class="m-0">{{ curs.discount_price }} TJS <b class="text-white mx-1">|</b> <s class="text-white">{{ curs.price }} TJS</s></p>
@@ -466,7 +466,7 @@
                 -{{ curs.discount + "%" }}
               </div>
               <img
-                :src="'http://fitness.abdurazzoq.beget.tech/public/' + curs.img"
+                :src="'https://api.mubingym.com/' + curs.img"
               />
               <div class="product-info">
                 <div class="product-title mb-2 border-color-yellow">
@@ -635,7 +635,7 @@ export default {
     coursesFn() {
       const token = Cookies.get("token");
       posts(
-        "http://fitness.abdurazzoq.beget.tech/public/enroll/courses",
+        "https://api.mubingym.com/enroll/courses",
         {
           ...this.cursData,
         },
@@ -671,7 +671,7 @@ export default {
     getInfoUsers() {
       const token = Cookies.get("token");
       posts(
-        "http://fitness.abdurazzoq.beget.tech/public/users",
+        "https://api.mubingym.com/users",
         {
           form: "0",
           to: "21",
@@ -716,7 +716,7 @@ export default {
         if (response.status === 200) {
           this.addStatus = true;
           await this.getInfo(
-            "http://fitness.abdurazzoq.beget.tech/public/api/coach/all",
+            "https://api.mubingym.com/api/coach/all",
             "DataUsers",
             1
           );
@@ -760,7 +760,7 @@ export default {
     getClients() {
       const token = Cookies.get("token");
       posts(
-        "http://fitness.abdurazzoq.beget.tech/public/users",
+        "https://api.mubingym.com/users",
         {
           form: "0",
           to: "21",
@@ -784,7 +784,7 @@ export default {
     },
     changeCourse() {
       console.log("changeCourse");
-      posts("http://fitness.abdurazzoq.beget.tech/public/count/courses", {
+      posts("https://api.mubingym.com/count/courses", {
         user_id: this.activeCourse.userId,
         courses_id: this.activeCourse.courseId,
       })
@@ -810,7 +810,7 @@ export default {
   },
   mounted() {
     this.getInfo(
-      "http://fitness.abdurazzoq.beget.tech/public/api/coach/all",
+      "https://api.mubingym.com/api/coach/all",
       "DataUsers",
       1
     );

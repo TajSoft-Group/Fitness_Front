@@ -41,7 +41,7 @@ export default {
     setup() {
       const token = Cookies.get("token");
       gets(
-          "http://fitness.abdurazzoq.beget.tech/public/wh",
+          "https://api.mubingym.com/wh",
           token
       )
           .then((response) => {
@@ -112,14 +112,14 @@ export default {
           console.log('yes');
           delete FormData.img
           response = await Patch(
-              `http://fitness.abdurazzoq.beget.tech/public/wh/update/${FormData.id}`,
+              `https://api.mubingym.com/wh/update/${FormData.id}`,
               FormData
           );
           this.editNull()
         } else {
           console.log("yes");
           response = await form_Data(
-              "http://fitness.abdurazzoq.beget.tech/public/wh/create",
+              "https://api.mubingym.com/wh/create",
               FormData
           );
         }
@@ -127,7 +127,7 @@ export default {
         if (response.status === 200) {
           this.addStatus = true;
           await this.getInfo(
-              "http://fitness.abdurazzoq.beget.tech/public/wh",
+              "https://api.mubingym.com/wh",
               "Warehouse"
           );
           await this.Delay("addStatus", 5);
@@ -277,7 +277,7 @@ export default {
         <div class="bg-gray card-block h-auto position-relative">
           <router-link :to="'/warehouseItem/' + item.id">
             <div class="d-flex justify-content-between">
-              <div class="col-4"><img :src="'http://fitness.abdurazzoq.beget.tech/public/' + item.img"
+              <div class="col-4"><img :src="'https://api.mubingym.com/' + item.img"
                                       class="warehouse-img"></div>
               <div class="col-9 px-3">
                 <h3>{{ truncatedTitle(item.title) }}</h3>

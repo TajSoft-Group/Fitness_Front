@@ -470,7 +470,7 @@ export default {
     getInfo() {
       const token = Cookies.get("token");
       posts(
-        "http://fitness.abdurazzoq.beget.tech/public/users",
+        "https://api.mubingym.com/users",
         { form: "0", to: "0" },
         token
       )
@@ -491,7 +491,7 @@ export default {
       currentDate = currentDate.toISOString().split('T')[0];
 
       posts(
-          "http://fitness.abdurazzoq.beget.tech/public/count",
+          "https://api.mubingym.com/count",
           { start_date: oneMonthBack, end_date: currentDate },
           token
       )
@@ -506,7 +506,7 @@ export default {
 
     submitForm() {
       this.formData.status = "active";
-      posts("http://fitness.abdurazzoq.beget.tech/public/user_register", {
+      posts("https://api.mubingym.com/user_register", {
         ...this.formData,
       })
         .then((response) => {

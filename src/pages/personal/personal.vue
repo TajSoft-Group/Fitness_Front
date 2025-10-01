@@ -328,7 +328,7 @@
                     >
                       <img
                         :src="
-                          'http://fitness.abdurazzoq.beget.tech/public/' +
+                          'https://api.mubingym.com/' +
                           personal.avatar
                         "
                         alt=""
@@ -435,7 +435,7 @@ export default {
   methods: {
     getInfo() {
       const token = Cookies.get("token");
-      gets("http://fitness.abdurazzoq.beget.tech/public/api/coach/all", token)
+      gets("https://api.mubingym.com/api/coach/all", token)
         .then((response) => {
           this.DataUsers = response.data.data;
           this.Delay("loading", 1);
@@ -497,7 +497,7 @@ export default {
       try {
         console.log(FormData);
         const response = await form_Data(
-          "http://fitness.abdurazzoq.beget.tech/public/coach/create",
+          "https://api.mubingym.com/coach/create",
           FormData
         );
         console.log(response);

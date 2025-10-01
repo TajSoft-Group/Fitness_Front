@@ -106,7 +106,7 @@ export default {
         const dateTo = new Date(this.dates.dateTo);
 
           posts(
-              "http://fitness.abdurazzoq.beget.tech/public/finance",
+              "https://api.mubingym.com/finance",
               { start_date: dateFrom, end_date: dateTo },
               token
           )
@@ -132,7 +132,7 @@ export default {
 
 
       posts(
-          "http://fitness.abdurazzoq.beget.tech/public/finance",
+          "https://api.mubingym.com/finance",
           { start_date: oneMonthBack, end_date: currentDate },
           token
       )

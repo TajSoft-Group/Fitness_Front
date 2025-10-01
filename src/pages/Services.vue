@@ -35,7 +35,7 @@
                 <div class="user-list-item-img">
                   <img
                     v-if="trener.img"
-                    :src="`http://fitness.abdurazzoq.beget.tech/public/${trener.img}`"
+                    :src="`https://api.mubingym.com/${trener.img}`"
                     alt=""
                   />
                   <img v-else src="@/assets/images/user-photo.png" alt="" />
@@ -357,7 +357,7 @@
             (addCurs = curs),
             (cursData.services_id = curs.id)">
 <!--          <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>-->
-          <img class="w-100 h-100" :src="'http://fitness.abdurazzoq.beget.tech/public/' + curs.img" alt="">
+          <img class="w-100 h-100" :src="'https://api.mubingym.com/' + curs.img" alt="">
           <div class="at-bottom position-absolute bottom-0 ps-4">
             <h5>{{ curs.name }}</h5>
             <p class="m-0">{{ curs.price }} TJS </p>
@@ -517,7 +517,7 @@ export default {
       const token = Cookies.get("token");
       this.cursData.count = (this.cursData.count *  this.addCurs.visit_count)
       posts(
-        "http://fitness.abdurazzoq.beget.tech/public/enroll/services",
+        "https://api.mubingym.com/enroll/services",
         {
           ...this.cursData,
         },
@@ -552,7 +552,7 @@ export default {
     getInfoUsers() {
       const token = Cookies.get("token");
       posts(
-        "http://fitness.abdurazzoq.beget.tech/public/users",
+        "https://api.mubingym.com/users",
         {
           form: "0",
           to: "0",
@@ -592,18 +592,18 @@ export default {
         if(!edit){
           FormData.img = this.imagesPost;
           const response = await form_Data(
-            "http://fitness.abdurazzoq.beget.tech/public/services/create",
+            "https://api.mubingym.com/services/create",
             FormData
           );
           if (response.status === 200) {
             this.addStatus = true;
             await this.getInfo(
-              "http://fitness.abdurazzoq.beget.tech/public/api/coach/all",
+              "https://api.mubingym.com/api/coach/all",
               "DataUsers",
               1
             );
             await this.getInfo(
-              "http://fitness.abdurazzoq.beget.tech/public/api/services/all",
+              "https://api.mubingym.com/api/services/all",
               "cursList",
               2
             );
@@ -614,19 +614,19 @@ export default {
           }
         }else{
           const response = await form_Data(
-            `http://fitness.abdurazzoq.beget.tech/public/services/update/${ FormData.id }`,
+            `https://api.mubingym.com/services/update/${ FormData.id }`,
             FormData
           );
           delete FormData.img;
           if (response.status === 200) {
             this.addStatus = true;
             await this.getInfo(
-              "http://fitness.abdurazzoq.beget.tech/public/api/coach/all",
+              "https://api.mubingym.com/api/coach/all",
               "DataUsers",
             
             );
             await this.getInfo(
-              "http://fitness.abdurazzoq.beget.tech/public/api/services/all",
+              "https://api.mubingym.com/api/services/all",
               "cursList",
               2
             );
@@ -665,7 +665,7 @@ export default {
     },
     changeCourse() {
       console.log("changeCourse");
-      posts("http://fitness.abdurazzoq.beget.tech/public/count/services", {
+      posts("https://api.mubingym.com/count/services", {
         user_id: this.activeCourse.userId,
         services_id: this.activeCourse.courseId,
       })
@@ -690,12 +690,12 @@ export default {
   },
   mounted() {
     this.getInfo(
-      "http://fitness.abdurazzoq.beget.tech/public/api/coach/all",
+      "https://api.mubingym.com/api/coach/all",
       "DataUsers",
       1
     );
     this.getInfo(
-      "http://fitness.abdurazzoq.beget.tech/public/api/services/all",
+      "https://api.mubingym.com/api/services/all",
       "cursList",
       2
     );

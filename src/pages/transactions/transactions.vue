@@ -161,7 +161,7 @@
       },
       loadData() {
         const token = Cookies.get("token");
-        gets('http://fitness.abdurazzoq.beget.tech/public/api/transactions', token)
+        gets('https://api.mubingym.com/api/transactions', token)
             .then((response) => {
               this.transactions = response.data;
               this.filteredTransactions = this.transactions; // Initially, show all transactions
