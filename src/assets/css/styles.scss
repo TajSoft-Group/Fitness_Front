@@ -207,6 +207,7 @@ input[type="checkbox"] {
         overflow: hidden;
         max-width: 200px;
         margin-right: 10px;
+        aspect-ratio: 2/1;
     }
     .product-card  {
         height: 180px;
@@ -642,7 +643,7 @@ header {
 .search-block {
     margin-top: 65px;
     position: relative;
-    z-index: 10;
+    z-index: 1;
 }
 
 .search-block img {

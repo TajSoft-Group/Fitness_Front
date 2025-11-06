@@ -254,7 +254,7 @@ export default {
       <div class="col">
         <div class="d-flex justify-content-between title-block align-items-center">
           <div class="page-title">
-            <router-link to="/">Склад</router-link>
+            <router-link to="/">Ск22ад</router-link>
           </div>
           <div
               class="user-add-btn d-flex justify-content-center align-items-center"

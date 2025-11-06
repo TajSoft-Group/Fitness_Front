@@ -1,9 +1,8 @@
 <script setup>
 import DataPicker from "@/pages/analytics/DataPicker.vue"
-
+import BarChart from "@/components/Chart/BarChart.vue";
 </script>
 <script>
-import BarChart from "@/components/Chart/BarChart.vue";
 import posts from "@/components/axios/posts.js";
 import Cookies from "js-cookie";
 export default {

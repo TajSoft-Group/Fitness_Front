@@ -6,6 +6,7 @@ const token = Cookies.get("token");
 export default function gets(url, t) {
   return axios
     .get(url, {
+       timeout: 210000,
       headers: {
         Authorization: t || token,
       },
