@@ -265,7 +265,7 @@ export default {
         let response;
         console.log("yes");
         response = await fetch(
-          "http://fitness.abdurazzoq.beget.tech/public/whh/create",
+          "https://api.mubingym.com/whh/create",
           {
             method: "POST",
             body: formData,

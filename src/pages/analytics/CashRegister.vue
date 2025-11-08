@@ -56,7 +56,7 @@ export default {
 
 
       posts(
-          "http://fitness.abdurazzoq.beget.tech/public/finance",
+          "https://api.mubingym.com/finance",
           { start_date: oneMonthBack, end_date: currentDate },
           token
       )
