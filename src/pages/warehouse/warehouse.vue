@@ -10,6 +10,10 @@ import { DateTime } from "luxon";
 export default {
   data() {
     return {
+      category: {
+        name: "",
+      },
+      isAddingCategory: false,
       activeCategory: null,
       success: true,
       toastMessage: 'Продукт добавлен!',
@@ -48,7 +52,12 @@ export default {
     }
   },
   methods: {
+    showAddCategory() {
+      this.isAddingCategory = !this.isAddingCategory;
+    },
     removeProduct() {
+      this.isLoading = true;
+      this.loadingText = "Удаление продукта";
       const token = Cookies.get("token");
       if (this.deleter) {
         deletes(
@@ -56,10 +65,16 @@ export default {
           token
         )
           .then((response) => {
+            this.success = false;
+            this.isLoading = false;
+            this.toastMessage = "Продукт удален";
+            this.toaster = true;
+            this.Delay('toaster', 3);
             this.setup();
             console.log(this.Warehouse)
           })
           .catch((error) => {
+            this.loadingText = this.error;
             this.error = error;
           });
       }
@@ -164,7 +179,11 @@ export default {
       };
     },
     setCategory(id) {
-      if(id===null){
+      if (id === null) {
+        this.WarehouseFilter = this.Warehouse;
+        return;
+      } else if (id == this.activeCategory) {
+        this.activeCategory = null;
         this.WarehouseFilter = this.Warehouse;
         return;
       }
@@ -172,6 +191,66 @@ export default {
       this.WarehouseFilter = this.Warehouse.filter((val) => {
         return id == val.category;
       })
+    },
+    async saveCategory() {
+      try {
+        let response;
+        response = await fetch(
+          "https://api.mubingym.com/category_create",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(this.category),
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          if (response.status === 200) {
+
+            this.category = {
+              name: "",
+            }
+
+            this.showAddCategory();
+
+            this.loadCategories();
+
+          } else {
+            console.error(`Запрос завершился с ошибкой: ${response.status}`);
+          }
+        } else {
+          console.error(`Запрос завершился с ошибкой: ${response.status}`);
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+      }
+    },
+    removeCategory(id) {
+      console.log(id)
+      this.isLoading = true;
+      this.loadingText = "Удаление..."
+      deletes(`https://api.mubingym.com/category/delete/${parseInt(id)}`)
+        .then(
+          (response) => {
+            console.log(response);
+            this.isLoading = false;
+            this.success = false;
+            this.toastMessage = "Категория удалена";
+            this.toaster = true;
+            this.setCategory(null);
+            this.Delay('toaster', 3);
+            this.loadCategories();
+          })
+        .catch((error) => {
+          console.log(response);
+          this.loadingText = error;
+          this.Delay('toaster', 3);
+        })
     },
     async incomeWarehouse() {
       let formData = new FormData();
@@ -230,6 +309,7 @@ export default {
         "purchase",
         "sale",
         "type",
+        "category"
       ];
 
       let isFilled = required.every(key => {
@@ -258,6 +338,7 @@ export default {
       formDataToSend.append("discount", Number(this.formData.discount) || 0);
       formDataToSend.append("barcode", this.formData.barcode);
       formDataToSend.append("type", Number(this.formData.type) || 1);
+      formDataToSend.append("category", Number(this.formData.category) || null);
 
       // ✅ Добавляем первое изображение (если есть)
       if (this.imagesPost.length > 0) {
@@ -268,27 +349,23 @@ export default {
 
       try {
         let response;
+        let message = "";
         if (this.edit) {
-          const bodyData = {
-            title: this.formData.title,
-            count: Number(this.formData.count),
-            balance: Number(this.formData.count),
-            purchase: Number(this.formData.purchase),
-            sale: Number(this.formData.sale),
-            discount: Number(this.formData.discount) || 0,
-            barcode: this.formData.barcode,
-            type: Number(this.formData.type) || 1,
-          };
-
+          message = "изменен";
           response = await fetch(
             `https://api.mubingym.com/wh/update/${this.formData.id}`,
             {
               method: "PATCH", // или PATCH, если API принимает
-              headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", },
-              body: JSON.stringify({ title: "ali" }),
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+              },
+              body: JSON.stringify(this.formData),
             }
           );
         } else {
+          message = "добавлен";
           response = await fetch("https://api.mubingym.com/wh/create", {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` },
@@ -299,9 +376,21 @@ export default {
         if (response.ok) {
           this.addStatus = true;
           this.setup();
-          this.Delay("addStatus", 5);
+          this.success = true;
+          this.toastMessage = "Продукт успешно " + message;
+          this.toaster = true;
+          this.Delay("toaster", 3);
+    
           this.addModal = false;
+          this.editNull();
+          this.images = [];
+          this.imagesPost = [];
         } else {
+          this.success = false;
+          this.toastMessage = `Ошибка: ${response.status}`;
+          this.toaster = true;
+          this.Delay("toaster", 3);
+    
           console.error(`Ошибка: ${response.status}`);
         }
         this.isLoading = false;
@@ -397,15 +486,17 @@ export default {
       </div>
 
 
-      <div class="form position-relative">
-        <label for="purchase">Закупочная цена*</label>
-        <input type="text" placeholder="Введите закупочную цену" id="purchase" v-model="formData.purchase" required />
-      </div>
+      <div class="d-flex">
+        <div class="form position-relative w-50 pe-2">
+          <label for="purchase">Закупочная цена*</label>
+          <input type="text" placeholder="Введите закупочную цену" id="purchase" v-model="formData.purchase" required />
+        </div>
 
 
-      <div class="form position-relative">
-        <label for="sale">Продажная цена*</label>
-        <input type="text" placeholder="Введите продажную цену" id="sale" v-model="formData.sale" required />
+        <div class="form position-relative w-50 ps-2">
+          <label for="sale">Продажная цена*</label>
+          <input type="text" placeholder="Введите продажную цену" id="sale" v-model="formData.sale" required />
+        </div>
       </div>
 
       <div class="d-flex">
@@ -414,10 +505,19 @@ export default {
           <input type="text" placeholder="Введите штрихкод" id="barcode" v-model="formData.barcode" required />
         </div>
 
+
         <div class="form position-relative w-50 ps-2">
           <label for="sale">Скидка*</label>
           <input type="text" placeholder="Введите скидку" id="discount" v-model="formData.discount" required />
         </div>
+      </div>
+
+      <div class="form position-relative">
+        <label for="purchase">Категория*</label>
+        <select name="" id="" v-model="formData.category">
+          <option selected disabled>Выберите категорию</option>
+          <option v-for="value in collection" :value="value.id">{{ value.name }}</option>
+        </select>
       </div>
 
       <div class="d-flex justify-content-between add-user-buttons">
@@ -505,10 +605,11 @@ export default {
       </div>
     </div>
     <div class="row px-3 pt-5">
-      <button class="btn bg-yellow w-auto rounded-pill me-3" @click="setCategory(null)">Все</button>
+      <button class="btn btn-dark border-0 bg-yellow w-auto rounded-pill me-3" @click="setCategory(null)">Все</button>
       <button class="btn btn-dark w-auto rounded-pill me-3" v-for="item in collection" @click="setCategory(item.id)">
         {{ item.name }}
-        <span class="btn-error ms-2" @click.stop="activeCategory = null; setCategory(null)" v-if="isActiveCategory(item.id)">
+
+        <span @click.stop="removeCategory(item.id)" v-if="isActiveCategory(item.id)" class="ms-2 btn-error">
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256"
             height="256" viewBox="0 0 256 256" xml:space="preserve">
             <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"
@@ -528,6 +629,27 @@ export default {
             </g>
           </svg>
         </span>
+        <!-- <span class="btn-error ms-2" @click.stop="activeCategory = null; setCategory(null)"
+          v-if="isActiveCategory(item.id)">
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256"
+            height="256" viewBox="0 0 256 256" xml:space="preserve">
+            <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"
+              transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+              <path
+                d="M 28.5 65.5 c -1.024 0 -2.047 -0.391 -2.829 -1.172 c -1.562 -1.562 -1.562 -4.095 0 -5.656 l 33 -33 c 1.561 -1.562 4.096 -1.562 5.656 0 c 1.563 1.563 1.563 4.095 0 5.657 l -33 33 C 30.547 65.109 29.524 65.5 28.5 65.5 z"
+                style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(236,0,0); fill-rule: nonzero; opacity: 1;"
+                transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+              <path
+                d="M 61.5 65.5 c -1.023 0 -2.048 -0.391 -2.828 -1.172 l -33 -33 c -1.562 -1.563 -1.562 -4.095 0 -5.657 c 1.563 -1.562 4.095 -1.562 5.657 0 l 33 33 c 1.563 1.562 1.563 4.095 0 5.656 C 63.548 65.109 62.523 65.5 61.5 65.5 z"
+                style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(236,0,0); fill-rule: nonzero; opacity: 1;"
+                transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+              <path
+                d="M 45 90 C 20.187 90 0 69.813 0 45 C 0 20.187 20.187 0 45 0 c 24.813 0 45 20.187 45 45 C 90 69.813 69.813 90 45 90 z M 45 8 C 24.598 8 8 24.598 8 45 c 0 20.402 16.598 37 37 37 c 20.402 0 37 -16.598 37 -37 C 82 24.598 65.402 8 45 8 z"
+                style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(236,0,0); fill-rule: nonzero; opacity: 1;"
+                transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+            </g>
+          </svg>
+        </span> -->
       </button>
       <button v-if="isCollection" class="btn btn-danger text-black w-auto rounded-pill me-3 d-flex align-items-center"
         @click="loadCategories()">
@@ -536,7 +658,12 @@ export default {
           <span class="sr-only"></span>
         </div>
       </button>
-      <button class="btn w-auto rounded-circle bg-yellow fw-bolder fs-5">+</button>
+      <button class="btn btn-dark rounded-circle bg-yellow fw-bolder fs-5 aspect-ratio-11"
+        @click="showAddCategory()">+</button>
+      <div class="w-auto py-1 text-center mx-2 py-1 d-flex flex-direction-row" v-if="isAddingCategory">
+        <input type="text" v-model="category.name" class="form-control rounded-pill">
+        <button class="btn btn-dark bg-yellow w-auto rounded-pill mx-1 px-4" @click="saveCategory()">Ок</button>
+      </div>
     </div>
     <div class="row">
       <div class="col-4" v-for="item in WarehouseFilter">
@@ -616,6 +743,11 @@ export default {
   </div>
 </template>
 <style scoped lang="scss">
+.aspect-ratio-11 {
+  width: 50px;
+  aspect-ratio: 1/1;
+}
+
 .spinner-reload {
   width: 25px;
   height: 25px;
