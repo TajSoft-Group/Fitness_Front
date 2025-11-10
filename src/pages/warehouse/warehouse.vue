@@ -253,6 +253,17 @@ export default {
         })
     },
     async incomeWarehouse() {
+      let a  = "";
+      let b = "";
+      if (this.formDataH.type == 'income') {
+        a = "оприходовано !"
+        b = "Оприходование..."
+      } else {
+        a = "израсходовано !"
+        b = "Расходование..."
+      }
+      this.loadingText = b
+      this.isLoading = true;
       let formData = new FormData();
       formData.append('product_id', this.formDataH.product_id);
       formData.append('type', this.formDataH.type);
@@ -265,7 +276,7 @@ export default {
         let response;
         console.log("yes");
         response = await fetch(
-          "https://api.mubingym.com/whh/create",
+          `https://api.mubingym.com/whh/create/${this.formDataH.type}`,
           {
             method: "POST",
             body: formData,
@@ -277,6 +288,13 @@ export default {
           console.log(data);
           if (response.status === 201) {
             this.addStatus = true;
+
+            this.toastMessage = "Успешно " + a;
+            this.success = true;
+            this.toaster = true;
+            this.Delay('toaster', 3);
+            this.setup();
+
 
             this.formDataH = {
               product_id: 0,
@@ -290,13 +308,26 @@ export default {
 
           } else {
             console.error(`Запрос завершился с ошибкой: ${response.status}`);
+            this.toastMessage = `Ошибка: ${response.status}!`;
+            this.success = false;
+            this.toaster = true;
+            this.Delay('toaster', 3);
           }
         } else {
           console.error(`Запрос завершился с ошибкой: ${response.status}`);
+          this.toastMessage = `Ошибка: ${response.status}!`;
+          this.success = false;
+          this.toaster = true;
+          this.Delay('toaster', 3);
         }
       } catch (error) {
-        console.error('Ошибка:', error);
+        console.error('Ошибка: ', error);
+        this.toastMessage = `Ошибка: ${error}!`;
+        this.success = false;
+        this.toaster = true;
+        this.Delay('toaster', 3);
       }
+      this.isLoading = false;
     },
     async addCategory() {
 
@@ -380,7 +411,7 @@ export default {
           this.toastMessage = "Продукт успешно " + message;
           this.toaster = true;
           this.Delay("toaster", 3);
-    
+
           this.addModal = false;
           this.editNull();
           this.images = [];
@@ -390,7 +421,7 @@ export default {
           this.toastMessage = `Ошибка: ${response.status}`;
           this.toaster = true;
           this.Delay("toaster", 3);
-    
+
           console.error(`Ошибка: ${response.status}`);
         }
         this.isLoading = false;

@@ -8,11 +8,13 @@ import Patch from "@/components/axios/Patch.js";
 import { DateTime } from "luxon";
 
 export default {
-  data(){
-    return{
-      edit : false,
-      addModal : false,
+  data() {
+    return {
+      id: null,
+      edit: false,
+      addModal: false,
       Warehouse: [],
+      WarehouseItem: [],
       formData: {
         title: "",
         count: "",
@@ -39,18 +41,23 @@ export default {
       }
     },
     setup() {
+      this.id = this.$route.params.id
+
       const token = Cookies.get("token");
+
       gets(
-          "https://api.mubingym.com/wh",
-          token
+        `https://api.mubingym.com/whh/history/${this.id}`,
+        token
       )
-          .then((response) => {
-            this.Warehouse = response.data.data;
-            console.log(this.Warehouse)
-          })
-          .catch((error) => {
-            this.error = error;
-          });
+        .then((response) => {
+          this.Warehouse = response.data.data;
+          console.log(this.Warehouse)
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+
+
     },
     truncatedTitle(title) {
       return title.length > 10 ? title.substring(0, 10) + '...' : title;
@@ -69,23 +76,23 @@ export default {
     },
     getInfo(url, dataStore, id) {
       gets(url)
-          .then((response) => {
-            console.log(response);
-            this[dataStore] = [];
-            if (id === 1) {
-              this[dataStore].push({id: Date.now(), name: "Все"});
-              for (let Key in response.data) {
-                this[dataStore].push(response.data[Key]);
-              }
-              this[dataStore].push({id: Date.now(), name: "+"});
-            } else if (id === 2) {
-              this[dataStore] = response.data;
+        .then((response) => {
+          console.log(response);
+          this[dataStore] = [];
+          if (id === 1) {
+            this[dataStore].push({ id: Date.now(), name: "Все" });
+            for (let Key in response.data) {
+              this[dataStore].push(response.data[Key]);
             }
-          })
-          .catch((error) => {
-            console.log(error);
-            this.error = error;
-          });
+            this[dataStore].push({ id: Date.now(), name: "+" });
+          } else if (id === 2) {
+            this[dataStore] = response.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+        });
     },
     editNull() {
       this.edit = false;
@@ -102,7 +109,7 @@ export default {
 
 
     async addCategory() {
-      let FormData = {...this.formData};
+      let FormData = { ...this.formData };
       FormData.img = this.imagesPost[0];
       FormData.balance = FormData.count;
       FormData.created_at = new DateTime('now');
@@ -112,23 +119,23 @@ export default {
           console.log('yes');
           delete FormData.img
           response = await Patch(
-              `https://api.mubingym.com/wh/update/${FormData.id}`,
-              FormData
+            `https://api.mubingym.com/wh/update/${FormData.id}`,
+            FormData
           );
           this.editNull()
         } else {
           console.log("yes");
           response = await form_Data(
-              "https://api.mubingym.com/wh/create",
-              FormData
+            "https://api.mubingym.com/wh/create",
+            FormData
           );
         }
         console.log(response);
         if (response.status === 200) {
           this.addStatus = true;
           await this.getInfo(
-              "https://api.mubingym.com/wh",
-              "Warehouse"
+            "https://api.mubingym.com/wh",
+            "Warehouse"
           );
           await this.Delay("addStatus", 5);
           this.Delay("addStatus", 5);
@@ -141,7 +148,7 @@ export default {
     }
   },
   mounted() {
-    this.setup()
+    this.setup();
   },
 }
 </script>
@@ -149,99 +156,51 @@ export default {
 <template>
 
 
-  <div
-      @click="addModal = !addModal"
-      v-if="addModal"
-      class="add-user-modal d-flex justify-content-center my-1 align-items-center"
-  >
+  <div @click="addModal = !addModal" v-if="addModal"
+    class="add-user-modal d-flex justify-content-center my-1 align-items-center">
     <div @click.stop class="content">
       <div class="title" v-show="!edit">ДОБАВИТЬ ТОВАР</div>
       <div class="title" v-show="edit">РЕДАКТИРОВАТЬ ТОВАР</div>
       <div class="form position-relative">
         <label for="heading">Заголовок*</label>
-        <input
-            ref="inputText"
-            type="text"
-            placeholder="Введите название"
-            id="heading"
-            v-model="formData.title"
-            required
-        />
+        <input ref="inputText" type="text" placeholder="Введите название" id="heading" v-model="formData.title"
+          required />
       </div>
       <div class="form position-relative">
         <label for="count">Кол-во*</label>
-        <input
-            ref="inputText"
-            type="text"
-            placeholder="Введите количество"
-            id="count"
-            v-model="formData.count"
-            required
-        />
+        <input ref="inputText" type="text" placeholder="Введите количество" id="count" v-model="formData.count"
+          required />
       </div>
 
       <div class="form position-relative" v-if="!edit">
         <label for="phone">Выберите фото*</label>
         <div class="img-card row p-3 justify-content-between">
-          <div
-              v-for="(image, index) in images"
-              :key="index"
-              class="card-add-img m-2"
-          >
-            <img :src="image" class="card-img-top" alt="Product Image"/>
+          <div v-for="(image, index) in images" :key="index" class="card-add-img m-2">
+            <img :src="image" class="card-img-top" alt="Product Image" />
           </div>
-          <div
-              v-show="images.length < 1"
-              class="card-button align-content-center text-center m-2"
-              @click="selectImage"
-          >
+          <div v-show="images.length < 1" class="card-button align-content-center text-center m-2" @click="selectImage">
             <button type="button" class="add-button">+</button>
           </div>
         </div>
-        <input
-            type="file"
-            ref="fileInput"
-            @change="handleFileChange"
-            style="display: none"
-        />
+        <input type="file" ref="fileInput" @change="handleFileChange" style="display: none" />
       </div>
       <div class="form position-relative">
         <label for="purchase">Закупочная цена*</label>
-        <input
-            type="text"
-            placeholder="Введите закупочную цену"
-            id="purchase"
-            v-model="formData.purchase"
-            required
-        />
+        <input type="text" placeholder="Введите закупочную цену" id="purchase" v-model="formData.purchase" required />
       </div>
 
 
       <div class="form position-relative">
         <label for="sale">Продажная цена*</label>
-        <input
-            type="text"
-            placeholder="Введите продажную цену"
-            id="sale"
-            v-model="formData.sale"
-            required
-        />
+        <input type="text" placeholder="Введите продажную цену" id="sale" v-model="formData.sale" required />
       </div>
 
       <div class="d-flex justify-content-between add-user-buttons">
         <button @click="(addCardHoliday = false); editNull()" class="dont">Отмена</button>
-        <button
-            class="submit"
-            type="button"
-            @click="addCategory(); (addCardHoliday = false)" v-if="!edit"
-        >
+        <button class="submit" type="button" @click="addCategory(); (addCardHoliday = false)" v-if="!edit">
           Добавить
         </button>
-        <button
-            class="submit"
-            type="button"
-            @click="addCategory(); (addCardHoliday = false)" v-if="edit"
-        >
+        <button class="submit" type="button" @click="addCategory(); (addCardHoliday = false)" v-if="edit">
           Изменить
         </button>
       </div>
@@ -254,11 +213,9 @@ export default {
       <div class="col">
         <div class="d-flex justify-content-between title-block align-items-center">
           <div class="page-title">
-            <router-link to="/">Ск22ад</router-link>
+            <router-link to="/">Склад</router-link>
           </div>
-          <div
-              class="user-add-btn d-flex justify-content-center align-items-center"
-          >
+          <div class="user-add-btn d-flex justify-content-center align-items-center">
             <button @click="addModal = true" class="add-user-btn me-3 py-2 px-3">
               Приход
             </button>
@@ -277,8 +234,7 @@ export default {
         <div class="bg-gray card-block h-auto position-relative">
           <router-link :to="'/warehouseItem/' + item.id">
             <div class="d-flex justify-content-between">
-              <div class="col-4"><img :src="'https://api.mubingym.com/' + item.img"
-                                      class="warehouse-img"></div>
+              <div class="col-4"><img :src="'https://api.mubingym.com/' + item.img" class="warehouse-img"></div>
               <div class="col-9 px-3">
                 <h3>{{ truncatedTitle(item.title) }}</h3>
                 <div class="fs-7">
@@ -308,7 +264,7 @@ export default {
             <div class="menu">
               <div class="menu-card">
                 <ul>
-                  <li @click="addModal = true; ( edit = item.id, formData = item )">Редактировать</li>
+                  <li @click="addModal = true; (edit = item.id, formData = item)">Редактировать</li>
                   <li class="text-danger">Удалить</li>
                 </ul>
               </div>
@@ -328,7 +284,8 @@ export default {
 }
 
 .menu-btn {
-  position: relative; /* Ensure the .menu is positioned relative to the .menu-btn */
+  position: relative;
+  /* Ensure the .menu is positioned relative to the .menu-btn */
 
   .menu-icon {
     right: 10px;
@@ -336,7 +293,8 @@ export default {
     bottom: 0;
 
     img {
-      transform: scale(1.2); /* Updated for better support */
+      transform: scale(1.2);
+      /* Updated for better support */
     }
   }
 
