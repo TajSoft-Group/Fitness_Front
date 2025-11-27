@@ -31,21 +31,27 @@ export default {
               <li :class="{active: ActiveMenu === '/services'}"><router-link to="/services">Услуги</router-link></li>
               <li :class="{active: ActiveMenu === '/courses'}">
                 <router-link to="/courses" class="trigger-hover">Курсы</router-link>
-                <ul class="hidden-hover bg-gray p-0 position-absolute">
-                  <li :class="{active: ActiveMenu === '/individual-courses'}"><router-link to="/individual-courses" class="m-3">Курсы индивидуальные</router-link></li>
-                  <li :class="{active: ActiveMenu === '/reviews-page'}"><router-link to="/reviews-page" class="m-3">Курсы индивидуальные Отзывы</router-link></li>
-                  <li :class="{active: ActiveMenu === '/cash'}"><router-link to="/cash" class="m-3">касса</router-link></li>
+                <ul class="hidden-hover bg-gray p-0 position-absolute mt-0 pt-4 rounded-3">
+                  <li :class="{active: ActiveMenu === '/individual-courses'}"><router-link to="/individual-courses" class="mx-3 my-2 p-3 mt-0">Курсы индивидуальные</router-link></li>
+                  <li :class="{active: ActiveMenu === '/reviews-page'}"><router-link to="/reviews-page" class="mx-3 my-2 p-3 mt-0">Курсы индивидуальные Отзывы</router-link></li>
                 </ul>
               </li>
-              <li :class="{active: ActiveMenu === '/newsletters'}"><router-link to="/newsletters">Рассылки</router-link></li>
-              <li><a href="#">Управление</a></li>
-              <li :class="{active: ActiveMenu === '/finance'}"><router-link to="/finance">Финансы</router-link></li>
+              <li :class="{active: (ActiveMenu === '/finance' || ActiveMenu === '/transactions' || ActiveMenu === '/newsletters') }" class="trigger-hover">
+                <a>Управление</a>
+                <ul class="hidden-hover bg-gray p-0 position-absolute mt-0 pt-4 rounded-3">
+                  <li :class="{active: ActiveMenu === '/transactions'}"><router-link to="/transactions" class="mx-3 p-3 my-2 p-3 mt-0">Транзакции</router-link></li>
+                  <li :class="{active: ActiveMenu === '/finance'}"><router-link to="/finance" class="mx-3 p-3 my-2 p-3 mt-0">Финансы</router-link></li>
+                  <li :class="{active: ActiveMenu === '/newsletters'}"><router-link to="/newsletters" class="mx-3 p-3 my-2 p-3 mt-0">Рассылки</router-link></li>
+                </ul>
+              </li>
               <li :class="{active: ActiveMenu === '/lockers'}"><router-link to="/lockers">Шкафчики</router-link></li>
-              <li :class="{active: ActiveMenu === '/product'}"><router-link to="/product">Продукты</router-link></li>
+              <!-- <li :class="{active: ActiveMenu === '/product'}"><router-link to="/product">Продукты</router-link></li> -->
+              <li :class="{active: ActiveMenu === '/warehouse' || ActiveMenu.includes('/warehouse/') || ActiveMenu.includes('/warehouseItem/') }"><router-link to="/warehouse">Склад</router-link></li>
+              <li :class="{active: ActiveMenu === '/cash'}"><router-link to="/cash">Касса</router-link></li>
             </ul>
           </div>
           <router-link to="/login"><div class="user-icon">
-            <img height="24" width="24" src="@/assets/images/icons/user-icon.png" alt="user">
+            <img height="24" width="24" src="@/assets/images/icons/user-icon.png" alt="user" style="width: 100%;">
           </div></router-link>
         </header>
       </div>
@@ -55,4 +61,17 @@ export default {
 
 <style scoped>
 /* Add your styles here */
+  .hidden-hover{
+    margin-top: 23px;
+    background: #2c2c2e;
+  }
+
+@media screen and (max-width: 1290px){
+  .menu ul{
+    gap: 18px;
+  }
+  .menu ul li a{
+    font-size: 14px;
+  }
+}
 </style>

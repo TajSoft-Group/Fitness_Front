@@ -4,7 +4,7 @@ import NavBar from "@/pages/NavBar.vue";
 
 <template>
 
-  <nav-bar v-if="$route.fullPath!=='/login'" />
+  <nav-bar v-if="$route.fullPath !== '/login' && $route.fullPath !== '/delete-account'" />
   <router-view/>
 </template>
 

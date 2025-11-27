@@ -17,9 +17,14 @@ import product from "@/pages/products/product.vue";
 import MobileInformation from "@/pages/MobileInformation.vue";
 import login from "@/pages/login.vue";
 import Lockers from "@/pages/lockers.vue";
-import finance from "@/pages/finance.vue";
+import finance from "@/pages/Finance/finance.vue";
 import Cash from "@/pages/Cash.vue";
 import courses from "@/pages/Courses/courses.vue";
+import newCourse from "@/pages/Courses/newCourse.vue";
+import transactions from "@/pages/transactions/transactions.vue";
+import warehouse from "@/pages/warehouse/warehouse.vue";
+import warehousePage from "@/pages/warehouse/warehousePage.vue";
+import deleteAccount from "@/pages/deleteAccount.vue"
 
 const routes = [
   {
@@ -120,9 +125,35 @@ const routes = [
     component: Cash
   },
   {
+    path: '/warehouse',
+    name: 'warehouse',
+    component: warehouse
+  },
+  {
+    path: '/warehouseItem/:id',
+    name: 'warehousePage',
+    component: warehousePage,
+    props:true
+  },
+  {
     path: '/courses',
     name: 'courses',
     component: courses
+  },
+  {
+    path: '/new-course',
+    name: 'new-course',
+    component: newCourse
+  },
+  {
+    path: '/transactions',
+    name: 'transactions',
+    component: transactions
+  },
+  {
+    path: '/delete-account',
+    name: 'deleteAccount',
+    component: deleteAccount
   },
 
 ];

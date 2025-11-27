@@ -6,7 +6,7 @@ import TimeTable from "@/pages/analytics/TimeTable.vue";
 <template>
   <CashRegister/>
   <visitors/>
-  <TimeTable/>
+  <!-- <TimeTable/> -->
 </template>
 
 <style scoped>
