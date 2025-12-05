@@ -21,19 +21,17 @@
           <div class="m-0 p-0 position-relative">
             <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
               <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-                  aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                  aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                  aria-label="Slide 3"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
-                  aria-label="Slide 3"></button>
+                
+                <button type="button" v-for="(value, index) in DataUsers.cover_imgs"
+                  data-bs-target="#carouselExampleIndicators" :data-bs-slide-to="index"
+                  :class="index === 0 ? 'active' : ''" :aria-current="index === 0 ? 'true' : null"
+                  :aria-label="`Slide ${index + 1}`">
+                </button>
+
               </div>
               <div class="carousel-inner slider-inner height-400 my-4">
-                
-                <div v-for="value in DataUsers.cover_imgs" class="carousel-item active">
-                  <img src="@/assets/images/Rectangle.png" class="d-block w-100" alt="..." />
+                <div v-for="(value, index) in DataUsers.cover_imgs" :class="['carousel-item', { active: index === 0 }]">
+                  <img :src="'https://api.mubingym.com/' + value" class="d-block w-100" alt="..." />
                 </div>
 
               </div>
@@ -54,7 +52,7 @@
             </div>
             <div class="title-trainer">
               <div class="teacher-img img-width-200 border-9px" :style="{ borderColor: user.color }">
-                <img :src="'https://api.mubingym.com/' + user.avatar
+                <img :src="'https://api.mubingym.com/' + DataUsers.avatar
                   " alt="" />
               </div>
             </div>
@@ -69,7 +67,7 @@
           <div class="statistics position-relative bg-gray h-auto py-4">
             <div class="trainer-info-title d-flex justify-content-between align-items-center">
               <div class="trainer-name color-yellow">
-                {{ user.name + " " + user.surname }}
+                {{ DataUsers.name + " " + DataUsers.surname }}
                 <img class="mx-3" src="@/assets/images/icons/pencel.png" />
               </div>
               <img class="w-auto px-3 trainer-menu" src="@/assets/images/icons/menu-2.png" />
@@ -199,7 +197,7 @@ export default {
         token
       )
         .then((response) => {
-          this.DataUsers = response.data;
+          this.DataUsers = response.data.data;
           console.log(this.DataUsers);
         })
         .catch((error) => {
@@ -221,7 +219,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.carousel-control-next, .carousel-control-prev {
+.carousel-control-next,
+.carousel-control-prev {
   background: none !important;
 }
 
@@ -234,7 +233,8 @@ export default {
   padding: 5px;
   translate: -50% 0;
 }
-.carousel-control-prev>div{
+
+.carousel-control-prev>div {
   translate: 50% 0;
 }
 
