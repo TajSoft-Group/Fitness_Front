@@ -35,12 +35,12 @@
           <div
             class="user-add-btn d-flex justify-content-center align-items-center"
           >
-            <button
+            <!-- <button
               @click="toggleModal('.clients-list')"
               class="add-user-btn mx-3"
             >
               Список клиентов
-            </button>
+            </button> -->
             <!-- <button @click="toggleModal('.add-curs')" class="add-user-btn">
               Добавить
             </button> -->
@@ -548,6 +548,42 @@
   <!--      </div>-->
   <!--    </div>-->
   <!--  </div>-->
+
+
+  <div v-if="isLoading" class="overlay w-100 h-100 position-fixed top-0 start-0 z-3"
+    style="background-color: rgba(0, 0, 0, 0.8);">
+    <div class="position-fixed top-50 start-50 translate-middle z-3 text-center mt-2">
+      <div class="spinner-border text-warning" v-show="!error" role="status">
+        <span class="sr-only"></span>
+      </div>
+      <div class="error-div" v-show="error">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256"
+          height="256" viewBox="0 0 256 256" xml:space="preserve">
+          <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"
+            transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+            <path
+              d="M 28.5 65.5 c -1.024 0 -2.047 -0.391 -2.829 -1.172 c -1.562 -1.562 -1.562 -4.095 0 -5.656 l 33 -33 c 1.561 -1.562 4.096 -1.562 5.656 0 c 1.563 1.563 1.563 4.095 0 5.657 l -33 33 C 30.547 65.109 29.524 65.5 28.5 65.5 z"
+              style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(236,0,0); fill-rule: nonzero; opacity: 1;"
+              transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+            <path
+              d="M 61.5 65.5 c -1.023 0 -2.048 -0.391 -2.828 -1.172 l -33 -33 c -1.562 -1.563 -1.562 -4.095 0 -5.657 c 1.563 -1.562 4.095 -1.562 5.657 0 l 33 33 c 1.563 1.562 1.563 4.095 0 5.656 C 63.548 65.109 62.523 65.5 61.5 65.5 z"
+              style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(236,0,0); fill-rule: nonzero; opacity: 1;"
+              transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+            <path
+              d="M 45 90 C 20.187 90 0 69.813 0 45 C 0 20.187 20.187 0 45 0 c 24.813 0 45 20.187 45 45 C 90 69.813 69.813 90 45 90 z M 45 8 C 24.598 8 8 24.598 8 45 c 0 20.402 16.598 37 37 37 c 20.402 0 37 -16.598 37 -37 C 82 24.598 65.402 8 45 8 z"
+              style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(236,0,0); fill-rule: nonzero; opacity: 1;"
+              transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+          </g>
+        </svg>
+      </div>
+      <div class="mt-2 text-light text-center" v-show="!error">{{ loadingText }}</div>
+      <div class="mt-2 text-light text-center" v-show="error">Ошибка ! <p>{{ error }}</p>
+      </div>
+    </div>
+  </div>
+
+
+
 </template>
 <script>
 import VueSelect from "vue3-select-component";
@@ -562,6 +598,9 @@ export default {
   },
   data() {
     return {
+      isLoading: true,
+      loadingText : "Загрузка курсов...",
+      error: false,
       activeTR: "",
       idTr: "",
       images: [],
@@ -688,9 +727,11 @@ export default {
         });
     },
     getInfo(url, dataStore, id) {
+      this.isLoading = true;
       const token = Cookies.get("token");
       gets(url, token)
         .then((response) => {
+          this.isLoading = false;
           this[dataStore] = [];
           if (id === 1) {
             this[dataStore] = response.data.data;
@@ -710,7 +751,7 @@ export default {
       FormData.coach_id = this.idTr;
       try {
         const response = await form_Data(
-          "http://fitness.abdurazzoq.beget.tech/api/courses/create",
+          "http://api.mubingym.com/api/courses/create",
           FormData
         );
         if (response.status === 200) {
@@ -721,7 +762,7 @@ export default {
             1
           );
           await this.getInfo(
-            "http://fitness.abdurazzoq.beget.tech/api/courses/all",
+            "https://api.mubingym.com/api/courses/all",
             "cursList",
             2
           );
@@ -815,7 +856,7 @@ export default {
       1
     );
     this.getInfo(
-      "http://fitness.abdurazzoq.beget.tech/api/courses/all",
+      "https://api.mubingym.com/api/courses/all",
       "cursList",
       2
     );

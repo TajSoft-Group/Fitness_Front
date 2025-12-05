@@ -914,6 +914,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.base-modal{
+  z-index: 1 !important;
+}
 .error-toast {
   content: "";
   width: 440px;
