@@ -1,70 +1,36 @@
 <template>
-  <div
-    @click="toggleModal('.clients-list')"
-    class="base-modal clients-list d-none d-flex justify-content-center align-items-center"
-  >
+  <div @click="toggleModal('.clients-list')"
+    class="base-modal clients-list d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="holder">
       <div class="base-modal-top">
         <div class="title">Список клиентов</div>
-        <button
-          class="button-close"
-          @click="toggleModal('.clients-list')"
-        ></button>
+        <button class="button-close" @click="toggleModal('.clients-list')"></button>
       </div>
       <div class="content">
-        <form
-          class="form"
-          @submit.prevent="changeCourse(), toggleModal('.clients-list')"
-        >
+        <form class="form" @submit.prevent="changeCourse(), toggleModal('.clients-list')">
           <div class="search-input pb-4">
             <input v-model="searchQuery" type="text" placeholder="Поиск" />
           </div>
 
           <div class="clients-list-holder">
-            <div
-              role="button"
-              v-for="(trener, index) in filteredClients"
-              :key="trener.id"
-              class="user-list h-auto m-0 p-2"
-            >
-              <div
-                class="user-list-item"
-                :class="{ active: activeIndex === index }"
-                @click.self="toggleCollapse(index)"
-              >
+            <div role="button" v-for="(trener, index) in filteredClients" :key="trener.id"
+              class="user-list h-auto m-0 p-2">
+              <div class="user-list-item" :class="{ active: activeIndex === index }"
+                @click.self="toggleCollapse(index)">
                 <div class="user-list-item-img">
-                  <img
-                    v-if="trener.img"
-                    :src="`https://api.mubingym.com/${trener.img}`"
-                    alt=""
-                  />
+                  <img v-if="trener.img" :src="`https://api.mubingym.com/${trener.img}`" alt="" />
                   <img v-else src="@/assets/images/user-photo.png" alt="" />
                 </div>
                 {{ trener.name + " " + trener.surname }}
               </div>
-              <div
-                v-if="activeIndex === index && trener.services.length"
-                class="collapse-content"
-              >
+              <div v-if="activeIndex === index && trener.services.length" class="collapse-content">
                 <ul class="user-list-inner">
-                  <li
-                    v-for="(course, index) in trener.services"
-                    :key="index"
-                    class="d-flex"
-                  >
-                    <label
-                      class="custom-checkbox"
-                      :class="{ disabled: course.count <= 0 }"
-                    >
+                  <li v-for="(course, index) in trener.services" :key="index" class="d-flex">
+                    <label class="custom-checkbox" :class="{ disabled: course.count <= 0 }">
                       <span>{{ course.service_name }}</span>
-                      <input
-                        type="radio"
-                        :name="`course-user-${trener.id}`"
-                        :disabled="course.count <= 0"
-                        @change="
-                          selectedCourse(trener.id, course.id, trener.name)
-                        "
-                      />
+                      <input type="radio" :name="`course-user-${trener.id}`" :disabled="course.count <= 0" @change="
+                        selectedCourse(trener.id, course.id, trener.name)
+                        " />
                       <span class="custom-checkmark"></span>
                     </label>
                   </li>
@@ -73,11 +39,7 @@
             </div>
           </div>
           <div class="d-flex justify-content-between add-user-buttons">
-            <button
-              @click="toggleModal('.clients-list')"
-              class="dont"
-              type="button"
-            >
+            <button @click="toggleModal('.clients-list')" class="dont" type="button">
               Отмена
             </button>
             <button class="submit" type="submit">Добавить</button>
@@ -115,33 +77,22 @@
       </div> -->
 
       <div class="col">
-        <div
-          class="d-flex justify-content-between title-block align-items-center"
-        >
+        <div class="d-flex justify-content-between title-block align-items-center">
           <div @click="addStatus = !addStatus" class="page-title">Услуги</div>
-          <div
-            class="user-add-btn d-flex justify-content-center align-items-center relative"
-          >
+          <div class="user-add-btn d-flex justify-content-center align-items-center relative">
             <!-- <button
               @click="toggleModal('.clients-list')"
               class="add-user-btn mx-3"
             >
               Список клиентов
             </button> -->
-            <button @click="toggleModal('.add-curs')" class="add-user-btn">
+            <button @click="toggleModal('.add-curs'); (edit = false, setFormData())" class="add-user-btn">
               Добавить
             </button>
-            <transition
-              name="bounce"
-              v-if="addStatus"
-              class="added-user-message"
-            >
+            <transition name="bounce" v-if="addStatus" class="added-user-message">
               <div class="result-true">
                 <div class="result-true-card d-flex align-items-center">
-                  <img
-                    class="m-4 img-width-40"
-                    src="@/assets/images/icons/check_add.png"
-                  />
+                  <img class="m-4 img-width-40" src="@/assets/images/icons/check_add.png" />
                   <div class="result-true-content">
                     <!-- <div
                       v-if="activeCourse && activeCourse.name"
@@ -162,94 +113,68 @@
     </div>
   </div>
 
- <!-- add modal -->
-  <div
-    @click="toggleModal('.add-curs')"
-    class="add-user-modal add-curs d-none d-flex justify-content-center align-items-center"
-  >
+  <!-- add modal -->
+  <div @click="toggleModal('.add-curs')"
+    class="add-user-modal add-curs d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="content">
       <div class="title" v-if="!edit">Создать услугу</div>
       <div class="title" v-if="edit">Изменить услугу</div>
-      <form
-        class="form"
-        @submit.prevent="submitForm(), toggleModal('.add-curs')"
-      >
+
+      <form class="form" @submit.prevent="submitForm(), toggleModal('.add-curs')">
         <label for="name">Название услуги</label>
-        <input
-          type="text"
-          placeholder="Введите название услуги"
-          id="name"
-          required
-          v-model="formData.name"
-        />
+        <input type="text" placeholder="Введите название услуги" id="name" required v-model="formData.name" />
+
         <div class="form position-relative">
-          <label for="phone">Описание*</label>
-          <textarea
-            type="text"
-            v-model="formData.description"
-            placeholder="Введите текст"
-            class="description"
-            required
-          ></textarea>
+          <label for="description">Описание*</label>
+          <textarea type="text" v-model="formData.description" placeholder="Введите текст" class="description"
+            required></textarea>
         </div>
-        <div class="form position-relative" v-if="!edit">
-          <label for="phone">Добавить фотографию</label>
+
+        <div class="form position-relative">
+          <label>Фотографии</label>
           <div class="img-card row p-3 justify-content-between">
-            <div
-              v-for="(image, index) in images"
-              :key="index"
-              class="card-add-img m-2"
-            >
-              <img :src="image" class="card-img-top" alt="Product Image" />
+            <!-- Существующие изображения при редактировании -->
+            <div v-for="(image, index) in formData.img" :key="'old-' + index"
+              class="card-add-img m-2 position-relative">
+              <img :src="'https://api.mubingym.com/' + image" class="card-img-top" alt="Product Image" />
+              <button type="button" class="btn-close position-absolute top-0 end-0"
+                @click="removeImage(index, true)"></button>
             </div>
-            <div
-              v-show="images.length < 1"
-              class="card-button align-content-center text-center m-2"
-              @click="selectImage"
-            >
+
+            <!-- Новые выбранные изображения -->
+            <div v-for="(image, index) in images" :key="'new-' + index" class="card-add-img m-2 position-relative">
+              <img :src="image" class="card-img-top" alt="Product Image" />
+              <button type="button" class="btn-close position-absolute top-0 end-0"
+                @click="removeImage(index, false)"></button>
+            </div>
+
+            <!-- Кнопка добавления нового изображения -->
+            <div v-show="images.length + formData.img.length === 0"
+              class="card-button align-content-center text-center m-2" @click="selectImage">
               <button type="button" class="add-button">+</button>
             </div>
           </div>
-          <input
-            type="file"
-            ref="fileInput"
-            @change="handleFileChange"
-            style="display: none"
-            required
-          />
+
+
+          <input type="file" ref="fileInput" @change="handleFileChange" style="display: none"
+            :required="!edit && images.length === 0" />
         </div>
 
         <div class="d-flex">
           <div class="me-3">
             <label for="price_visit">Цена</label>
-            <input
-                type="text"
-                placeholder="Цена за посещение"
-                id="price_visit"
-                v-model="formData.price"
-                required
-            />
+            <input type="text" placeholder="Цена за посещение" id="price_visit" v-model="formData.price" required />
           </div>
           <div>
-            <label for="price_visit">Скидка</label>
-            <input
-                type="text"
-                placeholder="Скидка"
-                id="discount"
-                v-model="formData.discount"
-                required
-            />
+            <label for="discount">Скидка</label>
+            <input type="text" placeholder="Скидка" id="discount" v-model="formData.discount" required />
           </div>
         </div>
 
-        <label for="price_visit">Количество посещений</label>
-        <input
-            type="text"
-            placeholder="Количество посещений"
-            id="visit_count"
-            v-model="formData.visit_count"
-            required
-        />
+        <label for="visit_count">Количество посещений</label>
+        <input type="text" placeholder="Количество посещений" id="visit_count" v-model="formData.visit_count"
+          required />
+
         <div class="d-flex justify-content-between add-user-buttons">
           <button @click="toggleModal('.add-curs')" class="dont" type="button">
             Отмена
@@ -261,65 +186,40 @@
     </div>
   </div>
 
-  <div
-    @click="toggleModal('.pay-curs')"
-    class="add-user-modal pay-curs d-none d-flex justify-content-center align-items-center"
-  >
+
+  <div @click="toggleModal('.pay-curs')"
+    class="add-user-modal pay-curs d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="content">
       <div class="title">Оплата курса</div>
-      <form
-        class="form"
-        @submit.prevent="coursesFn(), toggleModal('.pay-curs')"
-      >
-<!--        <label for="title">тип курса</label>-->
-<!--        <input-->
-<!--          type="text"-->
-<!--          placeholder="Введите название курса"-->
-<!--          id="title"-->
-<!--          v-model="addCurs.type_courses"-->
-<!--         />-->
+      <form class="form" @submit.prevent="coursesFn(), toggleModal('.pay-curs')">
+        <!--        <label for="title">тип курса</label>-->
+        <!--        <input-->
+        <!--          type="text"-->
+        <!--          placeholder="Введите название курса"-->
+        <!--          id="title"-->
+        <!--          v-model="addCurs.type_courses"-->
+        <!--         />-->
         <label for="title">название курса</label>
-        <input
-          type="text"
-          placeholder="Введите название курса"
-          id="title"
-          v-model="addCurs.name"
-        />
+        <input type="text" placeholder="Введите название курса" id="title" v-model="addCurs.name" />
         <div class="form position-relative">
           <label for="phone">Описание*</label>
-          <textarea
-            type="text"
-            v-model="addCurs.description"
-            placeholder="Введите текст"
-            class="description"
-          ></textarea>
+          <textarea type="text" v-model="addCurs.description" placeholder="Введите текст"
+            class="description"></textarea>
         </div>
         <div class="position-relative">
           <label for="name">Выберите пользователя</label>
           <input type="text" id="present" v-model="activeTR" @click="presentMenu = !presentMenu" />
-          <img
-            @click="presentMenu = !presentMenu"
-            :class="{ 'rotate-90': presentMenu }"
-            class="row-right-icon"
-            src="@/assets/images/icons/row-right.png"
-          />
-          <div
-            :class="{ 'd-block': presentMenu }"
-            class="menu-type-1 pt-4 ps-3"
-          >
+          <img @click="presentMenu = !presentMenu" :class="{ 'rotate-90': presentMenu }" class="row-right-icon"
+            src="@/assets/images/icons/row-right.png" />
+          <div :class="{ 'd-block': presentMenu }" class="menu-type-1 pt-4 ps-3">
             <h1 class="ps-2">Все пользователи</h1>
             <div class="scroll-new">
-              <div
-                  role="button"
-                  v-for="treners in userData"
-                  @click="
+              <div role="button" v-for="treners in userData" @click="
                 (cursData.user_id = treners.id),
-                  (presentMenu = false),
-                  (presentMenu = false),
-                  (activeTR = treners.name + ' ' + treners.surname)
-              "
-                  class="statistics h-auto m-0 p-2"
-              >
+                (presentMenu = false),
+                (presentMenu = false),
+                (activeTR = treners.name + ' ' + treners.surname)
+                " class="statistics h-auto m-0 p-2">
                 <hr class="m-0 p-1" />
                 {{ treners.name + " " + treners.surname }}
               </div>
@@ -328,14 +228,10 @@
         </div>
         <div class="d-flex align-items-center justify-content-between">
           <label for="title">Количество</label>
-          <p class="m-0"> Кол-во посещений: <span class="color-yellow fw-bold">{{ cursData.count *  addCurs.visit_count }}</span> </p>
+          <p class="m-0"> Кол-во посещений: <span class="color-yellow fw-bold">{{ cursData.count * addCurs.visit_count
+              }}</span> </p>
         </div>
-        <input
-          type="text"
-          placeholder="Введите количество"
-          id="title"
-          v-model="cursData.count"
-        />
+        <input type="text" placeholder="Введите количество" id="title" v-model="cursData.count" />
         <div class="d-flex justify-content-between add-user-buttons">
           <button @click="toggleModal('.pay-curs')" class="dont" type="button">
             Отмена
@@ -348,15 +244,12 @@
 
   <div class="container mt-5">
     <div class="row">
-      <div class="col-md-4" 
-        v-for="curs in cursList"
-      >
-        <div class="w-100 h-100 courses-card position-relative mb-3 p-0" 
-        @click="
+      <div class="col-md-4" v-for="curs in cursList">
+        <div class="w-100 h-100 courses-card position-relative mb-3 p-0" @click="
           toggleModal('.pay-curs'),
-            (addCurs = curs),
-            (cursData.services_id = curs.id)">
-<!--          <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>-->
+          (addCurs = curs),
+          (cursData.services_id = curs.id)">
+          <!--          <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>-->
           <img class="w-100 h-100" :src="'https://api.mubingym.com/' + curs.img" alt="">
           <div class="at-bottom position-absolute bottom-0 ps-4">
             <h5>{{ curs.name }}</h5>
@@ -365,16 +258,19 @@
           </div>
         </div>
         <div class="menu-btn">
-            <button class="bg-transparent border-0 position-absolute menu-icon"><img src="@/assets/images/icons/menu.png" alt=""></button>
-            <div class="menu">
-              <div class="menu-card">
-                <ul>
-                  <li @click="toggleModal('.add-curs'), (formData = curs, edit=true)" class="mb-0">Редактировать</li>
-                  <!-- <li class="text-danger">Удалить</li> -->
-                </ul>
-              </div>
+          <button class="bg-transparent border-0 position-absolute menu-icon"><img src="@/assets/images/icons/menu.png"
+              alt=""></button>
+          <div class="menu">
+            <div class="menu-card">
+              <ul>
+                <li @click="toggleModal('.add-curs'), (edit = true, formData = { ...curs })">
+                  Редактировать
+                </li>
+                <!-- <li class="text-danger">Удалить</li> -->
+              </ul>
             </div>
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -443,7 +339,7 @@
   <!--    </div>-->
   <!--  </div>-->
 
-  
+
   <div v-if="isLoading" class="overlay w-100 h-100 position-fixed top-0 start-0 z-3"
     style="background-color: rgba(0, 0, 0, 0.8);">
     <div class="position-fixed top-50 start-50 translate-middle z-3 text-center mt-2">
@@ -486,23 +382,25 @@ export default {
     return {
       isLoading: true,
       loadingText: "",
-      error : false,
+      error: false,
       editServices: "",
       activeTR: "",
       idTr: "",
-      edit : false,
-      images: [],
-      imagesPost: [],
+      edit: false,
       addCurs: "",
       formData: {
+        id: null,
         img: "",
         name: "",
         description: "",
         price: "",
-        discount : "",
+        discount: "",
         visit_count: "",
         status: 1,
       },
+      images: [], // уже есть
+      imagesPost: [],
+
       DataUsers: null,
       userData: null,
       cursList: "",
@@ -537,6 +435,20 @@ export default {
     },
   },
   methods: {
+    setFormData() {
+      this.formData = {
+        id: null,
+        img: "",
+        name: "",
+        description: "",
+        price: "",
+        discount: "",
+        visit_count: "",
+        status: 1,
+      };
+        this.images = []; // уже есть
+        this.imagesPost = [];
+    },
     addStatusDelay() {
       setTimeout(() => {
         this.addStatus = false;
@@ -551,7 +463,7 @@ export default {
     },
     coursesFn() {
       const token = Cookies.get("token");
-      this.cursData.count = (this.cursData.count *  this.addCurs.visit_count)
+      this.cursData.count = (this.cursData.count * this.addCurs.visit_count)
       posts(
         "https://api.mubingym.com/enroll/services",
         {
@@ -575,14 +487,28 @@ export default {
       this.$refs.fileInput.click();
     },
     handleFileChange(event) {
-      const file = event.target.files[0];
-      if (file) {
+      const files = Array.from(event.target.files);
+
+      files.forEach(file => {
+        this.imagesPost.push(file); // для отправки
+
         const reader = new FileReader();
-        this.imagesPost = file;
         reader.onload = (e) => {
-          this.images.push(e.target.result);
+          // Используем Vue.set или просто push в массив
+          this.images = [...this.images, e.target.result];
         };
         reader.readAsDataURL(file);
+      });
+    },
+    removeImage(index) {
+      if (this.edit && index < this.formData.img.length) {
+        // удаляем существующее изображение
+        this.formData.img.splice(index, 1);
+      } else {
+        // удаляем новое добавленное изображение
+        const newIndex = this.edit ? index - this.formData.img.length : index;
+        this.images.splice(newIndex, 1);
+        this.imagesPost.splice(newIndex, 1);
       }
     },
     getInfoUsers() {
@@ -623,59 +549,59 @@ export default {
           this.error = error;
         });
     },
-
     async submitForm() {
-      let FormData = this.formData;
+      let FormDataObj = new FormData(); // Используем FormData для файлов
       try {
-        if(!edit){
-          FormData.img = this.imagesPost;
-          const response = await form_Data(
-            "https://api.mubingym.com/services/create",
-            FormData
-          );
-          if (response.status === 200) {
-            this.addStatus = true;
-            await this.getInfo(
-              "https://api.mubingym.com/api/coach/all",
-              "DataUsers",
-              1
-            );
-            await this.getInfo(
-              "https://api.mubingym.com/api/services/all",
-              "cursList",
-              2
-            );
-            await this.getInfoUsers();
-            this.Delay("addStatus", 7);
-          } else {
-            console.error(`Запрос завершился с ошибкой: ${response.status}`);
-          }
-        }else{
-          const response = await form_Data(
-            `https://api.mubingym.com/services/update/${ FormData.id }`,
-            FormData
-          );
-          delete FormData.img;
-          if (response.status === 200) {
-            this.addStatus = true;
-            await this.getInfo(
-              "https://api.mubingym.com/api/coach/all",
-              "DataUsers",
-            
-            );
-            await this.getInfo(
-              "https://api.mubingym.com/api/services/all",
-              "cursList",
-              2
-            );
-            await this.getInfoUsers();
-            this.Delay("addStatus", 7);
-          } else {
-            console.error(`Запрос завершился с ошибкой: ${response.status}`);
-          }
+        this.isLoading = true;
+
+        // Добавляем текстовые поля
+        FormDataObj.append("name", this.formData.name);
+        FormDataObj.append("description", this.formData.description);
+        FormDataObj.append("price", this.formData.price);
+        FormDataObj.append("discount", this.formData.discount);
+        FormDataObj.append("visit_count", this.formData.visit_count);
+
+        // Добавляем изображения, если они есть
+        if (this.imagesPost && this.imagesPost.length > 0) {
+          this.imagesPost.forEach((file, index) => {
+            FormDataObj.append(`img`, file); // ключ img[] для массива файлов
+
+          });
+        }
+
+        let url = "";
+        this.loadingText = this.edit ? "Изменение услуги" : "Создание услуги";
+
+        if (!this.edit) {
+          url = "https://api.mubingym.com/services/create";
+        } else {
+          url = `https://api.mubingym.com/services/update/${this.formData.id}`;
+        }
+
+        // POST-запрос с FormData
+        const response = await form_Data(url, FormDataObj, true); // true для multipart/form-data
+
+        if (response.status === 200) {
+          this.addStatus = true;
+
+          // Обновляем данные
+          await this.getInfo("https://api.mubingym.com/api/coach/all", "DataUsers", 1);
+          await this.getInfo("https://api.mubingym.com/api/services/all", "cursList", 2);
+          await this.getInfoUsers();
+
+          this.messageSuccess = this.edit ? "Успешно изменен" : "Успешно добавлен";
+          this.Delay("addStatus", 7);
+        } else {
+          this.error = response.status;
+          console.error(`Запрос завершился с ошибкой: ${response.status}`);
         }
       } catch (error) {
+        this.error = error;
         console.error("Ошибка при отправке данных:", error);
+      } finally {
+        this.images = [];
+        this.imagesPost = [];
+        this.isLoading = false;
       }
     },
     Delay(target, t) {
@@ -719,11 +645,11 @@ export default {
         });
     },
     selectedCourse(userId, courseId, name) {
-      const courseData = {};
-      courseData.userId = userId;
-      courseData.courseId = courseId;
-      courseData.name = name;
-      this.activeCourse = courseData;
+      this.activeCourse = { userId, courseId, name };
+
+      // Обновляем cursData для отправки
+      this.cursData.user_id = userId;
+      this.cursData.services_id = courseId;
     },
   },
   mounted() {
@@ -749,7 +675,8 @@ export default {
 
 <style lang="scss" scoped>
 .menu-btn {
-  position: relative; /* Ensure the .menu is positioned relative to the .menu-btn */
+  position: relative;
+  /* Ensure the .menu is positioned relative to the .menu-btn */
 
   .menu-icon {
     z-index: 9;
@@ -758,7 +685,8 @@ export default {
     bottom: 30px;
 
     img {
-      transform: scale(1.2); /* Updated for better support */
+      transform: scale(1.2);
+      /* Updated for better support */
     }
   }
 
@@ -787,6 +715,7 @@ export default {
       }
     }
   }
+
   &:hover .menu-card {
     display: block;
   }
@@ -795,10 +724,12 @@ export default {
 .fs-7 {
   font-size: 14px;
 }
+
 button.active {
   background-color: #c3ff00;
   color: #333;
 }
+
 button.add-button {
   background: url("@/assets/images/icons/add.png") center;
   color: #333;
@@ -807,6 +738,7 @@ button.add-button {
   min-height: 43px;
   padding: 0;
 }
+
 .add-user-modal .content {
   max-height: 100vh;
   overflow-y: auto;
@@ -822,6 +754,7 @@ button.add-button {
   font-size: 22px;
   user-select: none;
 }
+
 .custom-checkbox.disabled {
   opacity: 0.7;
 }
@@ -844,14 +777,13 @@ button.add-button {
   border-radius: 100%;
 }
 
-.custom-checkbox:hover input ~ .custom-checkmark {
+.custom-checkbox:hover input~.custom-checkmark {
   opacity: 0.7;
 }
 
-.custom-checkbox input:checked ~ .custom-checkmark {
+.custom-checkbox input:checked~.custom-checkmark {
   border-color: #d0fd3e;
-  background: url("@/assets/images/icons/checkbox-white-checked.png") center
-    center no-repeat;
+  background: url("@/assets/images/icons/checkbox-white-checked.png") center center no-repeat;
 }
 
 .custom-checkmark:after {
@@ -868,6 +800,7 @@ button.add-button {
       padding: 15px 45px 15px 0;
       margin: 0;
     }
+
     &-item {
       border-bottom: 1px solid rgba(220, 220, 220, 0.1);
       display: flex;
@@ -875,6 +808,7 @@ button.add-button {
       padding-bottom: 15px;
       font-size: 26px;
       position: relative;
+
       &-img {
         width: 48px;
         height: 48px;
@@ -882,9 +816,9 @@ button.add-button {
         margin-right: 15px;
         border-radius: 100%;
       }
+
       &:after {
-        background: url("@/assets/images/icons/arrow-left.png") center center
-          no-repeat;
+        background: url("@/assets/images/icons/arrow-left.png") center center no-repeat;
         background-size: cover;
         display: block;
         content: "";
@@ -895,29 +829,35 @@ button.add-button {
         top: 50%;
         transform: translateY(-50%) rotate(180deg) !important;
       }
+
       img {
         width: auto;
         height: 100%;
       }
+
       &.active {
         &:after {
           transform: translateY(-50%) rotate(270deg) !important;
         }
       }
     }
+
     &-inner {
       li {
         border-bottom: 1px solid rgba(220, 220, 220, 0.1);
       }
     }
   }
+
   &-holder {
     max-height: 350px;
     overflow-y: auto;
-    scrollbar-width: thin; /* Устанавливает ширину скроллбара */
+    scrollbar-width: thin;
+    /* Устанавливает ширину скроллбара */
     scrollbar-color: #282829 #090909;
   }
 }
+
 .clients-list-holder::-webkit-scrollbar {
   width: 10px;
 }

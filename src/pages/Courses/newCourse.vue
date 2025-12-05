@@ -469,7 +469,7 @@
 
         this.isLoading = true
         try {
-          const response = await form_Data('http://fitness.abdurazzoq.beget.tech/api/courses/create', FormData);
+          const response = await form_Data('https://api.mubingym.com/api/courses/create', FormData);
           this.isLoading = false
 
           console.log(response)
@@ -487,11 +487,11 @@
               td.max_reports = JSON.stringify(td.max_reports)
               console.log(td)
               try {
-                const response = form_Data('http://fitness.abdurazzoq.beget.tech/api/training/create', td);
+                const response = form_Data('https://api.mubingym.com/api/training/create', td);
                 if (response.status === 201) {
                   this.addStatus = true;
                   // await this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
-                  // await this.getInfo('http://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
+                  // await this.getInfo('https://api.mubingym.com/api/courses/all','cursList', 2)
                   // await this.getInfoUsers()
                   router.push("/courses");
                   this.Delay('addStatus', 7);
@@ -506,7 +506,7 @@
             });
             this.addStatus = true;
             // await this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
-            // await this.getInfo('http://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
+            // await this.getInfo('https://api.mubingym.com/api/courses/all','cursList', 2)
             // await this.getInfoUsers()
             this.Delay('addStatus', 7);
           } else {
@@ -546,7 +546,7 @@
     },
     mounted() {
       this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
-      this.getInfo('http://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
+      this.getInfo('https://api.mubingym.com/api/courses/all','cursList', 2)
       // this.getInfoUsers()
     },
     watch: {

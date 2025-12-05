@@ -53,6 +53,29 @@
         <textarea v-model="letter.message" type="text" placeholder="Введите текст" class="description pt-2"></textarea>
         <div @click="presentName('descriptionTextarea')" class="label-name position-absolute">имя</div>
       </div>
+
+      <hr>
+
+      <div class="position-relative">
+        <label for="name" class="color-yellow" style="margin: 10px 0px 10px 20px;">Выберите получателя</label>
+        <input type="text" id="present" class="mb-3" v-model="activeTR" @click="presentMenu2 = !presentMenu2" />
+        <img @click="presentMenu2 = !presentMenu2" :class="{ 'rotate-90': presentMenu2 }" class="row-right-icon mt-2"
+          src="@/assets/images/icons/row-right.png" />
+        <div :class="{ 'd-block': presentMenu2 }" class="menu-type-1 pt-4 pb-3 px-3">
+          <h1 class="ps-2">Все пользователи</h1>
+          <div class="scroll-new">
+            <div role="button" v-for="wh in filteredUsers" @click="
+              user_id = wh.id;
+            presentMenu2 = false;
+            activeTR = wh.name + ' ' + wh.surname;
+            " class="statistics h-auto m-0 p-2">
+              <hr class="m-0 p-1" />
+              {{ wh.name }} {{ wh.surname }}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <hr>
 
       <div class="menu-type-2 d-flex justify-content-between mt-3 px-3">
@@ -153,7 +176,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <div class="card rounded-5 mt-4 p-5"  data-bs-theme="dark">
+        <div class="card rounded-5 mt-4 p-5" data-bs-theme="dark">
           <table class="mail-table">
             <thead>
               <tr>
@@ -277,6 +300,7 @@ import ButtonSorting from "@/UI/ButtonSorting.vue";
 import posts from '@/components/axios/posts';
 import gets from '@/components/axios/get';
 import deletes from '@/components/axios/deletes';
+import Cookies from 'js-cookie';
 
 export default {
   data() {
@@ -292,6 +316,13 @@ export default {
       isLoading: false,
       error: null,
       loadingText: 'Загрузка...',
+
+      users: [],
+      user_id : "",
+      filteredUsers: [],
+      activeTR: '',
+      presentMenu: false,
+      presentMenu2: false,
 
       addCardHoliday: false,
       dllStatus: false,
@@ -339,17 +370,53 @@ export default {
     };
   },
   methods: {
+    toggleMenu(item) {
+      // Открываем/закрываем текущее
+      item.showMenu = !item.showMenu;
+
+      // Закрываем остальные
+      this.collection.forEach(el => {
+        if (el.id !== item.id) el.showMenu = false;
+      });
+    },
+    async loadUsers() {
+      const token = Cookies.get("token");
+
+      posts(
+        "https://api.mubingym.com/users",
+        { form: "0", to: "0" },
+        token
+      )
+        .then((response) => {
+          this.users = response.data.users;
+          this.filteredUsers = this.users;
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+
+    },
     submitLetter() {
+      const token = Cookies.get("token");
+
       this.isLoading = true;
       this.loadingText = 'Добавление рассылки...';
       let type = (this.sms && this.push) ? (parseInt(this.sms) + parseInt(this.push)) : (this.push ? this.push : 0);
-      this.letter.type = type;
-      console.log(this.letter);
-      posts('https://api.mubingym.com/api/mailings/create', {
+
+      
+      let sending = {
         message: this.letter.message,
         send_type: type,
         gender: this.letter.gender
-      })
+      };
+      if(this.user_id != ""){
+        sending.user_id = this.user_id;
+      }
+
+      this.letter.type = type;
+      console.log(this.letter);
+      posts('https://api.mubingym.com/api/mailings/create', sending, token)
         .then((response) => {
           this.isLoading = false;
           this.toaster = true;
@@ -396,9 +463,11 @@ export default {
       }, 3000)
     },
     loadLetters() {
+      const token = Cookies.get("token");
+
       this.isLoading = true;
       this.loadingText = 'Загрузка рассылок...';
-      gets('https://api.mubingym.com/api/mailings/get')
+      gets('https://api.mubingym.com/api/mailings/get', token)
         .then((response) => {
           this.letters = response.data.data.map(letter => ({
             ...letter,
@@ -446,9 +515,17 @@ export default {
       return Math.ceil(this.letters.length / this.pagination.perPage);
     }
   },
+  watch: {
+     activeTR(newVal) {
+      this.filteredUsers = this.users.filter(user =>
+        `${user.name} ${user.surname}`.toLowerCase().includes(newVal.toLowerCase())
+      );
+    },
+  },
   components: { ButtonSorting },
   mounted() {
     this.loadLetters();
+    this.loadUsers();
   },
 };
 
@@ -456,23 +533,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card{
+.card {
   background-color: #2c2c2e85 !important;
   border: none;
 }
-.btn-yellow{
+
+.btn-yellow {
   background-color: #D0FD3E;
   color: #000;
   border: none;
-  &:hover{
+
+  &:hover {
     background-color: #C4F437;
     color: #000;
   }
+
   &:disabled {
     background-color: #d4d4d4;
     color: #7a7a7a;
   }
 }
+
 .add-user-modal {
   position: fixed !important;
   z-index: 1 !important;

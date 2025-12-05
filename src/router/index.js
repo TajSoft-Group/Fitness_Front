@@ -42,16 +42,16 @@ const routes = [
     name: 'Services',
     component: Services
   },
-  {
-    path: '/individual-courses',
-    name: 'IndividualCourses',
-    component: IndividualCourses
-  },
-  {
-    path: '/reviews-page',
-    name: 'ReviewsPage',
-    component: ReviewsPage
-  },
+  // {
+  //   path: '/individual-courses',
+  //   name: 'IndividualCourses',
+  //   component: IndividualCourses
+  // },
+  // {
+  //   path: '/reviews-page',
+  //   name: 'ReviewsPage',
+  //   component: ReviewsPage
+  // },
   {
     path: '/clients',
     name: 'Clients',
