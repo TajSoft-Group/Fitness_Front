@@ -23,11 +23,13 @@
     <div class="row">
       <div class="col">
         <div class="d-flex justify-content-between title-block align-items-center">
-          <div class="page-title"><router-link to="/"><img class="px-3 pb-2"
-                src="@/assets/images/icons/Stroke.png">Шкафчики</router-link></div>
+          <div class="page-title">
+            <router-link to="/">
+              <img class="px-3 pb-2" src="@/assets/images/icons/Stroke.png">Шкафчики</router-link>
+          </div>
           <div class="user-add-btn d-flex justify-content-center align-items-center">
-            <button @click="editStatus = false, editStatusPicked = false, toggleModal('.add-user-modal')"
-              class="add-user-btn">Добавить</button>
+            <!-- <button @click="editStatus = false, editStatusPicked = false, toggleModal('.add-user-modal')" -->
+            <button @click="pushCloset()" class="add-user-btn">Добавить</button>
           </div>
         </div>
       </div>
@@ -38,139 +40,73 @@
     class="add-user-modal d-flex justify-content-center align-items-center d-none">
     <div @click.stop class="content">
       <div v-if="editStatus ? messageRead = 'РЕДАКТИРОВАТЬ' : messageRead = 'ДОБАВИТЬ ШКАФЧИК'" class="title">{{
-        messageRead }}
-      </div>
-      <div class="form">
-        <label for="name">Номер шкафчика*</label>
-        <input v-model="addLockers.id" maxlength="3" type="number" placeholder="Введите номер шкафчика" id="name">
+        messageRead }}</div>
+      <div class="position-relative">
+        <label for="name" class="color-yellow" style="margin: 10px 0px 10px 20px;">Выберите владельца</label>
+        <input type="text" id="present" class="mb-3" v-model="activeTR" @click="presentMenu2 = !presentMenu2" />
+        <img @click="presentMenu2 = !presentMenu2" :class="{ 'rotate-90': presentMenu2 }" class="row-right-icon mt-2"
+          src="@/assets/images/icons/row-right.png" />
+        <div :class="{ 'd-block': presentMenu2 }" class="menu-type-1 pt-4 pb-3 px-3">
+          <h1 class="ps-2">Все пользователи</h1>
+          <div class="scroll-new">
+            <div role="button" v-for="wh in filteredUsers" @click="
+              addLockers.user_id = wh.id;
+            presentMenu2 = false;
+            activeTR = wh.name + ' ' + wh.surname;
+            " class="statistics h-auto m-0 p-2">
+              <hr class="m-0 p-1" />
+              {{ wh.name }} {{ wh.surname }}
+            </div>
+          </div>
+        </div>
       </div>
       <div class="d-none">{{ editStatusPicked ? picked = addLockers.status : newPicked = picked }}</div>
       <div class="form position-relative">
         <label for="name">Статус шкафчика*</label>
-        <input id="present" name="menu" v-model="picked" placeholder="Выберите статус шкафчика" type="text" readonly>
+        <input id="present" name="menu" :value="statuses[picked]" @click="presentMenu = !presentMenu"
+          placeholder="Выберите статус шкафчика" type="text" readonly>
         <img @click="presentMenu = !presentMenu" :class="{ 'rotate-90': presentMenu }" class="row-right-icon"
           src="@/assets/images/icons/row-right.png">
-        <div :class="{ 'd-block': presentMenu }" class="menu-type-1 pt-4 px-4 ">
+        <div :class="{ 'd-block': presentMenu }" class="menu-type-1 pt-3 px-3 pb-3 mt-3">
           <div @click="editStatusPicked = false"
             class="menu-type-2 d-flex justify-content-between align-items-center flex-row-reverse">
-            <input type="radio" id="yoga" name="menu" value="Занято" v-model="picked" />
-            <label class="text-white d-flex align-items-center" for="yoga">
-              <div class="locker-status bg-red me-3"></div>
-              <div class="h5 text-white m-0">Занято</div>
+            <input type="radio" id="free" name="menu" value="1" v-model="picked" />
+            <label class="text-white d-flex align-items-center" for="free">
+              <p class="m-0 fw-bolder" style="color: #D0FD3E;">Свободно</p>
             </label>
           </div>
-          <hr>
+
+          <hr class="m-0">
+
           <div @click="editStatusPicked = false"
             class="menu-type-2 d-flex justify-content-between align-items-center flex-row-reverse">
-            <input type="radio" id="yoga" name="menu" value="Свободно" v-model="picked" />
-            <label class="text-white d-flex align-items-center" for="yoga">
-              <div class="locker-status bg-yellow me-3"></div>
-              <div class="h5 text-white m-0">Свободно</div>
+            <input type="radio" id="used" name="menu" value="2" v-model="picked" />
+            <label class="text-white d-flex align-items-center" for="used">
+              <p class="fw-bolder m-0" style="color: #f00;">Занято</p>
             </label>
           </div>
-          <hr>
+
+          <hr class="m-0">
           <div @click="editStatusPicked = false"
             class="menu-type-2 d-flex justify-content-between align-items-center flex-row-reverse">
-            <input type="radio" id="yoga" name="menu" value="Не работает" v-model="picked" />
-            <label class="text-white d-flex align-items-center" for="yoga">
-              <div class="locker-status bg-gray-2 me-3"></div>
-              <div class="h5 text-white m-0">Не работает</div>
+            <input type="radio" id="ooo" name="menu" value="3" v-model="picked" />
+            <label class="text-white d-flex align-items-center" for="ooo">
+              <p class="fw-bolder text-warning m-0">Не работает</p>
             </label>
           </div>
-          <hr>
         </div>
-        <div class="d-flex justify-content-between mt-4">
+        <div class="d-flex justify-content-between mt-5">
           <button @click="toggleModal('.add-user-modal')" class="button-type-1">Отмена</button>
-          <button v-if="!editStatus" @click="addInfo(addLockers, lockersArr), toggleModal('.add-user-modal')"
+          <button v-if="!editStatus" @click="pushCloset(), toggleModal('.add-user-modal')"
             class="button-type-1 bg-yellow">Добавить</button>
-          <button v-if="editStatus" @click="saveLockers(), toggleModal('.add-user-modal')"
-            class="button-type-1 bg-yellow">Сохранить</button>
+          <button v-if="editStatus" @click="editCloset(), toggleModal('.add-user-modal')" class="button-type-1"
+            :class="{ 'bg-yellow': picked, 'text-secondary': !picked }" :disabled="!picked">Сохранить</button>
         </div>
       </div>
     </div>
   </div>
 
 
-  <div class="container relative">
-    <div class="row">
-      <div class="col justify-content-between align-items-center mt-4">
-        <div :class="{ 'search-input': searchActive.length > 0 }"
-          class="d-flex justify-content-between align-items-center search-block m-0">
-          <img src="@/assets/images/icons/search.png" alt="search">
-          <input v-model="searchActive" type="text" id="searchInput" placeholder="Поиск по всем параметрам">
-          <a @click="filterStatus = !filterStatus" class="position-relative">
-            <div class="filter-icon d-flex justify-content-center align-items-center position-relative">
-              <img class="position-static " src="/src/assets/images/icons/filter.png" alt="user">
-            </div>
-
-            <div v-if="filterStatus" class="position-absolute filter-block p-4 bg-black h-auto right">
-              <div class="d-flex align-items-center">
-                <div class="locker-status bg-red me-3"></div>
-                <div class="h5 text-white m-0">Занято</div>
-              </div>
-              <hr>
-              <div class="d-flex align-items-center">
-                <div class="locker-status bg-yellow me-3"></div>
-                <div class="h5 text-white m-0">Свободно</div>
-              </div>
-              <hr>
-              <div class="d-flex align-items-center">
-                <div class="locker-status bg-gray-2 me-3"></div>
-                <div class="h5 text-white m-0">Не работает</div>
-              </div>
-              <hr>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col">
-      <div v-show="searchActive.length > 0" class="users-block search-result-block p-4">
-        <div v-for="i in filteredLockers" :key="i.id" class="locker-col position-relative mt-4">
-          <div @click="toggleFilterBlock(i)" :class="{
-            'bg-yellow': i.status === 'Свободно',
-            'bg-red': i.status === 'Занято',
-            'bg-gray-2': i.status === 'Не работает',
-          }" class="locker-col position-relative mt-4">
-            <div>{{ i.id }}</div>
-            <div>
-              <img class="position-absolute top-0 pt-4 right pe-3" src="@/assets/images/icons/menu-3.png">
-              <div v-if="i.showFilterBlock" class="position-absolute filter-block p-4 top-0 mt-4 bg-black h-auto">
-                <div
-                  @click="editLockers(i.id), searchActive = '', toggleModal('.add-user-modal'), editStatus = true, editStatusPicked = true"
-                  class="d-flex align-items-center justify-content-between">
-                  <div class="h5 text-white m-0">Редактировать</div>
-                  <img class="img-width-20" src="@/assets/images/icons/pencel.png">
-                </div>
-                <hr>
-                <div class="d-flex align-items-center justify-content-between">
-                  <div v-show="i.open ? message = 'Открыть шкафчик' : message = 'Закрыть шкафчик'"
-                    class="h5 text-white m-0">{{ message }}</div>
-                  <img :class="{ 'rotate-180': !i.open }" class="img-width-20"
-                    src="@/assets/images/icons/take-money.png">
-                </div>
-                <hr>
-                <div v-if="i.status !== 'Занято'" class="d-flex align-items-center justify-content-between">
-                  <div v-show="i.open ? messageBlock = 'Заблокировать' : messageBlock = 'Разблокировать'"
-                    class="h5 text-white m-0">{{ messageBlock }}</div>
-                  <img class="img-width-20" src="@/assets/images/icons/blocked.png">
-                </div>
-                <hr>
-                <div @click="dellLockers(i.id)" v-if="i.status !== 'Занято'"
-                  class="d-flex align-items-center justify-content-between">
-                  <div class="h5 text-white blocked m-0">Удалить</div>
-                  <img class="img-width-20" src="@/assets/images/icons/delete.png">
-                </div>
-              </div>
-            </div>
-            <div class="fs-6 position-absolute bottom-0 right pe-3">{{ i.status }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
 
   <div class="container">
     <div class="lockers-list mt-5 row">
@@ -182,37 +118,29 @@
         }" class="locker-col position-relative mt-4">
           <div>{{ i.id }}</div>
           <div>
-            <img class="position-absolute top-0 pt-4 right pe-3" src="@/assets/images/icons/menu-3.png">
-            <div v-if="i.showFilterBlock" class="position-absolute filter-block p-4 top-0 mt-4 bg-black h-auto">
-              <div
-                @click="editLockers(i.id), toggleModal('.add-user-modal'), editStatus = true, editStatusPicked = true"
-                class="d-flex align-items-center justify-content-between">
-                <div class="h5 text-white m-0">Редактировать</div>
-                <img class="img-width-20" src="@/assets/images/icons/pencel.png">
-              </div>
-              <hr>
-              <div class="d-flex align-items-center justify-content-between">
-                <div @click="saveLockers('openClose', i.id)"
-                  v-show="i.open ? message = 'Открыть шкафчик' : message = 'Закрыть шкафчик'" class="h5 text-white m-0">
-                  {{
-                    message }}</div>
-                <img :class="{ 'rotate-180': !i.open }" class="img-width-20" src="@/assets/images/icons/take-money.png">
-              </div>
-              <hr>
-              <div v-if="i.statusTranslate !== 'Занято'" class="d-flex align-items-center justify-content-between">
-                <div v-show="i.open ? messageBlock = 'Заблокировать' : messageBlock = 'Разблокировать'"
-                  class="h5 text-white m-0">{{ messageBlock }}</div>
-                <img class="img-width-20" src="@/assets/images/icons/blocked.png">
-              </div>
-              <hr>
-              <div @click="dellLockers(i.id)" v-if="i.statusTranslate !== 'Занято'"
-                class="d-flex align-items-center justify-content-between">
-                <div class="h5 text-white blocked m-0">Удалить</div>
-                <img class="img-width-20" src="@/assets/images/icons/delete.png">
+            <div class="menu-btn" ref="menuBtn" @click.stop="toggleMenu(i)">
+              <button class="bg-transparent border-0 position-absolute menu-icon">
+                <img src="@/assets/images/icons/menu.png" alt="">
+              </button>
+
+              <div class="menu">
+                <div class="menu-card" :class="{ 'show': i.showMenu }">
+                  <ul>
+                    <li class="text-left text-white fs-6"
+                      @click="toggleModal('.add-user-modal'); editStatus = true; edit = i.id">
+                      Редактировать
+                    </li>
+                    <li class="text-left text-danger fs-6" @click="deleter = i.id; removeCloset()">
+                      Удалить
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
+
+
           </div>
-          <div class="fs-6 position-absolute bottom-0 right pe-3">{{ i.statusTranslate }}</div>
+          <div class="fs-6 position-absolute top-0 right pe-3">{{ i.statusTranslate }}</div>
         </div>
       </div>
     </div>
@@ -257,15 +185,19 @@ import { ref } from 'vue'
 import Cookies from "js-cookie";
 import gets from "@/components/axios/get.js";
 import { color } from 'chart.js/helpers';
-const picked = ref(``)
+import posts from '@/components/axios/posts';
+import deletes from '@/components/axios/deletes';
+import Patch from '@/components/axios/Patch';
 </script>
 <script>
 export default {
 
   data() {
     return {
+      activeTR: '',
+      picked: '',
       isLoading: true,
-      statuses : [ null, "Свободно", "Занято", "Не работает" ],
+      statuses: [null, "Свободно", "Занято", "Не работает"],
       collection: [
         // {
         //   id: null,
@@ -274,12 +206,22 @@ export default {
         //   user_name: 1,
         // }
       ],
+      deleter: false,
+      edit: false,
+      users: [],
+      filteredUsers: [],
+      isActive: false,
       loadingText: "Загрузка...",
       error: false,
       success: false,
-      addLockers: { id: '', status: 'Не работает', open: true, blocked: 0 },
+      addLockers: {
+        id: '',
+        status: '',
+        user_id: '',
+      },
       editStatus: false,
       presentMenu: false,
+      presentMenu2: false,
       filterStatus: false,
       editStatusPicked: true,
       searchActive: '',
@@ -295,7 +237,23 @@ export default {
     }
   },
   methods: {
+    toggleMenu(item) {
+      // Открываем/закрываем текущее
+      item.showMenu = !item.showMenu;
 
+      // Закрываем остальные
+      this.collection.forEach(el => {
+        if (el.id !== item.id) el.showMenu = false;
+      });
+    },
+
+    handleClickOutside(e) {
+      // закрываем если клик вне меню
+      const btn = this.$refs.menuBtn;
+      if (!btn || btn.contains(e.target)) return;
+
+      this.collection.forEach(el => el.showMenu = false);
+    },
     async loadCollection() {
       this.id = this.$route.params.id
 
@@ -307,8 +265,8 @@ export default {
       )
         .then((response) => {
           this.collection = response.data.closets;
-          this.collection.forEach((val)=>{
-            val.statusTranslate = this.statuses[val.status]; 
+          this.collection.forEach((val) => {
+            val.statusTranslate = this.statuses[val.status];
           })
           this.isLoading = false;
         })
@@ -316,6 +274,93 @@ export default {
           this.error = error;
         });
 
+    },
+    async loadUsers() {
+      const token = Cookies.get("token");
+
+      posts(
+        "https://api.mubingym.com/users",
+        { form: "0", to: "0" },
+        token
+      )
+        .then((response) => {
+          this.users = response.data.users;
+          this.filteredUsers = this.users;
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+
+    },
+    async pushCloset() {
+      let formData = new FormData();
+      this.error = false;
+      this.loadingText = "Загрузка...";
+      this.isLoading = true;
+
+      posts('https://api.mubingym.com/api/closet/create', formData)
+        .then((response) => {
+
+          if (response.status === 200) {
+            this.toastMessage = "Шкафчик успешно добавлен"
+            this.toaster = true
+            this.success = true
+            setTimeout(() => {
+              this.toaster = false
+            }, 3000);
+            this.isLoading = false;
+          }
+          this.loadCollection();
+
+        })
+    },
+    async removeCloset() {
+      this.error = false;
+      this.loadingText = "Загрузка...";
+      this.isLoading = true;
+
+      deletes(`https://api.mubingym.com/api/closet/delete/${this.deleter}`)
+        .then((response) => {
+          this.isLoading = false;
+          this.loadingText = "Удаление...";
+          this.toastMessage = "Шкафчик успешно удален"
+          this.toaster = true
+          this.success = true
+          setTimeout(() => {
+            this.toaster = false
+          }, 3000);
+          this.loadCollection()
+        })
+    },
+    async editCloset() {
+      console.log(this.picked);
+      let formData = {
+        status: this.picked,
+        user_id: this.addLockers.user_id,
+      }
+      this.error = false;
+      this.loadingText = "Загрузка...";
+      this.isLoading = true;
+
+      posts(`https://api.mubingym.com/api/closet/update/${this.edit}`, formData)
+        .then((response) => {
+
+          if (response.status === 200) {
+            this.toastMessage = "Шкафчик успешно отредактирован"
+            this.toaster = true
+            this.success = true
+            setTimeout(() => {
+              this.toaster = false
+            }, 3000);
+            this.isLoading = false;
+
+            this.picked='';
+            this.addLockers.user_id = '';
+          }
+          this.loadCollection();
+
+        })
     },
     toggleModal(modalSelector) {
       this.modal = this.modal === 'auto' ? 'hidden' : 'auto';
@@ -338,8 +383,6 @@ export default {
           item.showFilterBlock = false
         }
       }
-
-
     },
     addInfo(data, arr) {
       let index = this.lockersArr.findIndex(item => item.id === this.addLockers.id);
@@ -381,11 +424,71 @@ export default {
     modal() {
       this.updateToggleModal();
     },
+    activeTR(newVal) {
+      this.filteredUsers = this.users.filter(user =>
+        `${user.name} ${user.surname}`.toLowerCase().includes(newVal.toLowerCase())
+      );
+    }
   },
   mounted() {
-    this.loadCollection()
+    this.loadCollection();
+    this.loadUsers();
+    document.addEventListener("click", this.handleClickOutside);
   },
+  beforeUnmount() {
+    document.removeEventListener("click", this.handleClickOutside);
+  }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.menu-btn {
+  position: relative;
+
+  .menu-icon {
+    position: absolute;
+    right: 0;
+    padding: 0 15px;
+    bottom: 0;
+
+    img {
+      filter: contrast(550%);
+      transform: scale(1.2);
+    }
+  }
+
+  .menu {
+    position: relative;
+
+    .menu-card {
+      display: none;
+      position: absolute;
+      right: 0;
+      translate: 50% 5%;
+      background: #000;
+      border-radius: 14px;
+      padding: 20px 30px;
+      z-index: 2;
+
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        text-align: left;
+
+        li {
+          cursor: pointer;
+
+          &:first-of-type {
+            margin-bottom: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .menu-card.show {
+    display: block;
+  }
+}
+</style>

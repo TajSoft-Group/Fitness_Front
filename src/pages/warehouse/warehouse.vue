@@ -731,7 +731,7 @@ export default {
             <div class="menu">
               <div class="menu-card">
                 <ul>
-                  <li @click="addModal = true; (edit = item.id, formData = item)">Редактировать</li>
+                  <li @click="addModal = true; console.log('edit')">Редактировать</li>
                   <li class="text-danger" @click="(deleter = item.id); removeProduct()">Удалить</li>
                 </ul>
               </div>
