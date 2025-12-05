@@ -546,7 +546,7 @@
     },
     mounted() {
       this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
-      this.getInfo('https://api.mubingym.com/api/courses/all','cursList', 2)
+      this.getInfo('https://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
       // this.getInfoUsers()
     },
     watch: {

@@ -25,6 +25,7 @@ import transactions from "@/pages/transactions/transactions.vue";
 import warehouse from "@/pages/warehouse/warehouse.vue";
 import warehousePage from "@/pages/warehouse/warehousePage.vue";
 import deleteAccount from "@/pages/deleteAccount.vue"
+import EditCourse from '@/pages/Courses/editCourse.vue';
 
 const routes = [
   {
@@ -144,6 +145,11 @@ const routes = [
     path: '/new-course',
     name: 'new-course',
     component: newCourse
+  },
+  {
+    path: '/edit-course/:id',
+    name: 'edit-course',
+    component: EditCourse
   },
   {
     path: '/transactions',

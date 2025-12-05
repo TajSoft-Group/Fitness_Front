@@ -245,7 +245,7 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-4" v-for="curs in cursList">
-        <div class="w-100 h-100 courses-card position-relative mb-3 p-0" @click="
+        <div class="w-100 h-100 courses-card position-relative mb-3 p-0"  :class="{ archived: curs.status === 0 }" @click="
           toggleModal('.pay-curs'),
           (addCurs = curs),
           (cursData.services_id = curs.id)">
@@ -265,6 +265,9 @@
               <ul>
                 <li @click="toggleModal('.add-curs'), (edit = true, formData = { ...curs })">
                   Редактировать
+                </li>
+                <li @click="archiveCourse() (archive_item = curs.id)">
+                  Архивировать
                 </li>
                 <!-- <li class="text-danger">Удалить</li> -->
               </ul>
@@ -380,6 +383,7 @@ import form_Data from "@/components/axios/formData.js";
 export default {
   data() {
     return {
+      archive_item: null,
       isLoading: true,
       loadingText: "",
       error: false,
@@ -481,6 +485,25 @@ export default {
         .catch((error) => {
           this.error = error;
           this.Delay("loading", 1);
+        });
+    },
+    archiveCourse() {
+      this.isLoading = true;
+      this.loadingText = "Архивирование...";
+
+      const token = Cookies.get("token");
+      posts(
+        `https://api.mubingym.com/services/status/${this.archive_item}`,
+        token
+      )
+        .then((response) => {
+          this.isLoading = false;
+          this.messageSuccess = "Успешно архивирован !";
+          this.addStatus = true;
+          this.addStatusDelay();
+        })
+        .catch((error) => {
+          this.error = error;
         });
     },
     selectImage() {
@@ -586,7 +609,7 @@ export default {
 
           // Обновляем данные
           await this.getInfo("https://api.mubingym.com/api/coach/all", "DataUsers", 1);
-          await this.getInfo("https://api.mubingym.com/api/services/all", "cursList", 2);
+          await this.getInfo("https://api.mubingym.com/api/services/admin/all", "cursList", 2);
           await this.getInfoUsers();
 
           this.messageSuccess = this.edit ? "Успешно изменен" : "Успешно добавлен";
@@ -659,7 +682,7 @@ export default {
       1
     );
     this.getInfo(
-      "https://api.mubingym.com/api/services/all",
+      "https://api.mubingym.com/api/services/admin/all",
       "cursList",
       2
     );
@@ -674,6 +697,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
+  .archived{
+    opacity: 0.3;
+  }
+
+
 .menu-btn {
   position: relative;
   /* Ensure the .menu is positioned relative to the .menu-btn */

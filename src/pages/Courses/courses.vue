@@ -14,9 +14,7 @@
             <div class="result-true-content">
               <div class="result-true-title">
                 Пользователь
-                <span class="color-yellow">{{
-                  formData.name + " " + formData.surname
-                }}</span>
+                <span class="color-yellow"></span>
                 добавлен
               </div>
               <div class="result-true-body mt-2">
@@ -28,13 +26,9 @@
       </div> -->
 
       <div class="col mb-4">
-        <div
-          class="d-flex justify-content-between title-block align-items-center"
-        >
+        <div class="d-flex justify-content-between title-block align-items-center">
           <div @click="addStatus = !addStatus" class="page-title">Курсы</div>
-          <div
-            class="user-add-btn d-flex justify-content-center align-items-center"
-          >
+          <div class="user-add-btn d-flex justify-content-center align-items-center">
             <!-- <button
               @click="toggleModal('.clients-list')"
               class="add-user-btn mx-3"
@@ -45,25 +39,17 @@
               Добавить
             </button> -->
 
-            
+
             <!-- @click="toggleModal('.add-curs')" -->
             <!-- <button class="add-user-btn" @click="toggleModal('.add-curs')">Добавить</button> -->
-            <button class="add-user-btn ms-3" type="button"><router-link to="/new-course" class="text-dark w-100 h-100 align-content-center">Добавить</router-link> </button>
+            <button class="add-user-btn ms-3" type="button"><router-link to="/new-course"
+                class="text-dark w-100 h-100 align-content-center">Добавить</router-link> </button>
 
 
-            <transition
-              name="bounce"
-              v-if="addStatus"
-              class="added-user-message"
-            >
+            <transition name="bounce" v-if="addStatus" class="added-user-message">
               <div class="result-true">
-                <div
-                  class="result-true-card d-flex align-items-center relative"
-                >
-                  <img
-                    class="m-4 img-width-40"
-                    src="@/assets/images/icons/check_add.png"
-                  />
+                <div class="result-true-card d-flex align-items-center relative">
+                  <img class="m-4 img-width-40" src="@/assets/images/icons/check_add.png" />
                   <div class="result-true-content">
                     <!-- <div
                       v-if="activeCourse && activeCourse.name"
@@ -84,131 +70,69 @@
     </div>
   </div>
 
-  <div
-    @click="toggleModal('.add-curs')"
-    class="add-user-modal add-curs d-none d-flex justify-content-center align-items-center"
-  >
+  <div @click="toggleModal('.add-curs')"
+    class="add-user-modal add-curs d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="content">
       <div class="title">СОЗДАТЬ КУРС</div>
-      <form
-        class="form"
-        @submit.prevent="submitForm(), toggleModal('.add-curs')"
-      >
+      <form class="form" @submit.prevent="submitForm(), toggleModal('.add-curs')">
         <label for="name" class="m-0 p-0 mt-4">ТИП КУРССА</label>
         <div class="menu-type-2 d-flex justify-content-between">
           <div class="form-recipients">
-            <input
-              type="radio"
-              id="ind"
-              name="type"
-              value="1"
-              v-model="formData.type_courses"
-            />
+            <input type="radio" id="ind" name="type" value="1" v-model="formData.type_courses" />
             <label for="ind" class="text-white">Индивидуальные</label>
           </div>
           <div class="form-recipients">
-            <input
-              type="radio"
-              id="type"
-              name="type"
-              value="2"
-              v-model="formData.type_courses"
-            />
+            <input type="radio" id="type" name="type" value="2" v-model="formData.type_courses" />
             <label for="group" class="text-white">Групповые</label>
           </div>
         </div>
 
         <label for="title">Название курса</label>
-        <input
-          type="text"
-          placeholder="Введите название курса"
-          id="title"
-          v-model="formData.title"
-        />
+        <input type="text" placeholder="Введите название курса" id="title" v-model="formData.title" />
         <div class="form position-relative">
           <label for="phone">Описание*</label>
-          <textarea
-            type="text"
-            v-model="formData.description"
-            placeholder="Введите текст"
-            class="description"
-          ></textarea>
+          <textarea type="text" v-model="formData.description" placeholder="Введите текст"
+            class="description"></textarea>
         </div>
         <div class="form position-relative">
           <label for="phone">Добавить фотографию</label>
           <div class="img-card row p-3 justify-content-between">
-            <div
-              v-for="(image, index) in images"
-              :key="index"
-              class="card-add-img m-2"
-            >
+            <div v-for="(image, index) in images" :key="index" class="card-add-img m-2">
               <img :src="image" class="card-img-top" alt="Product Image" />
             </div>
-            <div
-              v-show="images.length < 1"
-              class="card-button align-content-center text-center m-2"
-              @click="selectImage"
-            >
+            <div v-show="images.length < 1" class="card-button align-content-center text-center m-2"
+              @click="selectImage">
               <button type="button" class="add-button">+</button>
             </div>
           </div>
-          <input
-            type="file"
-            ref="fileInput"
-            @change="handleFileChange"
-            style="display: none"
-          />
+          <input type="file" ref="fileInput" @change="handleFileChange" style="display: none" />
         </div>
         <label for="price">Цена курса</label>
-        <input
-          type="text"
-          placeholder="Цена за посещение"
-          id="price"
-          v-model="formData.price"
-        />
+        <input type="text" placeholder="Цена за посещение" id="price" v-model="formData.price" />
         <label for="discount">Скидка в %</label>
-        <input
-          type="text"
-          placeholder="Скидка"
-          id="discount"
-          v-model="formData.discount"
-        />
-        <label for="discount_price" class="text-end"
-          >Итого:
+        <input type="text" placeholder="Скидка" id="discount" v-model="formData.discount" />
+        <label for="discount_price" class="text-end">Итого:
           <span v-if="formData.price !== ''">{{
             (formData.discount_price =
               formData.price -
               Math.round((formData.price / 100) * formData.discount))
-          }}</span></label
-        ><!--        <div class="form position-relative">-->
+          }}</span></label><!--        <div class="form position-relative">-->
         <div class="position-relative">
           <label for="name">Выбор тренера</label>
           <input type="text" id="present" v-model="activeTR" />
-          <img
-            @click="presentMenu = !presentMenu"
-            :class="{ 'rotate-90': presentMenu }"
-            class="row-right-icon"
-            src="@/assets/images/icons/row-right.png"
-          />
-          <div
-               :class="{ 'd-block': presentMenu }"
-            class="menu-type-1 pt-4 ps-3"
-          >
+          <img @click="presentMenu = !presentMenu" :class="{ 'rotate-90': presentMenu }" class="row-right-icon"
+            src="@/assets/images/icons/row-right.png" />
+          <div :class="{ 'd-block': presentMenu }" class="menu-type-1 pt-4 ps-3">
             <h1 class="ps-2">Все тренеры</h1>
             <div style="max-height: 300px;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #282829 #090909;">
-              <div
-                  role="button"
-                  v-for="treners in DataUsers"
-                  @click="
+              <div role="button" v-for="treners in DataUsers" @click="
                 (idTr = treners.id),
-                  (presentMenu = false),
-                  (activeTR = treners.name + ' ' + treners.surname)
-              "
-                  class="statistics h-auto m-0 p-2"
-              >
+                (presentMenu = false),
+                (activeTR = treners.name + ' ' + treners.surname)
+                " class="statistics h-auto m-0 p-2">
                 <hr class="m-0 p-1" />
                 {{ treners.name + " " + treners.surname }}
               </div>
@@ -216,19 +140,9 @@
           </div>
         </div>
         <label for="benefits_course">преимущества курса</label>
-        <input
-          type="text"
-          placeholder="преимущества курса"
-          id="benefits_course"
-          v-model="formData.benefits_course"
-        />
+        <input type="text" placeholder="преимущества курса" id="benefits_course" v-model="formData.benefits_course" />
         <label for="create_date">начало курса*</label>
-        <input
-          type="date"
-          placeholder="1994-11-23"
-          id="create_date"
-          v-model="formData.create_date"
-        />
+        <input type="date" placeholder="1994-11-23" id="create_date" v-model="formData.create_date" />
         <div class="d-flex justify-content-between add-user-buttons">
           <button @click="toggleModal('.add-curs')" class="dont" type="button">
             Отмена
@@ -239,93 +153,54 @@
     </div>
   </div>
 
-  <div
-    @click="toggleModal('.clients-list')"
-    class="base-modal clients-list d-none d-flex justify-content-center align-items-center"
-  >
+  <div @click="toggleModal('.clients-list')"
+    class="base-modal clients-list d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="holder">
       <div class="base-modal-top">
         <div class="title">Список клиентов</div>
-        <button
-          class="button-close"
-          @click="toggleModal('.clients-list')"
-        ></button>
+        <button class="button-close" @click="toggleModal('.clients-list')"></button>
       </div>
       <div class="content">
-        <form
-          class="form"
-          @submit.prevent="changeCourse(), toggleModal('.clients-list')"
-        >
+        <form class="form" @submit.prevent="changeCourse(), toggleModal('.clients-list')">
           <div class="search-input pb-4">
             <input v-model="searchQuery" type="text" placeholder="Поиск" />
           </div>
 
           <div class="clients-list-holder">
-            <div
-              role="button"
-              v-for="(trener, index) in filteredClients"
-              :key="trener.id"
-              class="user-list h-auto m-0 p-2"
-            >
-              <div
-                class="user-list-item"
-                :class="{ active: activeIndex === index }"
-                @click.self="toggleCollapse(index)"
-              >
+            <div role="button" v-for="(trener, index) in filteredClients" :key="trener.id"
+              class="user-list h-auto m-0 p-2">
+              <div class="user-list-item" :class="{ active: activeIndex === index }"
+                @click.self="toggleCollapse(index)">
                 <div class="user-list-item-img">
-                  <img
-                    v-if="trener.img"
-                    :src="`https://api.mubingym.com/${trener.img}`"
-                    alt=""
-                  />
+                  <img v-if="trener.img" :src="`https://api.mubingym.com/${trener.img}`" alt="" />
                   <img v-else src="@/assets/images/user-photo.png" alt="" />
                 </div>
                 {{ trener.name + " " + trener.surname }}
               </div>
-              <div
-                v-if="activeIndex === index && trener.courses.length"
-                class="collapse-content"
-              >
+              <div v-if="activeIndex === index && trener.courses.length" class="collapse-content">
                 <ul class="user-list-inner">
-                  <li
-                    v-for="(course, index) in trener.courses"
-                    :key="index"
-                    :class="{ 'close-course': course.count <= 0 }"
-                  >
-                    <label
-                      class="custom-checkbox"
-                      :class="{ disabled: course.count <= 0 }"
-                    >
+                  <li v-for="(course, index) in trener.courses" :key="index"
+                    :class="{ 'close-course': course.count <= 0 }">
+                    <label class="custom-checkbox" :class="{ disabled: course.count <= 0 }">
                       <span>{{ course.course_name }}</span>
-                      <input
-                        type="radio"
-                        :name="`course-user-${trener.id}`"
-                        :disabled="course.count <= 0"
-                        @change="
-                          selectedCourse(
-                            trener.id,
-                            course.course_id,
-                            course.count,
-                            trener.name
-                          )
-                        "
-                      />
+                      <input type="radio" :name="`course-user-${trener.id}`" :disabled="course.count <= 0" @change="
+                        selectedCourse(
+                          trener.id,
+                          course.course_id,
+                          course.count,
+                          trener.name
+                        )
+                        " />
                       <span class="custom-checkmark"></span>
                     </label>
-                    <span v-if="course.count <= 0" class="error"
-                      >Выбор курса невозможен, т.к. кол-во истрачено.</span
-                    >
+                    <span v-if="course.count <= 0" class="error">Выбор курса невозможен, т.к. кол-во истрачено.</span>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
           <div class="d-flex justify-content-between add-user-buttons">
-            <button
-              @click="toggleModal('.clients-list')"
-              class="dont"
-              type="button"
-            >
+            <button @click="toggleModal('.clients-list')" class="dont" type="button">
               Отмена
             </button>
             <button class="submit" type="submit">Добавить</button>
@@ -335,49 +210,25 @@
     </div>
   </div>
 
-  <div
-    @click="toggleModal('.pay-curs')"
-    class="add-user-modal pay-curs d-none d-flex justify-content-center align-items-center"
-  >
+  <div @click="toggleModal('.pay-curs')"
+    class="add-user-modal pay-curs d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="content">
       <div class="title">Оплата курса</div>
-      <form
-        class="form"
-        @submit.prevent="coursesFn(), toggleModal('.pay-curs')"
-      >
+      <form class="form" @submit.prevent="coursesFn(), toggleModal('.pay-curs')">
         <label for="title">тип курса</label>
-        <input
-          type="text"
-          placeholder="Введите название курса"
-          id="title"
-          v-model="addCurs.type_courses"
-        />
+        <input type="text" placeholder="Введите название курса" id="title" v-model="addCurs.type_courses" />
         <label for="title">название курса</label>
-        <input
-          type="text"
-          placeholder="Введите название курса"
-          id="title"
-          v-model="addCurs.title"
-        />
+        <input type="text" placeholder="Введите название курса" id="title" v-model="addCurs.title" />
         <div class="form position-relative">
           <label for="phone">Описание*</label>
-          <textarea
-            type="text"
-            v-model="addCurs.description"
-            placeholder="Введите текст"
-            class="description"
-          ></textarea>
+          <textarea type="text" v-model="addCurs.description" placeholder="Введите текст"
+            class="description"></textarea>
         </div>
         <div class="position-relative">
           <label for="name">Клиенты</label>
           <pre>{{ selectedClient }}</pre>
-          <VueSelect
-            class="custom-select scroll-new"
-            v-model="cursData.user_id"
-            :options="clients"
-            :isClearable="false"
-            placeholder="выберите клиента"
-          >
+          <VueSelect class="custom-select scroll-new" v-model="cursData.user_id" :options="clients" :isClearable="false"
+            placeholder="выберите клиента">
             <template #menu-header>
               <div class="menu-header">
                 <h3>Все клиенты</h3>
@@ -413,12 +264,7 @@
           </div> -->
         </div>
         <label for="title">количество</label>
-        <input
-          type="text"
-          placeholder="Введите количество"
-          id="title"
-          v-model="cursData.count"
-        />
+        <input type="text" placeholder="Введите количество" id="title" v-model="cursData.count" />
         <div class="d-flex justify-content-between add-user-buttons">
           <button @click="toggleModal('.pay-curs')" class="dont" type="button">
             Отмена
@@ -431,26 +277,59 @@
 
   <div class="container pt-3">
     <div class="row">
-          <!-- class="uslug-card uslug-card-responsive p-0 position-relative" -->
-          <div class="col-md-4" 
-            v-for="curs in cursList" 
-            @click="
-              toggleModal('.pay-curs'),
-                (addCurs = curs),
-                (cursData.courses_id = curs.id)"
-          >
-            <div class="w-100 h-100 courses-card position-relative mb-3 p-0">
-              <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>
-              <img class="w-100 h-100" :src="'https://api.mubingym.com/' + curs.img" alt="">
-              <div class="at-bottom position-absolute bottom-0 ps-4">
-                <h5>{{ curs.title }}</h5>
-                <p class="m-0">{{ curs.discount_price }} TJS <b class="text-white mx-1">|</b> <s class="text-white">{{ curs.price }} TJS</s></p>
-                <p class="m-0 mb-2 text-white text-capitalize">{{ curs.type_courses }}</p>
-              </div>
+      <!-- class="uslug-card uslug-card-responsive p-0 position-relative" -->
+      <div class="col-md-4" v-for="curs in cursList" @click="
+        toggleModal('.pay-curs'),
+        (addCurs = curs),
+        (cursData.courses_id = curs.id)
+        ">
+        <div class="w-100 h-100 courses-card position-relative mb-3 p-0">
+
+          <!-- Скидка -->
+          <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">
+            -{{ curs.discount + "%" }}
+          </div>
+
+          <!-- Фото -->
+          <img class="w-100 h-100" :src="'https://api.mubingym.com/' + curs.img" alt="">
+
+          <!-- Текст -->
+          <div class="at-bottom position-absolute bottom-0 ps-4">
+            <h5>{{ curs.title }}</h5>
+
+            <p class="m-0">
+              {{ curs.discount_price }} TJS
+              <b class="text-white mx-1">|</b>
+              <s class="text-white">{{ curs.price }} TJS</s>
+            </p>
+
+            <p class="m-0 mb-2 text-white text-capitalize">{{ curs.type_courses }}</p>
+          </div>
+        </div>
+
+        <!-- Кнопка меню -->
+        <div class="menu-btn">
+          <button class="bg-transparent border-0 position-absolute menu-icon">
+            <img src="@/assets/images/icons/menu.png" alt="">
+          </button>
+
+          <!-- Меню -->
+          <div class="menu">
+            <div class="menu-card">
+              <ul>
+                <li>
+                  <router-link :to="{ name: 'edit-course', params: { id: curs.id } }">
+                    Редактировать
+                  </router-link>
+                </li>
+              </ul>
             </div>
           </div>
-          
-          <!-- <div
+        </div>
+      </div>
+
+
+      <!-- <div
             @click="
               toggleModal('.pay-curs'),
                 (addCurs = curs),
@@ -482,7 +361,7 @@
               </div>
             </div>
           </div> -->
-      </div>
+    </div>
   </div>
 
   <!--  <div class="container">-->
@@ -599,7 +478,7 @@ export default {
   data() {
     return {
       isLoading: true,
-      loadingText : "Загрузка курсов...",
+      loadingText: "Загрузка курсов...",
       error: false,
       activeTR: "",
       idTr: "",
@@ -872,10 +751,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.menu-btn {
+  position: relative;
+  /* Ensure the .menu is positioned relative to the .menu-btn */
+
+  .menu-icon {
+    z-index: 9;
+    right: 20px;
+    padding: 0 0 0 20px;
+    bottom: 30px;
+
+    img {
+      transform: scale(1.2);
+      /* Updated for better support */
+    }
+  }
+
+  .menu-card {
+    display: none;
+    position: absolute;
+    right: 0px;
+    z-index: 9;
+    top: -30px;
+    background: #000;
+    border-radius: 14px;
+    padding: 20px 30px;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        cursor: pointer;
+        margin: 0;
+
+        &:first-of-type {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+
+  &:hover .menu-card {
+    display: block;
+  }
+}
+
 button.active {
   background-color: #c3ff00;
   color: #333;
 }
+
 button.add-button {
   background: url("@/assets/images/icons/add.png") center;
   color: #333;
@@ -884,6 +811,7 @@ button.add-button {
   min-height: 43px;
   padding: 0;
 }
+
 .add-user-modal .content {
   max-height: 100vh;
   overflow-y: auto;
@@ -900,6 +828,7 @@ button.add-button {
   background: #363636;
   color: #ffffff;
 }
+
 :deep(.custom-select .single-value) {
   color: #ffffff;
 }
@@ -908,9 +837,11 @@ button.add-button {
   position: static;
   padding-top: 20px;
 }
+
 :deep(.custom-select .menu-header) {
   padding: var(--vs-option-padding);
 }
+
 :deep(.custom-select .menu-header h3) {
   font-size: 18px;
   line-height: 22px;
@@ -918,30 +849,36 @@ button.add-button {
   color: #d0fd3e;
   margin-bottom: 0;
 }
+
 :deep(.custom-select .dropdown-icon) {
-  background: url("@/assets/images/icons/button-img-right.png") center center
-    no-repeat;
+  background: url("@/assets/images/icons/button-img-right.png") center center no-repeat;
 }
+
 :deep(.custom-select .dropdown-icon > *) {
   display: none;
 }
+
 :deep(.custom-select.open .dropdown-icon) {
   transform: rotate(90deg) !important;
 }
+
 :deep(.custom-select .value-container) {
   padding-top: 0;
   padding-bottom: 0;
 }
+
 :deep(.custom-select .menu) {
   background: #343434;
   border: transparent;
   border-radius: 22px;
 }
+
 :deep(.custom-select .menu-option) {
   background: #343434;
   border-bottom: 1px solid rgba(220, 220, 220, 0.1);
   color: #ffffff;
 }
+
 :deep(.custom-select .menu-option.focused),
 :deep(.custom-select .menu-option:hover) {
   background-color: transparent;
@@ -956,6 +893,7 @@ button.add-button {
   font-size: 22px;
   user-select: none;
 }
+
 .custom-checkbox.disabled {
   .custom-checkmark {
     border-color: #505050;
@@ -980,14 +918,13 @@ button.add-button {
   border-radius: 100%;
 }
 
-.custom-checkbox:hover input ~ .custom-checkmark {
+.custom-checkbox:hover input~.custom-checkmark {
   opacity: 0.7;
 }
 
-.custom-checkbox input:checked ~ .custom-checkmark {
+.custom-checkbox input:checked~.custom-checkmark {
   border-color: #d0fd3e;
-  background: url("@/assets/images/icons/checkbox-white-checked.png") center
-    center no-repeat;
+  background: url("@/assets/images/icons/checkbox-white-checked.png") center center no-repeat;
 }
 
 .custom-checkmark:after {
@@ -1004,6 +941,7 @@ button.add-button {
       padding: 15px 45px 15px 0;
       margin: 0;
     }
+
     &-item {
       border-bottom: 1px solid rgba(220, 220, 220, 0.1);
       display: flex;
@@ -1011,6 +949,7 @@ button.add-button {
       padding-bottom: 15px;
       font-size: 26px;
       position: relative;
+
       &-img {
         width: 48px;
         height: 48px;
@@ -1018,9 +957,9 @@ button.add-button {
         margin-right: 15px;
         border-radius: 100%;
       }
+
       &:after {
-        background: url("@/assets/images/icons/arrow-left.png") center center
-          no-repeat;
+        background: url("@/assets/images/icons/arrow-left.png") center center no-repeat;
         background-size: cover;
         display: block;
         content: "";
@@ -1031,35 +970,43 @@ button.add-button {
         top: 50%;
         transform: translateY(-50%) rotate(180deg) !important;
       }
+
       img {
         width: auto;
         height: 100%;
       }
+
       &.active {
         &:after {
           transform: translateY(-50%) rotate(270deg) !important;
         }
       }
     }
+
     &-inner {
       list-style: none;
+
       li {
         border-top: 1px solid rgba(220, 220, 220, 0.1);
         padding: 3px 0;
         list-style: none;
+
         &:first-child {
           border-top: none;
         }
+
         &.close-course {
           .custom-checkbox {
             border-bottom: 1px solid rgba(220, 220, 220, 0.1);
             margin-bottom: 15px;
           }
-          & + li {
+
+          &+li {
             border-top: transparent;
           }
         }
       }
+
       .error {
         font-size: 20px;
         line-height: 24px;
@@ -1067,13 +1014,16 @@ button.add-button {
       }
     }
   }
+
   &-holder {
     max-height: 350px;
     overflow-y: auto;
-    scrollbar-width: thin; /* Устанавливает ширину скроллбара */
+    scrollbar-width: thin;
+    /* Устанавливает ширину скроллбара */
     scrollbar-color: #282829 #090909;
   }
 }
+
 .clients-list-holder::-webkit-scrollbar {
   width: 10px;
 }
@@ -1086,5 +1036,4 @@ button.add-button {
   background: #090909;
   border-radius: 6px;
 }
-
 </style>

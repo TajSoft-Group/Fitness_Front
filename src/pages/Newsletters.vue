@@ -95,14 +95,16 @@
       <hr>
       <div class="menu-type-2 d-flex justify-content-around mt-4">
         <div class="form-recipients">
-          <input type="radio" id="push" v-model="push" value="1" name="push">
+          <input type="radio" id="push" :checked="push === '1'" @click="togglePush">
           <label for="push">Push</label>
         </div>
+
         <div class="form-recipients">
-          <input type="radio" id="sms" v-model="sms" value="1" name="sms">
+          <input type="radio" id="sms" :checked="sms === '1'" @click="toggleSms">
           <label for="sms">СМС</label>
         </div>
       </div>
+
       <!-- <div class="form position-relative">
         <label for="name">Подарок*</label>
         <input  type="text" :value="picked"   id="present">
@@ -214,14 +216,15 @@
 
                 <!-- Каналы -->
                 <td class="text-center">
-                  <img v-if="letter.type == 0" src="@/assets/images/icons/push.png" class="icon-sm">
-                  <img v-else-if="letter.type == 1" src="@/assets/images/icons/push-messages.png" class="icon-sm">
+                  <img v-if="letter.type == 1" src="@/assets/images/icons/push.png" class="icon-sm">
+                  <img v-else-if="letter.type == 0" src="@/assets/images/icons/push-messages.png" class="icon-sm">
                   <img v-else src="@/assets/images/icons/push-group.png" class="icon-sm">
                 </td>
 
                 <!-- Получатели -->
                 <td class="text-center">
-                  <img v-if="letter.gender == 0" src="@/assets/images/all.png" class="icon-sm">
+                  <span v-if="letter.user != ' '" class="fw-bold text-capitalize">{{ letter.user }}</span>
+                  <img v-else-if="letter.gender == 0" src="@/assets/images/all.png" class="icon-sm">
                   <img v-else-if="letter.gender == 1" src="@/assets/images/male.png" class="icon-sm">
                   <img v-else src="@/assets/images/female.png" class="icon-sm">
                 </td>
@@ -318,7 +321,7 @@ export default {
       loadingText: 'Загрузка...',
 
       users: [],
-      user_id : "",
+      user_id: "",
       filteredUsers: [],
       activeTR: '',
       presentMenu: false,
@@ -370,6 +373,13 @@ export default {
     };
   },
   methods: {
+    togglePush() {
+      this.push = this.push === "1" ? "0" : "1";
+    },
+
+    toggleSms() {
+      this.sms = this.sms === "1" ? "0" : "1";
+    },
     toggleMenu(item) {
       // Открываем/закрываем текущее
       item.showMenu = !item.showMenu;
@@ -402,15 +412,24 @@ export default {
 
       this.isLoading = true;
       this.loadingText = 'Добавление рассылки...';
-      let type = (this.sms && this.push) ? (parseInt(this.sms) + parseInt(this.push)) : (this.push ? this.push : 0);
+      let type = 0;
+      this.user_id = "";
 
-      
+      if (this.push === "1" && this.sms === "1") {
+        type = 2;
+      } else if (this.sms === "1") {
+        type = 1;
+      } else if (this.push === "1") {
+        type = 0;
+      }
+
+
       let sending = {
         message: this.letter.message,
         send_type: type,
         gender: this.letter.gender
       };
-      if(this.user_id != ""){
+      if (this.user_id != "") {
         sending.user_id = this.user_id;
       }
 
@@ -516,7 +535,7 @@ export default {
     }
   },
   watch: {
-     activeTR(newVal) {
+    activeTR(newVal) {
       this.filteredUsers = this.users.filter(user =>
         `${user.name} ${user.surname}`.toLowerCase().includes(newVal.toLowerCase())
       );
