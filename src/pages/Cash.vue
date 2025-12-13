@@ -827,6 +827,14 @@ export default {
         }
       }
 
+      if(this.cart.length === 0){
+        this.success = false;
+        this.toaster = true;
+        this.toastMessage = 'Корзина пуста!';
+        this.Delay("toaster", 2);
+
+        return;
+      }
 
       this.loadingText = "Оплата заказа..."
       this.isLoading = true;

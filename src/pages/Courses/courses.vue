@@ -299,8 +299,8 @@
 
             <p class="m-0">
               {{ curs.discount_price }} TJS
-              <b class="text-white mx-1">|</b>
-              <s class="text-white">{{ curs.price }} TJS</s>
+              <b class="text-white mx-1" v-if="curs.discount!=0">|</b>
+              <s class="text-white" v-if="curs.discount!=0">{{ curs.price }} TJS</s>
             </p>
 
             <p class="m-0 mb-2 text-white text-capitalize">{{ curs.type_courses }}</p>

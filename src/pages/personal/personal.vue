@@ -37,13 +37,13 @@
       <div class="title"> {{ editedCoach ? "Изменить" : "Добавить" }} персонал</div>
       <form class="form" @submit.prevent="saveCoach(), (addCard = false)">
         <label for="name">Имя*</label>
-        <input type="text" placeholder="Введите имя" id="name" v-model="formData.name" />
+        <input type="text" placeholder="Введите имя" id="name" v-model="formData.name" required />
 
         <label for="surname">Фамилия*</label>
-        <input type="text" placeholder="Введите фамилию" id="surname" v-model="formData.surname" />
+        <input type="text" placeholder="Введите фамилию" id="surname" v-model="formData.surname" required />
 
         <label for="phone_number">Номер телефона**</label>
-        <input type="text" placeholder="Введите номер телефона" id="phone_number" v-model="formData.phone_number" />
+        <input type="text" placeholder="Введите номер телефона" id="phone_number" v-model="formData.phone_number" required />
         <!--        <div class="form position-relative">-->
         <!--          <label for="name">Должность*</label>-->
         <!--          <input  type="text" :value="picked"   id="present">-->
@@ -67,7 +67,7 @@
         <!--          </div>-->
         <!--        </div>-->
         <label for="work_experience">Опыт работы*</label>
-        <input type="text" placeholder="Укажите опыт работы" id="work_experience" v-model="formData.work_experience" />
+        <input type="text" placeholder="Укажите опыт работы" id="work_experience" v-model="formData.work_experience" required />
 
         <!--        <label for="surname">Направление*</label>-->
         <!--        <div class="menu-type-2 d-flex justify-content-between  ">-->

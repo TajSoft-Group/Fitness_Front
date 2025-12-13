@@ -37,76 +37,78 @@
 
 
   <div v-if="addCardHoliday" class="add-user-modal d-flex justify-content-center align-items-center ">
-    <div @click.stop class="content">
-      <div class="title">Рассылка</div>
-      <!-- <div class="form">
+    <form @submit.prevent="submitLetter">
+      <div @click.stop class="content">
+        <div class="title">Рассылка</div>
+        <!-- <div class="form">
         <label for="name">Название рассылки*</label>
         <input type="text" placeholder="Введите название рассылки" id="name">
       </div> -->
-      <!-- <div class="form position-relative">
+        <!-- <div class="form position-relative">
         <label  for="surname">Заголовок**</label>
         <input ref="inputText" type="text" placeholder="Введите заголовок" id="heading">
         <div  @click="presentName('inputText')"  class=" label-name position-absolute">имя</div>
       </div> -->
-      <div class="form position-relative">
-        <label for="phone">Сообщение*</label>
-        <textarea ref="messageTextarea" v-model="letter.message" type="text" placeholder="Введите текст"
-          class="description pt-2"></textarea>
-        <div @click="presentName('messageTextarea')" class="label-name position-absolute">имя</div>
-      </div>
+        <div class="form position-relative">
+          <label for="phone">Сообщение*</label>
+          <textarea ref="messageTextarea" v-model="letter.message" type="text" placeholder="Введите текст"
+            class="description pt-2" required></textarea>
+          <div @click="presentName('messageTextarea')" class="label-name position-absolute">имя</div>
+        </div>
 
-      <hr>
+        <hr>
 
-      <div class="position-relative">
-        <label for="name" class="color-yellow" style="margin: 10px 0px 10px 20px;">Выберите получателя</label>
-        <input type="text" id="present" class="mb-3" v-model="activeTR" @click="presentMenu2 = !presentMenu2" />
-        <img @click="presentMenu2 = !presentMenu2" :class="{ 'rotate-90': presentMenu2 }" class="row-right-icon mt-2"
-          src="@/assets/images/icons/row-right.png" />
-        <div :class="{ 'd-block': presentMenu2 }" class="menu-type-1 pt-4 pb-3 px-3">
-          <h1 class="ps-2">Все пользователи</h1>
-          <div class="scroll-new">
-            <div role="button" v-for="wh in filteredUsers" @click="
-              user_id = wh.id;
-            presentMenu2 = false;
-            activeTR = wh.name + ' ' + wh.surname;
-            " class="statistics h-auto m-0 p-2">
-              <hr class="m-0 p-1" />
-              {{ wh.name }} {{ wh.surname }}
+        <div class="position-relative">
+          <label for="name" class="color-yellow" style="margin: 10px 0px 10px 20px;">Выберите получателя</label>
+          <input type="text" id="present" class="mb-3" v-model="activeTR" @click="presentMenu2 = !presentMenu2"
+            required />
+          <img @click="presentMenu2 = !presentMenu2" :class="{ 'rotate-90': presentMenu2 }" class="row-right-icon mt-2"
+            src="@/assets/images/icons/row-right.png" />
+          <div :class="{ 'd-block': presentMenu2 }" class="menu-type-1 pt-4 pb-3 px-3">
+            <h1 class="ps-2">Все пользователи</h1>
+            <div class="scroll-new">
+              <div role="button" v-for="wh in filteredUsers" @click="
+                user_id = wh.id;
+              presentMenu2 = false;
+              activeTR = wh.name + ' ' + wh.surname;
+              " class="statistics h-auto m-0 p-2">
+                <hr class="m-0 p-1" />
+                {{ wh.name }} {{ wh.surname }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <hr>
+        <hr>
 
-      <div class="menu-type-2 d-flex justify-content-between mt-3 px-3">
-        <div class="form-recipients">
-          <input type="radio" id="all" v-model="letter.gender" value="0" name="gender">
-          <label for="all">Все</label>
+        <div class="menu-type-2 d-flex justify-content-between mt-3 px-3">
+          <div class="form-recipients">
+            <input type="radio" id="all" v-model="letter.gender" value="0" name="gender" required>
+            <label for="all">Все</label>
+          </div>
+          <div class="form-recipients">
+            <input type="radio" id="man" v-model="letter.gender" value="1" name="gender" required>
+            <label for="man">Мужчина</label>
+          </div>
+          <div class="form-recipients">
+            <input type="radio" id="woman" v-model="letter.gender" value="2" name="gender" required>
+            <label for="woman">Женщина</label>
+          </div>
         </div>
-        <div class="form-recipients">
-          <input type="radio" id="man" v-model="letter.gender" value="1" name="gender">
-          <label for="man">Мужчина</label>
-        </div>
-        <div class="form-recipients">
-          <input type="radio" id="woman" v-model="letter.gender" value="2" name="gender">
-          <label for="woman">Женщина</label>
-        </div>
-      </div>
-      <hr>
-      <div class="menu-type-2 d-flex justify-content-around mt-4">
-        <div class="form-recipients">
-          <input type="radio" id="push" :checked="push === '1'" @click="togglePush">
-          <label for="push">Push</label>
+        <hr>
+        <div class="menu-type-2 d-flex justify-content-around mt-4">
+          <div class="form-recipients">
+            <input type="radio" id="push" :checked="push === '1'" @click="togglePush">
+            <label for="push">Push</label>
+          </div>
+
+          <div class="form-recipients">
+            <input type="radio" id="sms" :checked="sms === '1'" @click="toggleSms">
+            <label for="sms">СМС</label>
+          </div>
         </div>
 
-        <div class="form-recipients">
-          <input type="radio" id="sms" :checked="sms === '1'" @click="toggleSms">
-          <label for="sms">СМС</label>
-        </div>
-      </div>
-
-      <!-- <div class="form position-relative">
+        <!-- <div class="form position-relative">
         <label for="name">Подарок*</label>
         <input  type="text" :value="picked"   id="present">
         <img @click="presentMenu=!presentMenu" :class="{'rotate-90':presentMenu}" class="row-right-icon" src="@/assets/images/icons/row-right.png">
@@ -159,7 +161,7 @@
             <label for="woman">Женщина</label>
           </div>
       </div> -->
-      <!-- <div class="d-flex justify-content-between mt-3 text-center">
+        <!-- <div class="d-flex justify-content-between mt-3 text-center">
        <div @click="statusPicker=true" class="form col-5 position-relative">
          <label  for="surname">Дата публикации*</label>
          <input type="text"  id="heading">
@@ -169,11 +171,12 @@
          <input type="text"  id="heading">
        </div>
      </div> -->
-      <div class="d-flex justify-content-between add-user-buttons">
-        <button @click="addCardHoliday = false" class="dont">Отмена</button>
-        <button class="submit" type="button" @click="submitLetter()">Добавить</button>
+        <div class="d-flex justify-content-between add-user-buttons">
+          <button @click="addCardHoliday = false" class="dont">Отмена</button>
+          <button class="submit" type="submit">Добавить</button>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 
   <div class="container">

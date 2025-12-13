@@ -217,6 +217,9 @@ export default {
         const response = await fetch(`https://api.mubingym.com/whh/create/${type}`, {
           method: "POST",
           body: formData,
+          headers: {
+            Authorization: `${Cookies.get("token")}`,
+          },
         });
 
         if (response.ok) {
@@ -303,7 +306,7 @@ export default {
           required />
       </div>
 
-      <div class="form position-relative">
+      <div class="form position-relative" v-show="formDataH.type === 'income'">
         <label for="purchase">Закупочная цена*</label>
         <input type="text" placeholder="Введите закупочную цену" id="purchase" v-model="formDataH.purchase" required />
       </div>
@@ -375,11 +378,11 @@ export default {
                   <div class="ms-4">
                     <div class="d-flex">
                       <span class="me-3 fw-bold">Категория</span>
-                      <span class="color-yellow fw-bold">{{ WarehouseItem.category }} шт</span>
+                      <span class="color-yellow fw-bold">{{ WarehouseItem.category }}</span>
                     </div>
                     <div class="d-flex">
                       <span class="me-3 fw-bold">Скидка:</span>
-                      <span class="color-yellow fw-bold">{{ WarehouseItem.discount }} шт</span>
+                      <span class="color-yellow fw-bold">{{ WarehouseItem.discount }}</span>
                     </div>
                     <div class="d-flex">
                       <span class="me-3 fw-bold">Штрихкод:</span>
@@ -390,18 +393,6 @@ export default {
                   </div>
                 </div>
 
-              </div>
-            </div>
-          </div>
-          <div class="menu-btn">
-            <button class="bg-transparent border-0 position-absolute menu-icon"><img
-                src="@/assets/images/icons/menu.png" alt=""></button>
-            <div class="menu">
-              <div class="menu-card">
-                <ul>
-                  <li @click="addModal = true; (edit = item.id, formData = item)">Редактировать</li>
-                  <li class="text-danger">Удалить</li>
-                </ul>
               </div>
             </div>
           </div>

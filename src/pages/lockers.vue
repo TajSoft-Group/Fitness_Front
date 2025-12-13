@@ -127,7 +127,7 @@
                 <div class="menu-card" :class="{ 'show': i.showMenu }">
                   <ul>
                     <li class="text-left text-white fs-6"
-                      @click="toggleModal('.add-user-modal'); editStatus = true; edit = i.id">
+                      @click="toggleModal('.add-user-modal'); editStatus = true; edit = i.id; addLockers.id = i.id; addLockers.status = i.status; addLockers.user_id = i.user_id;">
                       Редактировать
                     </li>
                     <li class="text-left text-danger fs-6" @click="deleter = i.id; removeCloset()">

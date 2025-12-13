@@ -6,6 +6,7 @@ import posts from "@/components/axios/posts.js";
 import deletes from "@/components/axios/deletes.js";
 import Patch from "@/components/axios/Patch.js";
 import { DateTime } from "luxon";
+import { formToJSON } from "axios";
 
 export default {
   data() {
@@ -310,7 +311,7 @@ export default {
               sale: "",
             }
 
-            this.activeTR="";
+            this.activeTR = "";
 
             this.incomeModal = false;
 
@@ -560,7 +561,7 @@ export default {
       </div>
 
       <div class="d-flex justify-content-between add-user-buttons">
-        <button @click="(addCardHoliday = false); editNull()" class="dont">Отмена</button>
+        <button @click="(addModal = false); editNull()" class="dont">Отмена</button>
         <button class="submit" type="button" @click="addCategory(); (addCardHoliday = false)" v-if="!edit">
           Добавить
         </button>
@@ -573,54 +574,57 @@ export default {
 
   <div @click="incomeModal = !incomeModal" v-if="incomeModal"
     class="add-user-modal d-flex justify-content-center my-1 align-items-center">
-    <div @click.stop class="content">
-      <div class="title mb-3" v-show="formDataH.type === 'income'">Приход товара</div>
-      <div class="title mb-3" v-show="formDataH.type === 'expense'">Расход товара</div>
+    <form @submit.prevent="incomeWarehouse(); (addCardHoliday = false)">
+      <div @click.stop class="content">
+        <div class="title mb-3" v-show="formDataH.type === 'income'">Приход товара</div>
+        <div class="title mb-3" v-show="formDataH.type === 'expense'">Расход товара</div>
 
-      <div class="position-relative">
-        <label for="name" class="color-yellow" style="margin: 10px 0px 10px 20px;">Выберите товар</label>
-        <input type="text" id="present" v-model="activeTR" @click="presentMenu = !presentMenu" />
-        <img @click="presentMenu = !presentMenu" :class="{ 'rotate-90': presentMenu }" class="row-right-icon mt-2"
-          src="@/assets/images/icons/row-right.png" />
-        <div :class="{ 'd-block': presentMenu }" class="menu-type-1 pt-4 ps-3">
-          <h1 class="ps-2">Все товары</h1>
-          <div class="scroll-new">
-            <div role="button" v-for="wh in WarehouseFilter" @click="
-              formDataH.product_id = wh.id;
-            presentMenu = false;
-            activeTR = wh.title;
-            " class="statistics h-auto m-0 p-2">
-              <hr class="m-0 p-1" />
-              {{ wh.title }}
+        <div class="position-relative">
+          <label for="name" class="color-yellow" style="margin: 10px 0px 10px 20px;">Выберите товар</label>
+          <input type="text" id="present" v-model="activeTR" @click="presentMenu = !presentMenu" required />
+          <img @click="presentMenu = !presentMenu" :class="{ 'rotate-90': presentMenu }" class="row-right-icon mt-2"
+            src="@/assets/images/icons/row-right.png" />
+          <div :class="{ 'd-block': presentMenu }" class="menu-type-1 pt-4 ps-3">
+            <h1 class="ps-2">Все товары</h1>
+            <div class="scroll-new">
+              <div role="button" v-for="wh in WarehouseFilter" @click="
+                formDataH.product_id = wh.id;
+              presentMenu = false;
+              activeTR = wh.title;
+              " class="statistics h-auto m-0 p-2">
+                <hr class="m-0 p-1" />
+                {{ wh.title }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="form position-relative">
-        <label for="count">Кол-во*</label>
-        <input ref="inputText" type="text" placeholder="Введите количество" id="count" v-model="formDataH.count"
-          required />
-      </div>
+        <div class="form position-relative">
+          <label for="count">Кол-во*</label>
+          <input ref="inputText" type="text" placeholder="Введите количество" id="count" v-model="formDataH.count"
+            required />
+        </div>
 
-      <div class="form position-relative">
-        <label for="purchase">Закупочная цена*</label>
-        <input type="text" placeholder="Введите закупочную цену" id="purchase" v-model="formDataH.purchase" required />
-      </div>
+        <div class="form position-relative">
+          <label for="purchase">Закупочная цена*</label>
+          <input type="text" placeholder="Введите закупочную цену" id="purchase" v-model="formDataH.purchase"
+             />
+        </div>
 
 
-      <div class="form position-relative">
-        <label for="sale">Продажная цена*</label>
-        <input type="text" placeholder="Введите продажную цену" id="sale" v-model="formDataH.sale" required />
-      </div>
+        <div class="form position-relative">
+          <label for="sale">Продажная цена*</label>
+          <input type="text" placeholder="Введите продажную цену" id="sale" v-model="formDataH.sale"  />
+        </div>
 
-      <div class="d-flex justify-content-between add-user-buttons">
-        <button @click="(addCardHoliday = false); editNull()" class="dont">Отмена</button>
-        <button class="submit" type="button" @click="incomeWarehouse(); (addCardHoliday = false)">
-          Добавить
-        </button>
+        <div class="d-flex justify-content-between add-user-buttons">
+          <button @click="(incomeModal = false); editNull()" class="dont">Отмена</button>
+          <button class="submit" type="submit">
+            Добавить
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 
 
@@ -739,7 +743,7 @@ export default {
             <div class="menu">
               <div class="menu-card">
                 <ul>
-                  <li @click="addModal = true; console.log('edit')">Редактировать</li>
+                  <li @click="addModal = true; edit = true; formData = item">Редактировать</li>
                   <li class="text-danger" @click="(deleter = item.id); removeProduct()">Удалить</li>
                 </ul>
               </div>

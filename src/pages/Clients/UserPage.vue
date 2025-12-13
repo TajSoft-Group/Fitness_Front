@@ -121,28 +121,28 @@
       <div class="courses mt-3">
         <div class="form mt-3">
           <label for="name">Имя</label>
-          <input type="text" placeholder="Имя" id="name" v-model="formData.name">
+          <input type="text" placeholder="Имя" id="name" v-model="formData.name" required>
         </div>
         <div class="form mt-3">
           <label for="surname">Фамилия</label>
-          <input type="text" placeholder="Фамилия" id="surname" v-model="formData.surname">
+          <input type="text" placeholder="Фамилия" id="surname" v-model="formData.surname" required>
         </div>
         <div class="form mt-3">
           <label for="password">Пароль</label>
-          <input type="password" id="password" v-model="formData.password">
+          <input type="password" id="password" v-model="formData.password" required>
         </div>
         <div class="form mt-3">
           <label for="date">Дата рождения</label>
-          <input type="date" v-model="formData.birthday">
+          <input type="date" v-model="formData.birthday" required>
         </div>
 
         <div class="menu-type-2 d-flex justify-content-between pt-3 mt-3">
           <div class="form-recipients">
-            <input :checked="user.gender==='1'" type="radio" id="man" name="recipients" value="Мужчина">
+            <input :checked="user.gender==='1'" type="radio" id="man" name="recipients" value="Мужчина" required>
             <label for="man">Мужчина</label>
           </div>
           <div class="form-recipients">
-            <input :checked="user.gender==='2'" type="radio" id="woman" name="recipients" value="Женщина" >
+            <input :checked="user.gender==='2'" type="radio" id="woman" name="recipients" value="Женщина" required>
             <label for="woman">Женщина</label>
           </div>
         </div>
@@ -622,8 +622,16 @@
       </div>
     </div>
   </section>
-
 </div>
+  <!-- Loading Overlay -->
+  <div v-if="isLoading" class="overlay w-100 h-100 position-fixed top-0 start-0 z-3" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="position-fixed top-50 start-50 translate-middle z-3 text-center">
+      <div class="spinner-border text-warning" role="status">
+        <span class="sr-only"></span>
+      </div>
+      <div class="mt-2 text-light text-center">Идет загрузка...</div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -638,6 +646,7 @@ export default {
   name: 'UserPage',
   data() {
     return {
+      isLoading: true,
       payed: false,
       formData: {
         gender:'',
@@ -683,8 +692,10 @@ export default {
       this.modalSelector = modalSelector
     },
     getInfo() {
+      this.isLoading = true;
       get(`https://api.mubingym.com/api/user/${this.id}`,)
           .then(response => {
+            this.isLoading = false;
             this.User = response.data;
                 get(`https://api.mubingym.com/api/transaction_get/${this.User.user.cards[0].id}`,)
                 .then(response => {
@@ -712,8 +723,10 @@ export default {
       }
     },
     saveUser(){
+      this.isLoading = true;
       form_Data(`https://api.mubingym.com/api/user/update/${this.id}`, {...this.formData})
           .then(response => {
+            this.isLoading = false;
             this.UserConfigModal=false
             console.log(this.User)
             this.getInfo()
@@ -732,11 +745,14 @@ export default {
       deletes(`https://api.mubingym.com/user/delete/${this.id}`)
     },
     payment(payCash){
+      this.isLoading = true;
       const pay={ owner_id: this.id, payment: payCash, payment_type: "refill"}
       posts('https://api.mubingym.com/api/payment', pay)
           .then(response => {
             this.payed = true;
+            this.isLoading = false;
             console.log('ok',response)
+            payCash = "";
             this.toggleModal('.add-money-modal')
             this.getInfo()
             setTimeout(()=>{ this.payed=false; },2000)
@@ -760,6 +776,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  .add-money-modal{
+    z-index: 2 !important;
+  }
   *{
     user-select: none;    
   }

@@ -50,27 +50,27 @@
         <div class="d-flex">
           <div style="padding-right: 5px">
             <label for="name">Имя*</label>
-            <input type="text" placeholder="Введите имя" id="name" v-model="formData.name" />
+            <input type="text" placeholder="Введите имя" id="name" v-model="formData.name" required />
           </div>
           <div style="padding-left: 5px">
             <label for="surname">Фамилия*</label>
-            <input type="text" placeholder="Введите фамилию" id="surname" v-model="formData.surname" />
+            <input type="text" placeholder="Введите фамилию" id="surname" v-model="formData.surname" required />
           </div>
         </div>
 
         <label for="username">Номер телефона*</label>
-        <input type="text" placeholder="Введите номер телефона" id="username" v-model="formData.username" />
+        <input type="text" placeholder="Введите номер телефона" id="username" v-model="formData.username" required />
 
         <label for="birthday">Дата рождения*</label>
-        <input type="date" placeholder="1994-11-23" id="birthday" v-model="formData.birthday" />
+        <input type="date" placeholder="1994-11-23" id="birthday" v-model="formData.birthday" required />
 
         <div class="menu-type-2 d-flex justify-content-between pt-3 mt-3">
           <div class="form-recipients">
-            <input type="radio" id="man" name="gender" value="1" v-model="formData.gender" />
+            <input type="radio" id="man" name="gender" value="1" v-model="formData.gender" required />
             <label for="man">Мужчина</label>
           </div>
           <div class="form-recipients">
-            <input type="radio" id="woman" name="gender" value="2" v-model="formData.gender" />
+            <input type="radio" id="woman" name="gender" value="2" v-model="formData.gender" required />
             <label for="woman">Женщина</label>
           </div>
         </div>
@@ -91,16 +91,16 @@
         </div>
 
         <label for="password">Пароль*</label>
-        <input type="text" placeholder="пароль" id="password" v-model="formData.password" />
+        <input type="text" placeholder="пароль" id="password" v-model="formData.password" required />
 
         <div class="menu-type-2 d-flex justify-content-between mt-3">
           <div class="form-recipients">
-            <input type="radio" id="ios" name="mobile_id" value="2" v-model="formData.mobile_id" />
+            <input type="radio" id="ios" name="mobile_id" value="2" v-model="formData.mobile_id" required />
             <label for="ios">IOS</label>
             <img class="ps-3 img-width-55" src="@/assets/images/icons/Ios_accueil.webp" />
           </div>
           <div class="form-recipients">
-            <input type="radio" id="android" name="mobile_id" value="1" v-model="formData.mobile_id" />
+            <input type="radio" id="android" name="mobile_id" value="1" v-model="formData.mobile_id" required />
             <label for="android">Android</label>
             <img class="ps-3 img-width-55" src="@/assets/images/icons/Android_logo_2019.png" />
           </div>
@@ -401,9 +401,11 @@ export default {
 
     submitForm() {
       const token = Cookies.get("token");
+      this.isLoading = true;
       posts("https://api.mubingym.com/user_register", { ...this.formData, status: "active" }, token)
         .then(res => {
           if (res.status === 200) {
+            this.isLoading = false;
             this.addStatus = true;
             this.getInfo();
             this.Delay("addStatus", 5);
