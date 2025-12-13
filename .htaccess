@@ -7,5 +7,5 @@
   RewriteCond %{REQUEST_FILENAME} !-d
 
   # Все остальные запросы — в index.html
-  RewriteRule ./dist/index.html [L]
+  RewriteRule ^ /dist/index.html [L]
 </IfModule>
