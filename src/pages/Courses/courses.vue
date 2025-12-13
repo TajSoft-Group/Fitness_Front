@@ -282,8 +282,8 @@
         toggleModal('.pay-curs'),
         (addCurs = curs),
         (cursData.courses_id = curs.id)
-        ">
-        <div class="w-100 h-100 courses-card position-relative mb-3 p-0">
+        " >
+        <div class="w-100 h-100 courses-card position-relative mb-3 p-0" :class="{ archived: curs.status == 0 }">
 
           <!-- Скидка -->
           <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">
@@ -321,6 +321,9 @@
                   <router-link :to="{ name: 'edit-course', params: { id: curs.id } }">
                     Редактировать
                   </router-link>
+                </li>
+                 <li @click="archiveCourse(curs.id); ">
+                  {{ curs.status != 0 ? "Архивировать" : "Разархивировать" }}
                 </li>
               </ul>
             </div>
@@ -465,29 +468,24 @@
 
 </template>
 <script>
-import VueSelect from "vue3-select-component";
 import Cookies from "js-cookie";
-
 import posts from "@/components/axios/posts.js";
 import gets from "@/components/axios/get.js";
 import form_Data from "@/components/axios/formData.js";
+
 export default {
-  components: {
-    VueSelect,
-  },
   data() {
     return {
-      isLoading: true,
-      loadingText: "Загрузка курсов...",
-      error: false,
-      activeTR: "",
-      idTr: "",
-      images: [],
-      imagesPost: [],
-      addCurs: "",
+      // Основные данные
+      cursList: [],
+      DataUsers: [],        // Тренеры
+      userData: [],         // Все пользователи (для поиска клиентов)
+      clients: [],          // Для кастомного селекта
+
+      // Формы
       formData: {
         title: "",
-        type_courses: "",
+        type_courses: "1",
         description: "",
         coach_id: "",
         benefits_course: "[1]",
@@ -501,256 +499,235 @@ export default {
         direction_id: "1",
         user_count: "1",
       },
-      DataUsers: null,
-      userData: null,
-      cursList: "",
+
       cursData: {
-        user_id: "",
+        user_id: null,
         courses_id: "",
-        count: "",
+        count: 1,
       },
-      modal: "auto",
+
+      addCurs: {}, // Текущий курс при открытии модалки оплаты
+
+      // UI состояние
+      isLoading: true,
+      loadingText: "Загрузка курсов...",
       error: null,
-      loading: true,
-      searchActive: "",
+
       addStatus: false,
-      addCard: false,
-      modalSelector: "",
+      messageSuccess: "",
+
+      images: [],
+      imagesPost: null,
+
+      // Модальные окна
+      payModalVisible: false,
+      addCourseModalVisible: false,
+      clientsListModalVisible: false,
+
+      // Выбор тренера
       presentMenu: false,
-      // selectedClient: "",
-      clients: [],
+      activeTR: "",
+      idTr: "",
+
+      // Выбор клиента в модалке оплаты
+      clientDropdownOpen: false,
+      clientSearchQuery: "",
+      selectedClientName: "",
+
+      // Меню карточки курса
+      activeMenuId: null,
+
+      // Для списка клиентов (старый функционал)
       activeIndex: null,
       searchQuery: "",
       activeCourse: null,
-      messageSuccess: "",
     };
   },
+
   computed: {
     filteredClients() {
-      if (this.userData) {
-        return this.userData.filter((user) => {
-          return user.name
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase());
-        });
-      }
-      return this.userData;
+      if (!this.userData) return [];
+      return this.userData.filter(user =>
+        `${user.name} ${user.surname}`
+          .toLowerCase()
+          .includes(this.clientSearchQuery.toLowerCase())
+      );
     },
   },
+
   methods: {
-    addStatusDelay() {
-      setTimeout(() => {
-        this.addStatus = false;
-      }, 3000);
+    // Показ уведомления об успехе
+    showSuccess(message) {
+      this.messageSuccess = message;
+      this.addStatus = true;
+      setTimeout(() => (this.addStatus = false), 3500);
     },
-    toggleCollapse(index) {
-      if (this.activeIndex === index) {
-        this.activeIndex = null;
-      } else {
-        this.activeIndex = index;
+
+    // Загрузка всех данных при монтировании
+    async loadAllData() {
+      this.isLoading = true;
+      const token = Cookies.get("token");
+
+      try {
+        const [coursesRes, coachesRes, usersRes] = await Promise.all([
+          gets("https://api.mubingym.com/api/courses/all/admin", token),
+          gets("https://api.mubingym.com/api/coach/all", token),
+          posts("https://api.mubingym.com/users", { form: "0", to: "0" }, token),
+        ]);
+
+        this.cursList = coursesRes.data;
+        this.DataUsers = coachesRes.data.data || coachesRes.data;
+        this.userData = usersRes.data.users;
+      } catch (err) {
+        console.error(err);
+        this.error = "Ошибка загрузки данных";
+      } finally {
+        this.isLoading = false;
       }
     },
-    coursesFn() {
-      const token = Cookies.get("token");
-      posts(
-        "https://api.mubingym.com/enroll/courses",
-        {
-          ...this.cursData,
-        },
-        token
-      )
-        .then((response) => {
-          console.log("response", response);
-          this.Delay("loading", 1);
-          this.messageSuccess = response.data.message;
-          this.addStatus = true;
-          this.addStatusDelay();
-          console.log(this.cursData);
-        })
-        .catch((error) => {
-          this.error = error;
-          this.Delay("loading", 1);
-        });
+
+    // Открытие модалки записи на курс
+    openPayModal(course) {
+      this.addCurs = course;
+      this.cursData.courses_id = course.id;
+      this.cursData.user_id = null;
+      this.cursData.count = 1;
+      this.selectedClientName = "";
+      this.clientSearchQuery = "";
+      this.payModalVisible = true;
     },
+
+    // Выбор клиента в кастомном дропдауне
+    selectClient(client) {
+      this.cursData.user_id = client.id;
+      this.selectedClientName = `${client.name} ${client.surname}`;
+      this.clientDropdownOpen = false;
+    },
+
+    // Запись клиента на курс
+    async enrollCourse() {
+      if (!this.cursData.user_id) {
+        alert("Выберите клиента");
+        return;
+      }
+
+      this.isLoading = true;
+      this.loadingText = "Запись на курс...";
+
+      try {
+        const token = Cookies.get("token");
+        const res = await posts("https://api.mubingym.com/enroll/courses", this.cursData, token);
+        this.showSuccess(res.data.message || "Клиент успешно записан!");
+        this.payModalVisible = false;
+        await this.loadAllData();
+      } catch (err) {
+        alert(err.response?.data?.message || "Ошибка записи");
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // Архивирование курса
+    async archiveCourse(id) {
+      this.isLoading = true;
+      this.loadingText = "Изменение статуса...";
+
+      try {
+        const token = Cookies.get("token");
+        await posts(`https://api.mubingym.com/courses/status/${id}`, {}, token);
+        this.showSuccess("Архивы успешно пересобраны");
+        await this.loadAllData();
+      } catch (err) {
+        alert("Ошибка");
+      } finally {
+        this.isLoading = false;
+        this.activeMenuId = null;
+      }
+    },
+
+    // Меню карточки
+    toggleCourseMenu(id, event) {
+      event.stopPropagation();
+      this.activeMenuId = this.activeMenuId === id ? null : id;
+    },
+
+    // Загрузка изображения
     selectImage() {
       this.$refs.fileInput.click();
     },
-    handleFileChange(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        this.imagesPost = file;
-        reader.onload = (e) => {
-          this.images.push(e.target.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    },
-    getInfoUsers() {
-      const token = Cookies.get("token");
-      posts(
-        "https://api.mubingym.com/users",
-        {
-          form: "0",
-          to: "21",
-        },
-        token
-      )
-        .then((response) => {
-          this.userData = response.data.users;
-          this.Delay("loading", 1);
-        })
-        .catch((error) => {
-          this.error = error;
-          this.Delay("loading", 1);
-        });
-    },
-    getInfo(url, dataStore, id) {
-      this.isLoading = true;
-      const token = Cookies.get("token");
-      gets(url, token)
-        .then((response) => {
-          this.isLoading = false;
-          this[dataStore] = [];
-          if (id === 1) {
-            this[dataStore] = response.data.data;
-          } else if (id === 2) {
-            this[dataStore] = response.data;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          this.error = error;
-        });
+    handleFileChange(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      this.imagesPost = file;
+      const reader = new FileReader();
+      reader.onload = (ev) => this.images = [ev.target.result];
+      reader.readAsDataURL(file);
     },
 
+    // Создание курса (если оставляете модалку)
     async submitForm() {
-      let FormData = this.formData;
-      FormData.img = this.imagesPost;
-      FormData.coach_id = this.idTr;
+      if (!this.formData.title || !this.formData.price || !this.idTr) {
+        alert("Заполните обязательные поля");
+        return;
+      }
+
+      this.formData.coach_id = this.idTr;
+      const fd = new FormData();
+      for (let key in this.formData) {
+        fd.append(key, this.formData[key] || "");
+      }
+      if (this.imagesPost) fd.append("img", this.imagesPost);
+
+      this.isLoading = true;
+      this.loadingText = "Создание курса...";
+
       try {
-        const response = await form_Data(
-          "http://api.mubingym.com/api/courses/create",
-          FormData
-        );
-        if (response.status === 200) {
-          this.addStatus = true;
-          await this.getInfo(
-            "https://api.mubingym.com/api/coach/all",
-            "DataUsers",
-            1
-          );
-          await this.getInfo(
-            "https://api.mubingym.com/api/courses/all",
-            "cursList",
-            2
-          );
-          await this.getInfoUsers();
-          this.Delay("addStatus", 7);
-        } else {
-          console.error(`Запрос завершился с ошибкой: ${response.status}`);
-        }
-      } catch (error) {
-        console.error("Ошибка при отправке данных:", error);
+        await form_Data("https://api.mubingym.com/api/courses/create", fd);
+        this.showSuccess("Курс успешно создан!");
+        this.addCourseModalVisible = false;
+        this.resetForm();
+        await this.loadAllData();
+      } catch (err) {
+        alert("Ошибка создания курса");
+      } finally {
+        this.isLoading = false;
       }
     },
-    Delay(target, t) {
-      setTimeout(() => {
-        this[target] = false;
-      }, t * 1000);
+
+    resetForm() {
+      Object.keys(this.formData).forEach(key => {
+        this.formData[key] = key === "type_courses" ? "1" : "";
+      });
+      this.images = [];
+      this.imagesPost = null;
+      this.activeTR = "";
+      this.idTr = "";
     },
-    clearData(data) {
-      for (let key in data) {
-        data[key] = "";
-      }
-    },
-    toggleModal(modalSelector) {
-      this.modal = this.modal === "auto" ? "hidden" : "auto";
-      this.modalSelector = modalSelector;
-    },
-    updateToggleModal() {
-      if (this.modal === "auto") {
-        document.querySelector(this.modalSelector).classList.add("d-none");
-        document.body.style.overflow = this.modal;
-      } else {
-        document.body.style.overflow = this.modal;
-        document.querySelector(this.modalSelector).classList.remove("d-none");
-      }
-    },
-    getClients() {
-      const token = Cookies.get("token");
-      posts(
-        "https://api.mubingym.com/users",
-        {
-          form: "0",
-          to: "0",
-        },
-        token
-      )
-        .then((response) => {
-          const options = response.data.users.map((client) => {
-            const option = client;
-            option.label = client.name;
-            option.value = client.id;
-            return option;
-          });
-          this.clients = options;
-          this.Delay("loading", 1);
-        })
-        .catch((error) => {
-          this.error = error;
-          this.Delay("loading", 1);
-        });
-    },
-    changeCourse() {
-      console.log("changeCourse");
-      posts("https://api.mubingym.com/count/courses", {
-        user_id: this.activeCourse.userId,
-        courses_id: this.activeCourse.courseId,
-      })
-        .then((response) => {
-          console.log("changeCourse response", response);
-          this.messageSuccess = response.data.message;
-          this.addStatus = true;
-          this.addStatusDelay();
-        })
-        .catch((error) => {
-          this.error = error;
-          this.Delay("loading", 1);
-        });
-    },
-    selectedCourse(userId, courseId, courseCount, name) {
-      const courseData = {};
-      courseData.userId = userId;
-      courseData.courseId = courseId;
-      courseData.courseCount = courseCount;
-      courseData.name = name;
-      this.activeCourse = courseData;
+
+    // Закрытие всех дропдаунов и меню при клике вне
+    handleClickOutside(e) {
+      if (!e.target.closest(".menu-btn")) this.activeMenuId = null;
+      if (!e.target.closest(".client-select-area")) this.clientDropdownOpen = false;
+      if (!e.target.closest(".trainer-select")) this.presentMenu = false;
     },
   },
+
   mounted() {
-    this.getInfo(
-      "https://api.mubingym.com/api/coach/all",
-      "DataUsers",
-      1
-    );
-    this.getInfo(
-      "https://api.mubingym.com/api/courses/all",
-      "cursList",
-      2
-    );
-    this.getInfoUsers();
-    this.getClients();
+    this.loadAllData();
+    document.addEventListener("click", this.handleClickOutside);
   },
-  watch: {
-    modal() {
-      this.updateToggleModal();
-    },
+
+  beforeUnmount() {
+    document.removeEventListener("click", this.handleClickOutside);
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.archived {
+  opacity: 0.3;
+}
 .menu-btn {
   position: relative;
   /* Ensure the .menu is positioned relative to the .menu-btn */

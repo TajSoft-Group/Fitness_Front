@@ -841,7 +841,8 @@ export default {
         } else if (item.type === "service") {
           this.FormData.services.push({
             service_id: item.id,
-            count: (item.count || 1) * (item.visit_count || 1) // если у услуг есть visit_count
+            // count: (item.count || 1) * (item.visit_count || 1) // если у услуг есть visit_count
+            count: (item.count || 1) // если у услуг есть visit_count
           });
         } else if (item.type === "course") {
           this.FormData.courses.push({

@@ -245,10 +245,11 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-4" v-for="curs in cursList">
-        <div class="w-100 h-100 courses-card position-relative mb-3 p-0"  :class="{ archived: curs.status === 0 }" @click="
-          toggleModal('.pay-curs'),
-          (addCurs = curs),
-          (cursData.services_id = curs.id)">
+        <div class="w-100 h-100 courses-card position-relative mb-3 p-0" :class="{ archived: curs.status === 0 }"
+          @click="
+            toggleModal('.pay-curs'),
+            (addCurs = curs),
+            (cursData.services_id = curs.id)">
           <!--          <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>-->
           <img class="w-100 h-100" :src="'https://api.mubingym.com/' + curs.img" alt="">
           <div class="at-bottom position-absolute bottom-0 ps-4">
@@ -266,8 +267,8 @@
                 <li @click="toggleModal('.add-curs'), (edit = true, formData = { ...curs })">
                   Редактировать
                 </li>
-                <li @click="archiveCourse() (archive_item = curs.id)">
-                  Архивировать
+                <li @click="archive_item = curs.id; archiveCourse();">
+                  {{ curs.status != 0 ? "Архивировать" : "Разархивировать" }}
                 </li>
                 <!-- <li class="text-danger">Удалить</li> -->
               </ul>
@@ -380,6 +381,7 @@ import Cookies from "js-cookie";
 import posts from "@/components/axios/posts.js";
 import gets from "@/components/axios/get.js";
 import form_Data from "@/components/axios/formData.js";
+import { Exception } from "sass";
 export default {
   data() {
     return {
@@ -450,8 +452,8 @@ export default {
         visit_count: "",
         status: 1,
       };
-        this.images = []; // уже есть
-        this.imagesPost = [];
+      this.images = []; // уже есть
+      this.imagesPost = [];
     },
     addStatusDelay() {
       setTimeout(() => {
@@ -497,10 +499,19 @@ export default {
         token
       )
         .then((response) => {
-          this.isLoading = false;
-          this.messageSuccess = "Успешно архивирован !";
-          this.addStatus = true;
-          this.addStatusDelay();
+          if (response.status==200) {
+            this.isLoading = false;
+            this.messageSuccess = "Архивы успешно пересобраны !";
+            this.addStatus = true;
+            this.addStatusDelay();
+            this.getInfo(
+              "https://api.mubingym.com/api/services/admin/all",
+              "cursList",
+              2
+            );
+          }else{
+            this.error = response.message;
+          }
         })
         .catch((error) => {
           this.error = error;
@@ -697,11 +708,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-
-  .archived{
-    opacity: 0.3;
-  }
+.archived {
+  opacity: 0.3;
+}
 
 
 .menu-btn {

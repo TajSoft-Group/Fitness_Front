@@ -253,7 +253,9 @@ export default {
         })
     },
     async incomeWarehouse() {
-      let a  = "";
+      const token = Cookies.get("token");
+
+      let a = "";
       let b = "";
       if (this.formDataH.type == 'income') {
         a = "оприходовано !"
@@ -278,6 +280,10 @@ export default {
         response = await fetch(
           `https://api.mubingym.com/whh/create/${this.formDataH.type}`,
           {
+            headers: {
+              Authorization: `${token}`,
+              "Accept": "application/json"
+            },
             method: "POST",
             body: formData,
           }
@@ -303,6 +309,8 @@ export default {
               purchase: "",
               sale: "",
             }
+
+            this.activeTR="";
 
             this.incomeModal = false;
 
@@ -388,7 +396,7 @@ export default {
             {
               method: "PATCH", // или PATCH, если API принимает
               headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `${token}`,
                 "Content-Type": "application/json",
                 "Accept": "application/json"
               },
@@ -399,7 +407,7 @@ export default {
           message = "добавлен";
           response = await fetch("https://api.mubingym.com/wh/create", {
             method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `${token}` },
             body: formDataToSend,
           });
         }

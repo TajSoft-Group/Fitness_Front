@@ -49,9 +49,10 @@
         <div  @click="presentName('inputText')"  class=" label-name position-absolute">имя</div>
       </div> -->
       <div class="form position-relative">
-        <label for="phone">Описание*</label>
-        <textarea v-model="letter.message" type="text" placeholder="Введите текст" class="description pt-2"></textarea>
-        <div @click="presentName('descriptionTextarea')" class="label-name position-absolute">имя</div>
+        <label for="phone">Сообщение*</label>
+        <textarea ref="messageTextarea" v-model="letter.message" type="text" placeholder="Введите текст"
+          class="description pt-2"></textarea>
+        <div @click="presentName('messageTextarea')" class="label-name position-absolute">имя</div>
       </div>
 
       <hr>
@@ -413,7 +414,7 @@ export default {
       this.isLoading = true;
       this.loadingText = 'Добавление рассылки...';
       let type = 0;
-      this.user_id = "";
+      // this.user_id = "";
 
       if (this.push === "1" && this.sms === "1") {
         type = 2;
@@ -467,14 +468,34 @@ export default {
     shortText(text) {
       return text.substring(0, 20);
     },
-    presentName(ref) {
-      const refObject = this.$refs[ref]
-      const text = refObject.value
-      const cursorPosition = refObject.selectionStart;
-      const textBeforeCursor = text.substring(0, cursorPosition);
-      const textAfterCursor = text.substring(cursorPosition);
+    presentName(refName) {
+      // Get the textarea element using the ref name
+      const textarea = this.$refs[refName];
 
-      refObject.value = textBeforeCursor + ' $имя$ ' + textAfterCursor;
+      if (!textarea) {
+        console.error('Textarea ref not found:', refName);
+        return;
+      }
+
+      // Get current cursor position
+      const cursorPosition = textarea.selectionStart;
+
+      // Get current text value from v-model
+      const currentText = this.letter.message;
+
+      // Insert $имя$ at cursor position
+      const textBeforeCursor = currentText.substring(0, cursorPosition);
+      const textAfterCursor = currentText.substring(cursorPosition);
+
+      // Update the v-model
+      this.letter.message = textBeforeCursor + ' $имя$ ' + textAfterCursor;
+
+      // Focus and position cursor after inserted text
+      this.$nextTick(() => {
+        textarea.focus();
+        const newCursorPosition = cursorPosition + ' $имя$ '.length;
+        textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+      });
     },
     addStatusDelay(i) {
       setTimeout(() => {

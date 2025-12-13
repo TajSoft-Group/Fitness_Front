@@ -81,10 +81,10 @@
               <a class="add-money-btn">Пополнить счёт</a>
               <img src="@/assets/images/icons/add-money.png" height="22">
             </div>
-            <div @click="toggleModal('.user-block-modal')" class="user-configs-modal-item">
+            <!-- <div @click="toggleModal('.user-block-modal')" class="user-configs-modal-item">
               <a class="block-user-btn">Заблокировать</a>
               <img src="@/assets/images/icons/ban.png" height="22">
-            </div>
+            </div> -->
             <div @click="toggleModal('.user-delete-modal')" class="user-configs-modal-item red">
               <a class="delete-user-btn">Удалить</a>
               <img src="@/assets/images/icons/delete.png" height="22">
@@ -632,6 +632,7 @@ import Patch from "@/components/axios/Patch.js";
 import posts from "@/components/axios/posts.js";
 import deletes from "@/components/axios/deletes.js";
 import gets from "@/components/axios/get.js";
+import form_Data from "@/components/axios/formData";
 
 export default {
   name: 'UserPage',
@@ -711,7 +712,7 @@ export default {
       }
     },
     saveUser(){
-      Patch(`https://api.mubingym.com/api/user/update/${this.id}`, {...this.formData})
+      form_Data(`https://api.mubingym.com/api/user/update/${this.id}`, {...this.formData})
           .then(response => {
             this.UserConfigModal=false
             console.log(this.User)
