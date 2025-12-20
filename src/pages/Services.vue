@@ -171,9 +171,21 @@
           </div>
         </div>
 
-        <label for="visit_count">Количество посещений</label>
-        <input type="text" placeholder="Количество посещений" id="visit_count" v-model="formData.visit_count"
-          required />
+
+        <div class="d-flex">
+          <div class="me-3">
+            <label for="visit_count">Количество посещений</label>
+            <input type="text" placeholder="Количество посещений" id="visit_count" v-model="formData.visit_count"
+              required />
+          </div>
+          <div>
+            <label for="duration">Продолжительность (дней)</label>
+            <input type="text" placeholder="Пример: 30" id="duration" v-model="formData.duration"
+              required />
+          </div>
+        </div>
+
+
 
         <div class="d-flex justify-content-between add-user-buttons">
           <button @click="toggleModal('.add-curs')" class="dont" type="button">
@@ -245,10 +257,10 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-4" v-for="curs in cursList">
+        <!-- toggleModal('.pay-curs'), -->
+        <!-- (addCurs = curs), -->
         <div class="w-100 h-100 courses-card position-relative mb-3 p-0" :class="{ archived: curs.status === 0 }"
           @click="
-            toggleModal('.pay-curs'),
-            (addCurs = curs),
             (cursData.services_id = curs.id)">
           <!--          <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>-->
           <img class="w-100 h-100" :src="'https://api.mubingym.com/' + curs.img" alt="">
@@ -402,6 +414,7 @@ export default {
         price: "",
         discount: "",
         visit_count: "",
+        duration: "",
         status: 1,
       },
       images: [], // уже есть
@@ -450,6 +463,7 @@ export default {
         price: "",
         discount: "",
         visit_count: "",
+        duration: "",
         status: 1,
       };
       this.images = []; // уже есть
@@ -499,7 +513,7 @@ export default {
         token
       )
         .then((response) => {
-          if (response.status==200) {
+          if (response.status == 200) {
             this.isLoading = false;
             this.messageSuccess = "Архивы успешно пересобраны !";
             this.addStatus = true;
@@ -509,7 +523,7 @@ export default {
               "cursList",
               2
             );
-          }else{
+          } else {
             this.error = response.message;
           }
         })
@@ -594,12 +608,12 @@ export default {
         FormDataObj.append("price", this.formData.price);
         FormDataObj.append("discount", this.formData.discount);
         FormDataObj.append("visit_count", this.formData.visit_count);
+        FormDataObj.append("duration", this.formData.duration);
 
         // Добавляем изображения, если они есть
         if (this.imagesPost && this.imagesPost.length > 0) {
           this.imagesPost.forEach((file, index) => {
             FormDataObj.append(`img`, file); // ключ img[] для массива файлов
-
           });
         }
 
@@ -617,7 +631,7 @@ export default {
 
         if (response.status === 200) {
           this.addStatus = true;
-
+          this.error = false;
           // Обновляем данные
           await this.getInfo("https://api.mubingym.com/api/coach/all", "DataUsers", 1);
           await this.getInfo("https://api.mubingym.com/api/services/admin/all", "cursList", 2);

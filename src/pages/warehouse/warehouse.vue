@@ -722,10 +722,6 @@ export default {
                     <span class="color-yellow fw-bold">{{ item.count }} шт</span>
                   </div>
                   <div class="d-flex">
-                    <span class="me-3 fw-bold">В наличии:</span>
-                    <span class="color-yellow fw-bold">{{ item.balance }} шт</span>
-                  </div>
-                  <div class="d-flex">
                     <span class="me-3 fw-bold">Закуп. цена:</span>
                     <span class="color-yellow fw-bold">{{ item.purchase }} TJS</span>
                   </div>

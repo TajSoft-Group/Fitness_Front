@@ -46,6 +46,12 @@
                         <input required autocomplete="off" type="text" placeholder="Введите название курса" id="title" class="inp" v-model="formData.title">
                     </div>
 
+                    
+                    <div class="m-5">
+                        <label for="duration" class="m-0 mb-3">Продолжительность</label>
+                        <input required autocomplete="off" type="number" placeholder="Пример: 30" id="duration" class="inp" v-model="formData.duration">
+                    </div>
+
                     <div ref="imageScroll" class="form position-relative mt-3 mb-5 mx-5">
                         <!-- <label for="phone">Добавить фотографию</label> -->
                         <div class="img-card row p-3 flex-wrap">
@@ -271,6 +277,7 @@
         group : false,
         formData: {
           title:"",
+          duration: "",
           img:"",
           type_courses: "",
           coach_id: "27",
@@ -444,7 +451,7 @@
       RemoveExercises(idx, index) {
         this.formData.training_days[idx].exercises.splice(index, 1);
       },
-  
+   
       async submitForm() {
         // SETTING COURSETYPE
         if(this.individual && this.group)
@@ -586,7 +593,7 @@
     overflow-y: auto;
     scrollbar-width: none;
   }
-  input[type=text], input[type=text], textarea, .img-card, .cardBg{
+  input[type=text], input[type=number], textarea, .img-card, .cardBg{
     background-color: #1E1E20 !important;
   }
   .card-add-img{

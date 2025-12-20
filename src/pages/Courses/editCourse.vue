@@ -25,6 +25,12 @@
               v-model="formData.title">
           </div>
 
+          <div class="m-5">
+            <label for="duration" class="m-0 mb-3">Продолжительность</label>
+            <input required autocomplete="off" type="number" placeholder="Пример: 30" id="duration" class="inp"
+              v-model="formData.duration">
+          </div>
+
           <div ref="imageScroll" class="form position-relative mt-3 mb-5 mx-5">
             <!-- <label for="phone">Добавить фотографию</label> -->
             <div class="img-card row p-3 flex-wrap">
@@ -319,6 +325,7 @@ export default {
       group: false,
       formData: {
         title: "",
+        duration: "",
         img: "",
         type_courses: "",
         coach_id: "27",
@@ -578,6 +585,7 @@ export default {
 
       // === Required fields ===
       fd.append("title", this.formData.title.trim());
+      fd.append("duration", this.formData.duration);
       fd.append("description", this.formData.description || "");
       fd.append("price", this.formData.price);
       fd.append("discount", this.formData.discount || "0");
@@ -805,7 +813,7 @@ button.add-button {
 }
 
 input[type=text],
-input[type=text],
+input[type=number],
 textarea,
 .img-card,
 .cardBg {

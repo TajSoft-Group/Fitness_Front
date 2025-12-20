@@ -265,7 +265,7 @@
                       <div class="product-title mb-0">{{ item.title }}</div>
                       <div class="product-price color-yellow d-flex">
                         {{ (item.price_one - (item.price_one * item.discount) / 100) }} TJS
-                        <span class="product-old-price text-white"><s>{{ item.price_one }} c</s>
+                        <span class="product-old-price text-white" v-if="item.discount!=0"><s>{{ item.price_one }} c</s>
                         </span>
                       </div>
                     </div>
@@ -277,7 +277,7 @@
           <h4 class="pt-3 statistics-title">УСЛУГИ</h4>
           <div class="scroll-container">
             <div class="scroll-content">
-               <div class="row">
+              <div class="row">
                 <div class="col product-catalog">
                   <button class="py-2 me-3" :class="{
                     active: !activeServiceType,
@@ -313,11 +313,11 @@
               </div>
             </div>
           </div>
-                <h4 class="statistics-title">КУРСЫ</h4>
+          <h4 class="statistics-title">КУРСЫ</h4>
 
-           <div class="scroll-container">
+          <div class="scroll-container">
             <div class="scroll-content">
-               <div class="row">
+              <div class="row">
                 <div class="col product-catalog">
                   <button class="py-2 me-3" :class="{
                     active: !activeCurseType,
@@ -525,7 +525,7 @@ export default {
       },
       immediate: true,
     },
-    
+
     modal() {
       this.updateToggleModal();
     },
@@ -591,20 +591,19 @@ export default {
       }
     },
     isBarcode(barcode) {
-      const products = this.products || [];
-      const foundProduct = products.find(item => {
-        return item.barcode == barcode
-      });
+      const foundProduct = this.products.find(
+        item => String(item.barcode) === String(barcode)
+      );
 
       if (foundProduct) {
-        // Если товар найден — выбираем его
         this.selectItem(foundProduct);
-        console.log('✅ Найден товар:', foundProduct);
       } else {
-        // Если не найден — логируем предупреждение
-        console.warn('⚠️ Товар со штрихкодом', barcode, 'не найден');
+        this.success = false;
+        this.toastMessage = 'Товар по штрихкоду не найден';
+        this.toaster = true;
+        this.Delay("toaster", 2);
       }
-      // Очищаем поле поиска после обработки
+
       this.searchActive = "";
     },
     deleteProduct(index) {
@@ -643,17 +642,46 @@ export default {
       })
     },
     loadProducts() {
-      return gets(
-        `https://api.mubingym.com/product/all`
-      )
+      return gets(`https://api.mubingym.com/product/all/cash`)
         .then((response) => {
-          this.products = response.data;
-          this.products.forEach((value) => { value.type = 'product'; })
+          this.products = response.data.map(product => {
+            const basePrice = this.resolveProductPrice(product);
+            const discount = parseFloat(product.discount || 0);
+
+            const priceWithDiscount =
+              basePrice - (basePrice * discount) / 100;
+
+            return {
+              ...product,
+              type: 'product',
+
+              // 🔥 единый источник истины
+              price: basePrice,
+              price_discount: priceWithDiscount
+            };
+          });
+
+          // сразу отображаем
           this.productList = this.products;
         })
         .catch((error) => {
+          console.error('Ошибка загрузки товаров:', error);
           this.error = error;
         });
+    },
+    resolveProductPrice(product) {
+      // если есть история склада — берём последнюю цену
+      if (
+        Array.isArray(product.history_count) &&
+        product.history_count.length > 0
+      ) {
+        return parseFloat(
+          product.history_count[product.history_count.length - 1].price
+        );
+      }
+
+      // fallback
+      return parseFloat(product.price_one || 0);
     },
     getProductCategories() {
       gets("https://api.mubingym.com/category")
@@ -727,30 +755,31 @@ export default {
       }
     },
     selectItem(item) {
-      if (item.type && item.type == "user") {
+      // выбор пользователя
+      if (item.type === "user") {
         this.currentUser = item;
         this.clearSearch();
+        return;
       }
-      if (item.type && item.type !== "user") {
-        item.price = item.price || item.price_one || 0;
-        item.discount = item.discount || 0;
-        item.price_discount = item.price - (item.price / 100) * item.discount;
-        if (item.type === "service") {
-          item.title = item.name;
-        }
-        let checkFromCartIdx = this.cart.findIndex((val) => val.id === item.id && val.type === item.type);
 
-        if (checkFromCartIdx === -1) {
-          item.count = 1;
-          this.cart.push(item);
+      // товары / услуги / курсы
+      if (item.type !== "user") {
+        const index = this.cart.findIndex(
+          v => v.id === item.id && v.type === item.type
+        );
+
+        if (index === -1) {
+          this.cart.push({
+            ...item,
+            count: 1
+          });
         } else {
-          this.itemCnt('+', checkFromCartIdx);
+          this.itemCnt('+', index);
         }
-
       }
     },
     itemTotalPrice(count, price) {
-      return count * price;
+      return parseFloat(count) * parseFloat(price);
     },
     toggleModal(modalSelector) {
       this.modal = this.modal === "auto" ? "hidden" : "auto";
@@ -827,7 +856,7 @@ export default {
         }
       }
 
-      if(this.cart.length === 0){
+      if (this.cart.length === 0) {
         this.success = false;
         this.toaster = true;
         this.toastMessage = 'Корзина пуста!';
@@ -864,7 +893,7 @@ export default {
 
       try {
         const response = await posts(
-          "https://api.mubingym.com/api/order/create",
+          "https://api.mubingym.com/api/order/create/v2",
           this.FormData
         );
 
@@ -923,9 +952,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.base-modal{
+.base-modal {
   z-index: 1 !important;
 }
+
 .error-toast {
   content: "";
   width: 440px;

@@ -285,13 +285,13 @@ export default {
               <img class="m-4 img-width-40" v-show="success" src="@/assets/images/icons/check_add.png">
               <img class="m-4 img-width-40" v-show="!success" src="@/assets/images/icons/dell.png">
               <div class="result-true-content ">
-                <div class="result-true-title">{{ toastMessage }}</div>
+                <div class="result-true-title">{{ toastMessage }}</div> 
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div>  
   </section>
 
   <div @click="incomeModal = !incomeModal" v-if="incomeModal"
@@ -361,10 +361,6 @@ export default {
                     <div class="d-flex">
                       <span class="me-3 fw-bold">Кол-во:</span>
                       <span class="color-yellow fw-bold">{{ WarehouseItem.count }} шт</span>
-                    </div>
-                    <div class="d-flex">
-                      <span class="me-3 fw-bold">В наличии:</span>
-                      <span class="color-yellow fw-bold">{{ WarehouseItem.balance }} шт</span>
                     </div>
                     <div class="d-flex">
                       <span class="me-3 fw-bold">Закуп. цена:</span>

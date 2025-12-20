@@ -210,7 +210,7 @@
     </div>
   </div>
 
-  <div @click="toggleModal('.pay-curs')"
+  <!-- <div @click="toggleModal('.pay-curs')"
     class="add-user-modal pay-curs d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="content">
       <div class="title">Оплата курса</div>
@@ -235,33 +235,6 @@
               </div>
             </template>
           </VueSelect>
-          <!-- <input type="text" id="present" v-model="activeTR" />
-          <img
-            @click="presentMenu = !presentMenu"
-            :class="{ 'rotate-90': presentMenu }"
-            class="row-right-icon"
-            src="@/assets/images/icons/row-right.png"
-          />
-          <div
-            :class="{ 'd-block': presentMenu }"
-            class="menu-type-1 pt-4 px-4"
-          >
-            <h1>Все пользователи</h1>
-            <div
-              role="button"
-              v-for="treners in userData"
-              @click="
-                (cursData.user_id = treners.id),
-                  (presentMenu = false),
-                  (presentMenu = false),
-                  (activeTR = treners.name + ' ' + treners.surname)
-              "
-              class="statistics h-auto m-0 p-2"
-            >
-              <hr class="m-0 p-1" />
-              {{ treners.name + " " + treners.surname }}
-            </div>
-          </div> -->
         </div>
         <label for="title">количество</label>
         <input type="text" placeholder="Введите количество" id="title" v-model="cursData.count" />
@@ -273,14 +246,14 @@
         </div>
       </form>
     </div>
-  </div>
-
+  </div> -->
+  
   <div class="container pt-3">
     <div class="row">
       <!-- class="uslug-card uslug-card-responsive p-0 position-relative" -->
+        <!-- toggleModal('.pay-curs'), -->
+        <!-- (addCurs = curs), -->
       <div class="col-md-4" v-for="curs in cursList" @click="
-        toggleModal('.pay-curs'),
-        (addCurs = curs),
         (cursData.courses_id = curs.id)
         " >
         <div class="w-100 h-100 courses-card position-relative mb-3 p-0" :class="{ archived: curs.status == 0 }">
