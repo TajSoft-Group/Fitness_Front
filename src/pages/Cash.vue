@@ -212,7 +212,7 @@
                     <td>{{ item.price }} сом</td>
                     <td>- {{ item.discount }} %</td>
                     <td>
-                      {{ calculateFifoPrice(item.history_count, item.count).toFixed(2) }} сом
+                      {{ calculateFifoPrice(item.history_count, item.count, item.count_on_stock).toFixed(2) }} сом
                     </td>
                     <td>
                       <button @click="deleteProduct(index)" class="delete-product">
@@ -455,28 +455,32 @@ export default {
   computed: {
     totalPrice() {
       return this.cart.reduce((total, item) => {
+        // 🔥 ТОВАРЫ — FIFO
         if (item.type === 'product' && item.history_count?.length) {
           return total + this.calculateFifoPrice(
             item.history_count,
-            item.count || 1
+            item.count,            // сколько покупают
+            item.count_on_stock    // сколько реально на складе
           );
         }
 
-
-        // услуги / курсы — обычная цена
-        return total + (parseFloat(item.price_discount) * (item.count || 1));
+        // 🔹 услуги / курсы
+        return total + (Number(item.price_discount) * (item.count || 1));
       }, 0);
     },
     totalWithoutDiscount() {
       return this.cart.reduce((total, item) => {
+        // 🔥 ТОВАРЫ — FIFO (без скидки, т.к. скидки у партий нет)
         if (item.type === 'product' && item.history_count?.length) {
           return total + this.calculateFifoPrice(
             item.history_count,
-            item.count || 1
+            item.count,
+            item.count_on_stock
           );
         }
 
-        return total + (parseFloat(item.price) * (item.count || 1));
+        // 🔹 услуги / курсы
+        return total + (Number(item.price) * (item.count || 1));
       }, 0);
     }
   },
@@ -597,13 +601,18 @@ export default {
         this[target] = false
       }, t * 1000)
     },
-    itemCnt(action, item) {
+    itemCnt(action, index) {
+      const item = this.cart[index];
+
       if (action === '+') {
-        if (this.cart[item].count < 99)
-          this.cart[item].count += 1
+        if (item.type === 'product' && item.count >= item.count_on_stock) {
+          return; // нельзя больше, чем есть на складе
+        }
+        item.count += 1;
       } else {
-        if (this.cart[item].count > 1)
-          this.cart[item].count -= 1
+        if (item.count > 1) {
+          item.count -= 1;
+        }
       }
     },
     isBarcode(barcode) {
@@ -687,19 +696,17 @@ export default {
       // fallback если истории нет
       return parseFloat(product.price_one || 0);
     },
-    calculateFifoPrice(history, sellCount) {
+    calculateFifoPrice(history, sellCount, stockCount) {
+      const normalizedHistory = this.normalizeHistory(history, stockCount);
+
       let remaining = sellCount;
       let total = 0;
 
-      for (const batch of history) {
+      for (const batch of normalizedHistory) {
         if (remaining <= 0) break;
 
-        const available = Number(batch.count);
-        const price = Number(batch.price);
-
-        const used = Math.min(available, remaining);
-
-        total += used * price;
+        const used = Math.min(batch.count, remaining);
+        total += used * Number(batch.price);
         remaining -= used;
       }
 
@@ -729,6 +736,26 @@ export default {
       } else {
         return this.services.find(service => { console.log('services.name', service.name); console.log('setted name', name); return service.name === name });
       }
+    },
+    normalizeHistory(history, stockCount) {
+      let historySum = history.reduce((s, h) => s + Number(h.count), 0);
+      let toRemove = historySum - stockCount;
+
+      if (toRemove <= 0) {
+        return history.map(h => ({ ...h }));
+      }
+
+      const normalized = history.map(h => ({ ...h }));
+
+      for (const batch of normalized) {
+        if (toRemove <= 0) break;
+
+        const diff = Math.min(batch.count, toRemove);
+        batch.count -= diff;
+        toRemove -= diff;
+      }
+
+      return normalized.filter(b => b.count > 0);
     },
     loadService() {
       return gets(`https://api.mubingym.com/api/services/all`)
@@ -793,12 +820,16 @@ export default {
         if (index === -1) {
           this.cart.push({
             ...item,
-            count: 1
+            count: 1,
+
+            // 🔥 фиксируем остаток на складе в момент добавления
+            count_on_stock: item.count
           });
         } else {
           this.itemCnt('+', index);
         }
       }
+
     },
     itemTotalPrice(count, price) {
       return parseFloat(count) * parseFloat(price);
