@@ -164,7 +164,7 @@
           <div class="col-5 px-0">
             <div class="d-flex justify-content-between statistics bg-gray h-auto mt-3">
               <div>
-                <div class="fs-6">Цена:</div>
+                <div class="fs-6">Цена (от):</div>
                 <div class="fs-6">Бонус:</div>
                 <div class="h5">Итого:</div>
               </div>
@@ -184,7 +184,7 @@
                   <tr>
                     <th class="col-3 text-start"> &nbsp; Название</th>
                     <th>Кол-во (шт)</th>
-                    <th>Цена</th>
+                    <th>Цена (от)</th>
                     <th>Скидка</th>
                     <th class="total">Итого</th>
                     <th>&nbsp;</th>
@@ -212,8 +212,7 @@
                     <td>{{ item.price }} сом</td>
                     <td>- {{ item.discount }} %</td>
                     <td>
-                      {{ itemTotalPrice(item.count, item.price_discount).toFixed(2) }}
-                      сом<br />
+                      {{ calculateFifoPrice(item.history_count, item.count).toFixed(2) }} сом
                     </td>
                     <td>
                       <button @click="deleteProduct(index)" class="delete-product">
@@ -265,7 +264,8 @@
                       <div class="product-title mb-0">{{ item.title }}</div>
                       <div class="product-price color-yellow d-flex">
                         {{ (item.price_one - (item.price_one * item.discount) / 100) }} TJS
-                        <span class="product-old-price text-white" v-if="item.discount!=0"><s>{{ item.price_one }} c</s>
+                        <span class="product-old-price text-white" v-if="item.discount != 0"><s>{{ item.price_one }}
+                            c</s>
                         </span>
                       </div>
                     </div>
@@ -455,12 +455,28 @@ export default {
   computed: {
     totalPrice() {
       return this.cart.reduce((total, item) => {
-        return total + (parseFloat(item.price_discount) * parseFloat(item.count ? item.count : 1));
+        if (item.type === 'product' && item.history_count?.length) {
+          return total + this.calculateFifoPrice(
+            item.history_count,
+            item.count || 1
+          );
+        }
+
+
+        // услуги / курсы — обычная цена
+        return total + (parseFloat(item.price_discount) * (item.count || 1));
       }, 0);
     },
     totalWithoutDiscount() {
       return this.cart.reduce((total, item) => {
-        return total + (parseFloat(item.price) * parseFloat(item.count ? item.count : 1));
+        if (item.type === 'product' && item.history_count?.length) {
+          return total + this.calculateFifoPrice(
+            item.history_count,
+            item.count || 1
+          );
+        }
+
+        return total + (parseFloat(item.price) * (item.count || 1));
       }, 0);
     }
   },
@@ -648,40 +664,46 @@ export default {
             const basePrice = this.resolveProductPrice(product);
             const discount = parseFloat(product.discount || 0);
 
-            const priceWithDiscount =
-              basePrice - (basePrice * discount) / 100;
-
             return {
               ...product,
               type: 'product',
-
-              // 🔥 единый источник истины
               price: basePrice,
-              price_discount: priceWithDiscount
+              price_discount: basePrice - (basePrice * discount) / 100
             };
           });
 
-          // сразу отображаем
           this.productList = this.products;
-        })
-        .catch((error) => {
-          console.error('Ошибка загрузки товаров:', error);
-          this.error = error;
         });
     },
     resolveProductPrice(product) {
-      // если есть история склада — берём последнюю цену
       if (
         Array.isArray(product.history_count) &&
         product.history_count.length > 0
       ) {
-        return parseFloat(
-          product.history_count[product.history_count.length - 1].price
-        );
+        // FIFO — продаём по самой старой цене
+        return parseFloat(product.history_count[0].price);
       }
 
-      // fallback
+      // fallback если истории нет
       return parseFloat(product.price_one || 0);
+    },
+    calculateFifoPrice(history, sellCount) {
+      let remaining = sellCount;
+      let total = 0;
+
+      for (const batch of history) {
+        if (remaining <= 0) break;
+
+        const available = Number(batch.count);
+        const price = Number(batch.price);
+
+        const used = Math.min(available, remaining);
+
+        total += used * price;
+        remaining -= used;
+      }
+
+      return total;
     },
     getProductCategories() {
       gets("https://api.mubingym.com/category")

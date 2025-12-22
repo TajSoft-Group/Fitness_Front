@@ -158,7 +158,7 @@ export default {
           <div class="d-flex justify-content-between">
             <div class="card-left">
               <div class="card-title">Пользователи IOS</div>
-              <div class="card-quantity">{{ statistic.new_users }}</div>
+              <div class="card-quantity">{{ statistic.user_mobile_ios_count }}</div>
             </div>
           </div>
         </div>
@@ -168,7 +168,7 @@ export default {
           <div class="d-flex justify-content-between">
             <div class="card-left">
               <div class="card-title">Пользователи Android</div>
-              <div class="card-quantity">{{ statistic.new_users }}</div>
+              <div class="card-quantity">{{ statistic.user_mobile_android_count }}</div>
             </div>
           </div>
         </div>
