@@ -41,7 +41,7 @@
           <div class="left d-flex align-items-center">
             <div class="user-photo">
               <img src="@/assets/images/avatar-user-empty.png" v-if="!user.img">
-              <img :src="'https://api.mubingym.com/'+user.img" v-else="">
+              <img :src="'https://missfitnessbackend.tajsoft.tj/'+user.img" v-else="">
             </div>
             <div class="user-info">
               <div class="full-name">{{user.name+' '+user.surname}}</div>
@@ -693,15 +693,15 @@ export default {
     },
     getInfo() {
       this.isLoading = true;
-      get(`https://api.mubingym.com/api/user/${this.id}`,)
+      get(`https://missfitnessbackend.tajsoft.tj/api/user/${this.id}`,)
           .then(response => {
             this.isLoading = false;
             this.User = response.data;
-                get(`https://api.mubingym.com/api/transaction_get/${this.User.user.cards[0].id}`,)
+                get(`https://missfitnessbackend.tajsoft.tj/api/transaction_get/${this.User.user.cards[0].id}`,)
                 .then(response => {
                   this.mainCardT = response.data;
                 })
-                get(`https://api.mubingym.com/api/transaction_get/${this.User.user.cards[1].id}`,)
+                get(`https://missfitnessbackend.tajsoft.tj/api/transaction_get/${this.User.user.cards[1].id}`,)
                 .then(response => {
                   this.secondCardT = response.data;
                 })
@@ -724,7 +724,7 @@ export default {
     },
     saveUser(){
       this.isLoading = true;
-      form_Data(`https://api.mubingym.com/api/user/update/${this.id}`, {...this.formData})
+      form_Data(`https://missfitnessbackend.tajsoft.tj/api/user/update/${this.id}`, {...this.formData})
           .then(response => {
             this.isLoading = false;
             this.UserConfigModal=false
@@ -736,18 +736,18 @@ export default {
           });
     },
     disableUser(){
-      gets(`https://api.mubingym.com/user/disable/${this.id}`)
+      gets(`https://missfitnessbackend.tajsoft.tj/user/disable/${this.id}`)
           .then(response => {
               console.log(response);
           })
     },
     deleteUser(){
-      deletes(`https://api.mubingym.com/user/delete/${this.id}`)
+      deletes(`https://missfitnessbackend.tajsoft.tj/user/delete/${this.id}`)
     },
     payment(payCash){
       this.isLoading = true;
       const pay={ owner_id: this.id, payment: payCash, payment_type: "refill"}
-      posts('https://api.mubingym.com/api/payment', pay)
+      posts('https://missfitnessbackend.tajsoft.tj/api/payment', pay)
           .then(response => {
             this.payed = true;
             this.isLoading = false;
