@@ -212,8 +212,19 @@
                     <td>{{ item.price }} сом</td>
                     <td>- {{ item.discount }} %</td>
                     <td>
-                      {{ calculateFifoPrice(item.history_count, item.count, item.count_on_stock).toFixed(2) }} сом
+                      <span v-if="item.type === 'product'">
+                        {{ calculateFifoPrice(
+                          item.history_count,
+                          item.count,
+                        item.count_on_stock
+                        ).toFixed(2) }} сом
+                      </span>
+
+                      <span v-else>
+                        {{ ((item.discount_price != undefined  ? item.discount_price : item.price) * (item.count || 1)).toFixed(2) }} сом
+                      </span>
                     </td>
+
                     <td>
                       <button @click="deleteProduct(index)" class="delete-product">
                         <img src="@/assets/images/icons/close-icon.png" alt="close" />
@@ -737,7 +748,7 @@ export default {
         return this.services.find(service => { console.log('services.name', service.name); console.log('setted name', name); return service.name === name });
       }
     },
-    normalizeHistory(history, stockCount) {
+    normalizeHistory(history, stockCount = 0) {
       let historySum = history.reduce((s, h) => s + Number(h.count), 0);
       let toRemove = historySum - stockCount;
 
@@ -823,7 +834,7 @@ export default {
             count: 1,
 
             // 🔥 фиксируем остаток на складе в момент добавления
-            count_on_stock: item.count
+            count_on_stock: item.count ?? 0
           });
         } else {
           this.itemCnt('+', index);
