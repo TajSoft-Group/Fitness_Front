@@ -1054,7 +1054,11 @@ export default {
 
 <style lang="scss" scoped>
 .base-modal {
-  z-index: 1 !important;
+  z-index: 2 !important;
+}
+
+.overlay{
+  z-index: 99 !important;
 }
 
 .error-toast {
