@@ -95,7 +95,7 @@ export default {
     </div>
   </div>
 
-  <button @click="playOnce(), openDoor()" class="turnstile-btn d-flex align-items-center gap-2 mt-3 bg-yellow rounded-3 px-3 py-2 position-absolute end-0 bottom-0 m-4">
+  <button @click="playOnce(), openDoor()" class="turnstile-btn d-flex align-items-center gap-2 mt-3 bg-yellow rounded-3 px-3 py-2 position-fixed end-0 bottom-0 m-4">
     <div ref="lottie" class="lottie-icon"></div>
     Открыть турникет
   </button>

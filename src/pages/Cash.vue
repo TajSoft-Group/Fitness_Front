@@ -212,19 +212,20 @@
                     <td>{{ item.price }} сом</td>
                     <td>- {{ item.discount }} %</td>
                     <td>
+                      <!-- PRODUCT -->
                       <span v-if="item.type === 'product'">
                         {{ calculateFifoPrice(
                           item.history_count,
                           item.count,
-                        item.count_on_stock
+                          item.count_on_stock
                         ).toFixed(2) }} сом
                       </span>
 
+                      <!-- SERVICE / COURSE -->
                       <span v-else>
-                        {{ ((item.discount_price != undefined  ? item.discount_price : item.price) * (item.count || 1)).toFixed(2) }} сом
+                        {{ (Number(item.discount_price) * (item.count || 1)).toFixed(2) }} сом
                       </span>
                     </td>
-
                     <td>
                       <button @click="deleteProduct(index)" class="delete-product">
                         <img src="@/assets/images/icons/close-icon.png" alt="close" />
@@ -466,32 +467,68 @@ export default {
   computed: {
     totalPrice() {
       return this.cart.reduce((total, item) => {
-        // 🔥 ТОВАРЫ — FIFO
-        if (item.type === 'product' && item.history_count?.length) {
-          return total + this.calculateFifoPrice(
-            item.history_count,
-            item.count,            // сколько покупают
-            item.count_on_stock    // сколько реально на складе
-          );
-        }
 
-        // 🔹 услуги / курсы
-        return total + (Number(item.price_discount) * (item.count || 1));
-      }, 0);
-    },
-    totalWithoutDiscount() {
-      return this.cart.reduce((total, item) => {
-        // 🔥 ТОВАРЫ — FIFO (без скидки, т.к. скидки у партий нет)
-        if (item.type === 'product' && item.history_count?.length) {
-          return total + this.calculateFifoPrice(
+        // 🔥 ТОВАР — FIFO
+        if (item.type === 'product') {
+          const sum = this.calculateFifoPrice(
             item.history_count,
             item.count,
             item.count_on_stock
           );
+
+          // 🔒 ФИКС №4
+          if (Number.isNaN(sum)) {
+            console.warn('NaN в product FIFO:', item);
+            return total;
+          }
+
+          return total + sum;
         }
 
-        // 🔹 услуги / курсы
-        return total + (Number(item.price) * (item.count || 1));
+        // 🔹 СЕРВИС / КУРС
+        const price = Number(item.discount_price);
+        const count = Number(item.count || 1);
+        const sum = price * count;
+
+        // 🔒 ФИКС №4
+        if (Number.isNaN(sum)) {
+          console.warn('NaN в service/course:', item);
+          return total;
+        }
+
+        return total + sum;
+
+      }, 0);
+    },
+    totalWithoutDiscount() {
+      return this.cart.reduce((total, item) => {
+
+        if (item.type === 'product') {
+          const sum = this.calculateFifoPrice(
+            item.history_count,
+            item.count,
+            item.count_on_stock
+          );
+
+          // 🔒 ФИКС №4
+          if (Number.isNaN(sum)) {
+            console.warn('NaN в product FIFO:', item);
+            return total;
+          }
+
+          return total + sum;
+        }
+
+        const sum = Number(item.discount_price) * (item.count || 1);
+
+        // 🔒 ФИКС №4
+        if (Number.isNaN(sum)) {
+          console.warn('NaN в service/course:', item);
+          return total;
+        }
+
+        return total + sum;
+
       }, 0);
     }
   },
