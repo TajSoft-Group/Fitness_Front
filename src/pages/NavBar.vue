@@ -134,5 +134,12 @@ export default {
   width: 40px;
   height: 40px;
 }
+.hidden-hover{
+  padding: 20px 0 20px 0 !important;
+}
+.hidden-hover li a {
+  padding: 15px 20px !important;
+
+}
 
 </style>
