@@ -9,7 +9,7 @@ export default {
       if (!this.anim) return
       this.anim.goToAndPlay(0, true)
     },
-    openDoor(){
+    openDoor() {
       posts('https://api.mubingym.com/post/door')
         .then((response) => {
           console.log('Турникет открыт:', response.data);
@@ -30,7 +30,7 @@ export default {
       this.ActiveMenu = to.fullPath;
     },
   },
-   mounted() {
+  mounted() {
     this.anim = lottie.loadAnimation({
       container: this.$refs.lottie,
       renderer: 'svg',
@@ -75,6 +75,8 @@ export default {
                   </li>
                   <li :class="{ active: ActiveMenu === '/newsletters' }"><router-link
                       to="/newsletters">Рассылки</router-link></li>
+                  <li :class="{ active: ActiveMenu === '/report' }"><router-link
+                      to="/report">Отчет</router-link></li>
                 </ul>
               </li>
 
@@ -95,7 +97,8 @@ export default {
     </div>
   </div>
 
-  <button @click="playOnce(), openDoor()" class="turnstile-btn d-flex align-items-center gap-2 mt-3 bg-yellow rounded-3 px-3 py-2 position-fixed end-0 bottom-0 m-4">
+  <button @click="playOnce(), openDoor()"
+    class="turnstile-btn d-flex align-items-center gap-2 mt-3 bg-yellow rounded-3 px-3 py-2 position-fixed end-0 bottom-0 m-4">
     <div ref="lottie" class="lottie-icon"></div>
     Открыть турникет
   </button>
@@ -134,12 +137,13 @@ export default {
   width: 40px;
   height: 40px;
 }
-.hidden-hover{
+
+.hidden-hover {
   padding: 10px 0 10px 0 !important;
 }
+
 .hidden-hover li a {
   padding: 15px 10px !important;
   margin: 10px;
 }
-
 </style>

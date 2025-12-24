@@ -1,5 +1,8 @@
 import Cookies from 'js-cookie';
-import { createRouter, createWebHistory } from 'vue-router';
+import {
+  createRouter,
+  createWebHistory
+} from 'vue-router';
 import analytics from "@/pages/analytics/analytics.vue";
 import Subscription from '@/pages/Subscription.vue'
 import Services from "@/pages/Services.vue";
@@ -16,6 +19,7 @@ import TrainerPage from "@/pages/personal/TrainerPage.vue";
 import product from "@/pages/products/product.vue";
 import MobileInformation from "@/pages/MobileInformation.vue";
 import login from "@/pages/login.vue";
+import report from "@/pages/report/report.vue";
 import Lockers from "@/pages/lockers.vue";
 import finance from "@/pages/Finance/finance.vue";
 import Cash from "@/pages/Cash.vue";
@@ -27,8 +31,7 @@ import warehousePage from "@/pages/warehouse/warehousePage.vue";
 import deleteAccount from "@/pages/deleteAccount.vue"
 import EditCourse from '@/pages/Courses/editCourse.vue';
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'analytics',
     component: analytics
@@ -62,7 +65,7 @@ const routes = [
     path: '/user-page/:id',
     name: 'UserPage',
     component: UserPages,
-    props:true
+    props: true
   },
   {
     path: '/user-locked',
@@ -93,7 +96,7 @@ const routes = [
     path: '/trainer-page/:id',
     name: 'TrainerPage',
     component: TrainerPage,
-    props:true
+    props: true
   },
   {
     path: '/product',
@@ -119,6 +122,11 @@ const routes = [
     path: '/finance',
     name: 'finance',
     component: finance
+  }, 
+  {
+    path: '/report',
+    name: 'report',
+    component: report
   },
   {
     path: '/cash',
@@ -134,7 +142,7 @@ const routes = [
     path: '/warehouseItem/:id',
     name: 'warehousePage',
     component: warehousePage,
-    props:true
+    props: true
   },
   {
     path: '/courses',
@@ -165,7 +173,8 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(
+    import.meta.env.BASE_URL),
   routes
 });
 

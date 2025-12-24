@@ -45,6 +45,11 @@
                 v-model="type">
               <label for="bonus" class="text-white">Бонусами</label>
             </div>
+            <div class="form-recipients">
+              <input autocomplete="off" class="form-check-input" type="radio" id="discount" name="type" value="discount"
+                v-model="type">
+              <label for="discount" class="text-white">Скидка</label>
+            </div>
           </div>
           <div v-if="type === 'cash'">
             <label for="title">Оплата наличными</label>
@@ -410,6 +415,7 @@ import Cookies from "js-cookie";
 export default {
   data() {
     return {
+      discountCard: null,
       isLoading: false,
       loadingText: "Идет загрузка...",
       toastMessage: 'Транзакция успешно проведена',
@@ -466,39 +472,32 @@ export default {
   },
   computed: {
     totalPrice() {
-      return this.cart.reduce((total, item) => {
+      let total = this.cart.reduce((sum, item) => {
 
-        // 🔥 ТОВАР — FIFO
         if (item.type === 'product') {
-          const sum = this.calculateFifoPrice(
+          const v = this.calculateFifoPrice(
             item.history_count,
             item.count,
             item.count_on_stock
           );
-
-          // 🔒 ФИКС №4
-          if (Number.isNaN(sum)) {
-            console.warn('NaN в product FIFO:', item);
-            return total;
-          }
-
-          return total + sum;
+          return Number.isNaN(v) ? sum : sum + v;
         }
 
-        // 🔹 СЕРВИС / КУРС
-        const price = Number(item.discount_price);
+        // service / course
+        const price = Number(item.discount_price ?? item.price);
         const count = Number(item.count || 1);
-        const sum = price * count;
+        const v = price * count;
 
-        // 🔒 ФИКС №4
-        if (Number.isNaN(sum)) {
-          console.warn('NaN в service/course:', item);
-          return total;
-        }
-
-        return total + sum;
+        return Number.isNaN(v) ? sum : sum + v;
 
       }, 0);
+
+      // 🔥 ПРИМЕНЯЕМ СКИДКУ
+      if (this.type === 'discount' && this.discountCard) {
+        total -= (total * Number(this.discountCard)) / 100;
+      }
+
+      return Number(total.toFixed(2));
     },
     totalWithoutDiscount() {
       return this.cart.reduce((total, item) => {
@@ -510,24 +509,15 @@ export default {
             item.count_on_stock
           );
 
-          // 🔒 ФИКС №4
-          if (Number.isNaN(sum)) {
-            console.warn('NaN в product FIFO:', item);
-            return total;
-          }
-
-          return total + sum;
+          return Number.isNaN(sum) ? total : total + sum;
         }
 
-        const sum = Number(item.discount_price) * (item.count || 1);
+        // service / course — БЕЗ discount_price
+        const price = Number(item.price);
+        const count = Number(item.count || 1);
+        const sum = price * count;
 
-        // 🔒 ФИКС №4
-        if (Number.isNaN(sum)) {
-          console.warn('NaN в service/course:', item);
-          return total;
-        }
-
-        return total + sum;
+        return Number.isNaN(sum) ? total : total + sum;
 
       }, 0);
     }
@@ -609,6 +599,7 @@ export default {
           this.loadService(),
           this.loadCourses(),
           this.loadProducts(),
+          this.loadDiscount(),
           this.getCourseTypes(),
           this.getProductCategories(),
           this.getServiceTypes(),
@@ -653,9 +644,19 @@ export default {
       const item = this.cart[index];
 
       if (action === '+') {
-        if (item.type === 'product' && item.count >= item.count_on_stock) {
-          return; // нельзя больше, чем есть на складе
+
+        // 🔴 ПРОВЕРКА ОСТАТКА
+        if (
+          item.type === 'product' &&
+          item.count >= item.count_on_stock
+        ) {
+          this.success = false;
+          this.toastMessage = 'Недостаточно товара на складе';
+          this.toaster = true;
+          this.Delay('toaster', 2);
+          return;
         }
+
         item.count += 1;
       } else {
         if (item.count > 1) {
@@ -713,6 +714,12 @@ export default {
       return this.products.filter((value) => {
         return value.category === id;
       })
+    },
+    loadDiscount() {
+      return gets(`https://api.mubingym.com/api/discountCards`)
+        .then((response) => {
+          this.discountCard = response.data.percent;
+        });
     },
     loadProducts() {
       return gets(`https://api.mubingym.com/product/all/cash`)
@@ -859,25 +866,44 @@ export default {
         return;
       }
 
-      // товары / услуги / курсы
-      if (item.type !== "user") {
-        const index = this.cart.findIndex(
-          v => v.id === item.id && v.type === item.type
-        );
+      // 🔴 ПРОВЕРКИ ТОЛЬКО ДЛЯ ПРОДУКТОВ
+      if (item.type === 'product') {
 
-        if (index === -1) {
-          this.cart.push({
-            ...item,
-            count: 1,
+        // ❌ нет истории
+        if (!Array.isArray(item.history_count) || item.history_count.length === 0) {
+          this.success = false;
+          this.toastMessage = 'У товара нет истории поступлений';
+          this.toaster = true;
+          this.Delay('toaster', 2);
+          return;
+        }
 
-            // 🔥 фиксируем остаток на складе в момент добавления
-            count_on_stock: item.count ?? 0
-          });
-        } else {
-          this.itemCnt('+', index);
+        // ❌ нет остатка
+        if (!item.count || item.count <= 0) {
+          this.success = false;
+          this.toastMessage = 'Товара нет в наличии';
+          this.toaster = true;
+          this.Delay('toaster', 2);
+          return;
         }
       }
 
+      // товары / услуги / курсы
+      const index = this.cart.findIndex(
+        v => v.id === item.id && v.type === item.type
+      );
+
+      if (index === -1) {
+        this.cart.push({
+          ...item,
+          count: 1,
+
+          // фиксируем остаток
+          count_on_stock: item.count ?? 0
+        });
+      } else {
+        this.itemCnt('+', index);
+      }
     },
     itemTotalPrice(count, price) {
       return parseFloat(count) * parseFloat(price);
@@ -917,7 +943,7 @@ export default {
       }
 
 
-      if (this.type != 'cash' && this.FormData.user_id == null) {
+      if (this.type != 'cash' && this.type!='discount' && this.FormData.user_id == null) {
         this.success = false;
         this.toaster = true;
         this.toastMessage = 'Выберите пользователя чтобы оплатить картой/баллами';
@@ -956,6 +982,29 @@ export default {
           return;
         }
       }
+
+
+      if (this.type === "discount") {
+        this.FormData.payment_type = "discount";
+      }
+
+      // 🔴 ВАЛИДАЦИЯ ПРОДУКТОВ ПЕРЕД ОПЛАТОЙ
+      const invalidProduct = this.cart.find(item =>
+        item.type === 'product' && (
+          !Array.isArray(item.history_count) ||
+          item.history_count.length === 0 ||
+          item.count <= 0
+        )
+      );
+
+      if (invalidProduct) {
+        this.success = false;
+        this.toastMessage = 'В корзине есть товар без остатка или истории';
+        this.toaster = true;
+        this.Delay('toaster', 2);
+        return;
+      }
+
 
       if (this.cart.length === 0) {
         this.success = false;
@@ -1057,7 +1106,7 @@ export default {
   z-index: 2 !important;
 }
 
-.overlay{
+.overlay {
   z-index: 99 !important;
 }
 

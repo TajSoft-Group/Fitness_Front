@@ -707,6 +707,7 @@ import posts from "@/components/axios/posts.js";
 import deletes from "@/components/axios/deletes.js";
 import gets from "@/components/axios/get.js";
 import form_Data from "@/components/axios/formData";
+import Cookies from "js-cookie";
 
 export default {
   name: 'UserPage',
@@ -838,7 +839,8 @@ export default {
     payment(payCash) {
       this.isLoading = true;
       const pay = { owner_id: this.id, payment: payCash, payment_type: "refill" }
-      posts('https://api.mubingym.com/api/payment', pay)
+      let t = Cookies.get('token');
+      posts('https://api.mubingym.com/api/payment', pay, t)
         .then(response => {
           this.payed = true;
           this.isLoading = false;
