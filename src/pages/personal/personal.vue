@@ -164,7 +164,7 @@
                   <router-link :to="{ name: 'TrainerPage', params: { id: personal.id } }"
                     class="d-flex col-8 align-items-center">
                     <div class="personal-img my-3" :style="{ borderColor: personal.color }">
-                      <img :src="'https://missfitnessbackend.tajsoft.tj' +
+                      <img :src="'https://api.mubingym.com/' +
                         personal.avatar
                         " alt="" />
                     </div>
@@ -301,7 +301,7 @@ export default {
       if (!confirm("Вы уверены, что хотите удалить этого тренера?")) return;
 
       try {
-        const response = await deletes(`https://missfitnessbackend.tajsoft.tjapi/coach/delete/${id}`);
+        const response = await deletes(`https://api.mubingym.com/api/coach/delete/${id}`);
 
         // Если нужно проверить статус:
         if (response.status === 200) {
@@ -363,7 +363,7 @@ export default {
     },
     getInfo() {
       const token = Cookies.get("token");
-      gets("https://missfitnessbackend.tajsoft.tjapi/coach/all", token)
+      gets("https://api.mubingym.com/api/coach/all", token)
         .then((response) => {
           this.DataUsers = response.data.data;
           this.filteredUsers = this.DataUsers;
@@ -475,7 +475,7 @@ export default {
         // Если ваш form_Data — это helper, который принимает FormData — используем его.
         // Иначе замените на axios.post с заголовком multipart/form-data
         const response = await form_Data(
-          `https://missfitnessbackend.tajsoft.tjapi/coach/update/${this.editedCoach.id}`,
+          `https://api.mubingym.com/api/coach/update/${this.editedCoach.id}`,
           fd
         )
           .then(() => {
@@ -520,7 +520,7 @@ export default {
         const fd = this.buildCoachFormData(payload);
 
         const response = await form_Data(
-          "https://missfitnessbackend.tajsoft.tjcoach/create",
+          "https://api.mubingym.com/coach/create",
           fd
         );
 

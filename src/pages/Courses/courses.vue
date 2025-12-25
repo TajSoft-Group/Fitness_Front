@@ -172,7 +172,7 @@
               <div class="user-list-item" :class="{ active: activeIndex === index }"
                 @click.self="toggleCollapse(index)">
                 <div class="user-list-item-img">
-                  <img v-if="trener.img" :src="`https://missfitnessbackend.tajsoft.tj${trener.img}`" alt="" />
+                  <img v-if="trener.img" :src="`https://api.mubingym.com/${trener.img}`" alt="" />
                   <img v-else src="@/assets/images/user-photo.png" alt="" />
                 </div>
                 {{ trener.name + " " + trener.surname }}
@@ -264,7 +264,7 @@
           </div>
 
           <!-- Фото -->
-          <img class="w-100 h-100" :src="'https://missfitnessbackend.tajsoft.tj' + curs.img" alt="">
+          <img class="w-100 h-100" :src="'https://api.mubingym.com/' + curs.img" alt="">
 
           <!-- Текст -->
           <div class="at-bottom position-absolute bottom-0 ps-4">
@@ -321,7 +321,7 @@
                 -{{ curs.discount + "%" }}
               </div>
               <img
-                :src="'https://missfitnessbackend.tajsoft.tj' + curs.img"
+                :src="'https://api.mubingym.com/' + curs.img"
               />
               <div class="product-info">
                 <div class="product-title mb-2 border-color-yellow">
@@ -543,9 +543,9 @@ export default {
 
       try {
         const [coursesRes, coachesRes, usersRes] = await Promise.all([
-          gets("https://missfitnessbackend.tajsoft.tjapi/courses/all/admin", token),
-          gets("https://missfitnessbackend.tajsoft.tjapi/coach/all", token),
-          posts("https://missfitnessbackend.tajsoft.tjusers", { form: "0", to: "0" }, token),
+          gets("https://api.mubingym.com/api/courses/all/admin", token),
+          gets("https://api.mubingym.com/api/coach/all", token),
+          posts("https://api.mubingym.com/users", { form: "0", to: "0" }, token),
         ]);
 
         this.cursList = coursesRes.data;
@@ -589,7 +589,7 @@ export default {
 
       try {
         const token = Cookies.get("token");
-        const res = await posts("https://missfitnessbackend.tajsoft.tjenroll/courses", this.cursData, token);
+        const res = await posts("https://api.mubingym.com/enroll/courses", this.cursData, token);
         this.showSuccess(res.data.message || "Клиент успешно записан!");
         this.payModalVisible = false;
         await this.loadAllData();
@@ -607,7 +607,7 @@ export default {
 
       try {
         const token = Cookies.get("token");
-        await posts(`https://missfitnessbackend.tajsoft.tjcourses/status/${id}`, {}, token);
+        await posts(`https://api.mubingym.com/courses/status/${id}`, {}, token);
         this.showSuccess("Архивы успешно пересобраны");
         await this.loadAllData();
       } catch (err) {
@@ -656,7 +656,7 @@ export default {
       this.loadingText = "Создание курса...";
 
       try {
-        await form_Data("https://missfitnessbackend.tajsoft.tjapi/courses/create", fd);
+        await form_Data("https://api.mubingym.com/api/courses/create", fd);
         this.showSuccess("Курс успешно создан!");
         this.addCourseModalVisible = false;
         this.resetForm();

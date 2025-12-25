@@ -126,7 +126,7 @@ export default defineComponent({
           startDate = oneMonthBack.toISOString().split('T')[0];
           endDate = currentDate.toISOString().split('T')[0];
         }
-        const response = await posts("https://missfitnessbackend.tajsoft.tjfinance_chart", {
+        const response = await posts("https://api.mubingym.com/finance_chart", {
           start_date: startDate,
           end_date: endDate
         });

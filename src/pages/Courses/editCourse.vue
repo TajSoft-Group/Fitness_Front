@@ -35,7 +35,7 @@
             <!-- <label for="phone">Добавить фотографию</label> -->
             <div class="img-card row p-3 flex-wrap">
               <div class="card-add-img m-2">
-                <img :src="'https://missfitnessbackend.tajsoft.tj' + formData.img" class="card-img-top" alt="Product Image">
+                <img :src="'https://api.mubingym.com/' + formData.img" class="card-img-top" alt="Product Image">
                 <button type="button" class="btn-close position-absolute top-0 end-0"
                   @click="removeImage(index, true)"></button>
               </div>
@@ -127,7 +127,7 @@
                     <div class="img-card row p-3 flex-wrap">
                       <div v-for="(image, imgIndex) in formData.training_days[index].images" :key="'old-' + imgIndex"
                         class="card-add-img m-2 position-relative">
-                        <img :src="'https://missfitnessbackend.tajsoft.tj' + image" class="card-img-top" alt="Product Image" />
+                        <img :src="'https://api.mubingym.com/' + image" class="card-img-top" alt="Product Image" />
                         <button type="button" class="btn-close position-absolute top-0 end-0"
                           @click="removeImageDays(imgIndex, index)"></button>
                       </div>
@@ -458,7 +458,7 @@ export default {
       }
     },
     coursesFn() {
-      posts('https://missfitnessbackend.tajsoft.tjenroll/courses', { ...this.cursData })
+      posts('https://api.mubingym.com/enroll/courses', { ...this.cursData })
         .then(response => {
           this.Delay('loading', 1)
           console.log(this.cursData)
@@ -620,8 +620,8 @@ export default {
 
       // === Correct URL ===
       const url = isEditMode
-        ? `https://missfitnessbackend.tajsoft.tjapi/courses/update/${courseId}`
-        : `https://missfitnessbackend.tajsoft.tjapi/courses/create`;
+        ? `https://api.mubingym.com/api/courses/update/${courseId}`
+        : `https://api.mubingym.com/api/courses/create`;
 
       try {
         const response = await fetch(url, {
@@ -702,8 +702,8 @@ export default {
 
         // Определяем URL: обновление или создание
         const url = day.id
-          ? "https://missfitnessbackend.tajsoft.tjapi/training/update"
-          : "https://missfitnessbackend.tajsoft.tjapi/training/create";
+          ? "https://api.mubingym.com/api/training/update"
+          : "https://api.mubingym.com/api/training/create";
 
         // Отправляем запрос
         const response = await fetch(url, {
@@ -764,8 +764,8 @@ export default {
     },
   },
   mounted() {
-    this.getInfo('https://missfitnessbackend.tajsoft.tjapi/coach/all', 'DataUsers', 1)
-    this.getInfo(`https://missfitnessbackend.tajsoft.tjapi/courses/${this.$route.params.id}`, 'formData', 2)
+    this.getInfo('https://api.mubingym.com/api/coach/all', 'DataUsers', 1)
+    this.getInfo(`https://api.mubingym.com/api/courses/${this.$route.params.id}`, 'formData', 2)
     // this.getInfoUsers()
   },
   watch: {

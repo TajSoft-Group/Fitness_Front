@@ -279,7 +279,7 @@ export default {
 
       if (!this.dateFrom || !this.dateTo) return;
 
-      const baseURL = 'https://missfitnessbackend.tajsoft.tjapi';
+      const baseURL = 'https://api.mubingym.com/api';
       const token = localStorage.getItem('token');
 
       this.isLoading = true;

@@ -172,7 +172,7 @@ export default {
     loadData() {
       const token = Cookies.get("token");
 
-      gets('https://missfitnessbackend.tajsoft.tjapi/transactions', token)
+      gets('https://api.mubingym.com/api/transactions', token)
         .then((response) => {
           const normalized = {};
 
