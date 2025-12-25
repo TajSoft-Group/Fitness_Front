@@ -345,9 +345,9 @@ export default {
 
       let required = [
         "title",
-        "count",
-        "purchase",
-        "sale",
+        // "count",
+        // "purchase",
+        // "sale",
         "type",
         "category"
       ];
@@ -371,10 +371,10 @@ export default {
       this.loadingText = "Отправка продукта...";
 
       formDataToSend.append("title", this.formData.title);
-      formDataToSend.append("count", Number(this.formData.count));
-      formDataToSend.append("balance", Number(this.formData.count));
-      formDataToSend.append("purchase", Number(this.formData.purchase));
-      formDataToSend.append("sale", Number(this.formData.sale));
+      // formDataToSend.append("count", Number(this.formData.count));
+      // formDataToSend.append("balance", Number(this.formData.count));
+      // formDataToSend.append("purchase", Number(this.formData.purchase));
+      // formDataToSend.append("sale", Number(this.formData.sale));
       formDataToSend.append("discount", Number(this.formData.discount) || 0);
       formDataToSend.append("barcode", this.formData.barcode);
       formDataToSend.append("type", Number(this.formData.type) || 1);
@@ -511,11 +511,11 @@ export default {
       </div>
 
       <div class="d-flex">
-        <div class="form position-relative w-50 pe-2">
+        <!-- <div class="form position-relative w-50 pe-2">
           <label for="count">Кол-во*</label>
           <input ref="inputText" type="text" placeholder="Введите количество" id="count" v-model="formData.count"
             required />
-        </div>
+        </div> -->
         <div class="form position-relative w-50 ps-2">
           <label for="purchase">Тип*</label>
           <select name="" id="purchase" v-model="formData.type" required>
@@ -527,16 +527,16 @@ export default {
 
 
       <div class="d-flex">
-        <div class="form position-relative w-50 pe-2">
+        <!-- <div class="form position-relative w-50 pe-2">
           <label for="purchase">Закупочная цена*</label>
           <input type="text" placeholder="Введите закупочную цену" id="purchase" v-model="formData.purchase" required />
-        </div>
+        </div> -->
 
 
-        <div class="form position-relative w-50 ps-2">
+        <!-- <div class="form position-relative w-50 ps-2">
           <label for="sale">Продажная цена*</label>
           <input type="text" placeholder="Введите продажную цену" id="sale" v-model="formData.sale" required />
-        </div>
+        </div> -->
       </div>
 
       <div class="d-flex">

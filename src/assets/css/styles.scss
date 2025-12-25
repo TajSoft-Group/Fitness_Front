@@ -389,7 +389,7 @@ header {
     border-radius: 12px;
 }
 
-.menu ul .active a {
+.menu ul .active > a {
     opacity: 100%;
     padding: 12px;
     background: #111112;
