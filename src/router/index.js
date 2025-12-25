@@ -1,5 +1,8 @@
 import Cookies from 'js-cookie';
-import { createRouter, createWebHistory } from 'vue-router';
+import {
+  createRouter,
+  createWebHistory
+} from 'vue-router';
 import analytics from "@/pages/analytics/analytics.vue";
 import Subscription from '@/pages/Subscription.vue'
 import Services from "@/pages/Services.vue";
@@ -16,13 +19,19 @@ import TrainerPage from "@/pages/personal/TrainerPage.vue";
 import product from "@/pages/products/product.vue";
 import MobileInformation from "@/pages/MobileInformation.vue";
 import login from "@/pages/login.vue";
+import report from "@/pages/report/report.vue";
 import Lockers from "@/pages/lockers.vue";
-import finance from "@/pages/finance.vue";
+import finance from "@/pages/Finance/finance.vue";
 import Cash from "@/pages/Cash.vue";
 import courses from "@/pages/Courses/courses.vue";
+import newCourse from "@/pages/Courses/newCourse.vue";
+import transactions from "@/pages/transactions/transactions.vue";
+import warehouse from "@/pages/warehouse/warehouse.vue";
+import warehousePage from "@/pages/warehouse/warehousePage.vue";
+import deleteAccount from "@/pages/deleteAccount.vue"
+import EditCourse from '@/pages/Courses/editCourse.vue';
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'analytics',
     component: analytics
@@ -37,16 +46,16 @@ const routes = [
     name: 'Services',
     component: Services
   },
-  {
-    path: '/individual-courses',
-    name: 'IndividualCourses',
-    component: IndividualCourses
-  },
-  {
-    path: '/reviews-page',
-    name: 'ReviewsPage',
-    component: ReviewsPage
-  },
+  // {
+  //   path: '/individual-courses',
+  //   name: 'IndividualCourses',
+  //   component: IndividualCourses
+  // },
+  // {
+  //   path: '/reviews-page',
+  //   name: 'ReviewsPage',
+  //   component: ReviewsPage
+  // },
   {
     path: '/clients',
     name: 'Clients',
@@ -56,7 +65,7 @@ const routes = [
     path: '/user-page/:id',
     name: 'UserPage',
     component: UserPages,
-    props:true
+    props: true
   },
   {
     path: '/user-locked',
@@ -87,7 +96,7 @@ const routes = [
     path: '/trainer-page/:id',
     name: 'TrainerPage',
     component: TrainerPage,
-    props:true
+    props: true
   },
   {
     path: '/product',
@@ -113,6 +122,11 @@ const routes = [
     path: '/finance',
     name: 'finance',
     component: finance
+  }, 
+  {
+    path: '/report',
+    name: 'report',
+    component: report
   },
   {
     path: '/cash',
@@ -120,15 +134,47 @@ const routes = [
     component: Cash
   },
   {
+    path: '/warehouse',
+    name: 'warehouse',
+    component: warehouse
+  },
+  {
+    path: '/warehouseItem/:id',
+    name: 'warehousePage',
+    component: warehousePage,
+    props: true
+  },
+  {
     path: '/courses',
     name: 'courses',
     component: courses
+  },
+  {
+    path: '/new-course',
+    name: 'new-course',
+    component: newCourse
+  },
+  {
+    path: '/edit-course/:id',
+    name: 'edit-course',
+    component: EditCourse
+  },
+  {
+    path: '/transactions',
+    name: 'transactions',
+    component: transactions
+  },
+  {
+    path: '/delete-account',
+    name: 'deleteAccount',
+    component: deleteAccount
   },
 
 ];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(
+    import.meta.env.BASE_URL),
   routes
 });
 

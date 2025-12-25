@@ -43,6 +43,7 @@
 
 <script>
 import axios from "axios";
+import router from "@/router/index.js";
 
 export default {
   data() {
@@ -64,11 +65,15 @@ export default {
         username: this.username,
         password: this.password
       };
-      axios.post('http://fitness.abdurazzoq.beget.tech/public/login_check', dataToSend)
+      axios.post('https://api.mubingym.com/login_check', dataToSend)
           .then(response => {
             const t = response.data.token;
             this.setCookie('token', t, 31)
-            this.statusReg=this.getCookie('token')
+            console.log(t);
+            // this.statusReg=this.getCookie('token')
+            setTimeout(()=>{
+              router.push("/");
+            },0)
           })
           .catch(error => {
             console.error('Ошибка при отправке данных:', error);

@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <div class="container">
+  <!-- <div class="container">
     <div class="row">
       <div class="col">
         <div class="statistics bg-gray h-auto">
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
