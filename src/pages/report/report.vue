@@ -3,7 +3,7 @@
 
     <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3>Услуги по датам</h3>
+      <h3>Абонементы</h3>
 
       <div class="d-flex">
         <div class="dpi me-3 filter-icon d-flex justify-content-center align-items-center color-yellow"
