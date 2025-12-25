@@ -36,9 +36,9 @@
             <div class="img-card row p-3 flex-wrap">
               <div class="card-add-img m-2">
 <<<<<<< HEAD
-                <img :src="'https://missfitnessbackend.tajsoft.tj' + formData.img" class="card-img-top" alt="Product Image">
+                <img :src="'https://api.mubingym.com/' + formData.img" class="card-img-top" alt="Product Image">
 =======
-                <img :src="'https://missfitnessbackend.tajsoft.tj/' + formData.img" class="card-img-top" alt="Product Image">
+                <img :src="'https://api.mubingym.com//' + formData.img" class="card-img-top" alt="Product Image">
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                 <button type="button" class="btn-close position-absolute top-0 end-0"
                   @click="removeImage(index, true)"></button>
@@ -132,9 +132,9 @@
                       <div v-for="(image, imgIndex) in formData.training_days[index].images" :key="'old-' + imgIndex"
                         class="card-add-img m-2 position-relative">
 <<<<<<< HEAD
-                        <img :src="'https://missfitnessbackend.tajsoft.tj' + image" class="card-img-top" alt="Product Image" />
+                        <img :src="'https://api.mubingym.com/' + image" class="card-img-top" alt="Product Image" />
 =======
-                        <img :src="'https://missfitnessbackend.tajsoft.tj/' + image" class="card-img-top" alt="Product Image" />
+                        <img :src="'https://api.mubingym.com//' + image" class="card-img-top" alt="Product Image" />
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                         <button type="button" class="btn-close position-absolute top-0 end-0"
                           @click="removeImageDays(imgIndex, index)"></button>
@@ -467,9 +467,9 @@ export default {
     },
     coursesFn() {
 <<<<<<< HEAD
-      posts('https://missfitnessbackend.tajsoft.tjenroll/courses', { ...this.cursData })
+      posts('https://api.mubingym.com/enroll/courses', { ...this.cursData })
 =======
-      posts('https://missfitnessbackend.tajsoft.tj/enroll/courses', { ...this.cursData })
+      posts('https://api.mubingym.com//enroll/courses', { ...this.cursData })
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then(response => {
           this.Delay('loading', 1)
@@ -633,11 +633,11 @@ export default {
       // === Correct URL ===
       const url = isEditMode
 <<<<<<< HEAD
-        ? `https://missfitnessbackend.tajsoft.tjapi/courses/update/${courseId}`
-        : `https://missfitnessbackend.tajsoft.tjapi/courses/create`;
+        ? `https://api.mubingym.com/api/courses/update/${courseId}`
+        : `https://api.mubingym.com/api/courses/create`;
 =======
-        ? `https://missfitnessbackend.tajsoft.tj/api/courses/update/${courseId}`
-        : `https://missfitnessbackend.tajsoft.tj/api/courses/create`;
+        ? `https://api.mubingym.com//api/courses/update/${courseId}`
+        : `https://api.mubingym.com//api/courses/create`;
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
 
       try {
@@ -720,11 +720,11 @@ export default {
         // Определяем URL: обновление или создание
         const url = day.id
 <<<<<<< HEAD
-          ? "https://missfitnessbackend.tajsoft.tjapi/training/update"
-          : "https://missfitnessbackend.tajsoft.tjapi/training/create";
+          ? "https://api.mubingym.com/api/training/update"
+          : "https://api.mubingym.com/api/training/create";
 =======
-          ? "https://missfitnessbackend.tajsoft.tj/api/training/update"
-          : "https://missfitnessbackend.tajsoft.tj/api/training/create";
+          ? "https://api.mubingym.com//api/training/update"
+          : "https://api.mubingym.com//api/training/create";
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
 
         // Отправляем запрос
@@ -787,11 +787,11 @@ export default {
   },
   mounted() {
 <<<<<<< HEAD
-    this.getInfo('https://missfitnessbackend.tajsoft.tjapi/coach/all', 'DataUsers', 1)
-    this.getInfo(`https://missfitnessbackend.tajsoft.tjapi/courses/${this.$route.params.id}`, 'formData', 2)
+    this.getInfo('https://api.mubingym.com/api/coach/all', 'DataUsers', 1)
+    this.getInfo(`https://api.mubingym.com/api/courses/${this.$route.params.id}`, 'formData', 2)
 =======
-    this.getInfo('https://missfitnessbackend.tajsoft.tj/api/coach/all', 'DataUsers', 1)
-    this.getInfo(`https://missfitnessbackend.tajsoft.tj/api/courses/${this.$route.params.id}`, 'formData', 2)
+    this.getInfo('https://api.mubingym.com//api/coach/all', 'DataUsers', 1)
+    this.getInfo(`https://api.mubingym.com//api/courses/${this.$route.params.id}`, 'formData', 2)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
     // this.getInfoUsers()
   },

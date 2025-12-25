@@ -277,9 +277,9 @@
                   <div v-for="item in productList" @click="selectItem(item);"
                     class="product-card p-0 position-relative">
 <<<<<<< HEAD
-                    <img :src="`https://missfitnessbackend.tajsoft.tj${item.img[0]}`" />
+                    <img :src="`https://api.mubingym.com/${item.img[0]}`" />
 =======
-                    <img :src="`https://missfitnessbackend.tajsoft.tj/${item.img[0]}`" />
+                    <img :src="`https://api.mubingym.com//${item.img[0]}`" />
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                     <div class="product-info">
                       <div class="product-title mb-0">{{ item.title }}</div>
@@ -320,9 +320,9 @@
               <div class="row flex-nowrap uslugi-holder">
                 <div v-for="item in serviceList" class="uslug-card p-0 position-relative" @click="selectItem(item)">
 <<<<<<< HEAD
-                  <img :src="`https://missfitnessbackend.tajsoft.tj${item?.img?.[0] ? item.img[0] : ''}`" />
+                  <img :src="`https://api.mubingym.com/${item?.img?.[0] ? item.img[0] : ''}`" />
 =======
-                  <img :src="`https://missfitnessbackend.tajsoft.tj/${item?.img?.[0] ? item.img[0] : ''}`" />
+                  <img :src="`https://api.mubingym.com//${item?.img?.[0] ? item.img[0] : ''}`" />
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                   <div class="product-info">
                     <div class="product-title mb-0 border-color-yellow">
@@ -364,9 +364,9 @@
               <div v-if="coursesList.length" class="row flex-nowrap">
                 <div v-for="course in coursesList" class="uslug-card p-0 position-relative" @click="selectItem(course)">
 <<<<<<< HEAD
-                  <img :src="`https://missfitnessbackend.tajsoft.tj${course.img}`" />
+                  <img :src="`https://api.mubingym.com/${course.img}`" />
 =======
-                  <img :src="`https://missfitnessbackend.tajsoft.tj/${course.img}`" />
+                  <img :src="`https://api.mubingym.com//${course.img}`" />
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                   <div class="product-info">
                     <div class="product-title mb-0 border-color-yellow">
@@ -634,9 +634,9 @@ export default {
         this.isBarcode(barcode)
       } else {
 <<<<<<< HEAD
-        posts("https://missfitnessbackend.tajsoft.tjsearch_all", {
+        posts("https://api.mubingym.com/search_all", {
 =======
-        posts("https://missfitnessbackend.tajsoft.tj/search_all", {
+        posts("https://api.mubingym.com//search_all", {
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           name: queryString,
         })
@@ -701,9 +701,9 @@ export default {
     },
     getCourseTypes() {
 <<<<<<< HEAD
-      gets("https://missfitnessbackend.tajsoft.tjapi/courses_get_type")
+      gets("https://api.mubingym.com/api/courses_get_type")
 =======
-      gets("https://missfitnessbackend.tajsoft.tj/api/courses_get_type")
+      gets("https://api.mubingym.com//api/courses_get_type")
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.courseTypes = response.data;
@@ -720,9 +720,9 @@ export default {
     loadCourses() {
       return gets(
 <<<<<<< HEAD
-        `https://missfitnessbackend.tajsoft.tjapi/courses/all`
+        `https://api.mubingym.com/api/courses/all`
 =======
-        `https://missfitnessbackend.tajsoft.tj/api/courses/all`
+        `https://api.mubingym.com//api/courses/all`
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
       )
         .then((response) => {
@@ -740,16 +740,16 @@ export default {
       })
     },
     loadDiscount() {
-      return gets(`https://missfitnessbackend.tajsoft.tjapi/discountCards`)
+      return gets(`https://api.mubingym.com/api/discountCards`)
         .then((response) => {
           this.discountCard = response.data.percent;
         });
     },
     loadProducts() {
 <<<<<<< HEAD
-      return gets(`https://missfitnessbackend.tajsoft.tjproduct/all/cash`)
+      return gets(`https://api.mubingym.com/product/all/cash`)
 =======
-      return gets(`https://missfitnessbackend.tajsoft.tj/product/all/cash`)
+      return gets(`https://api.mubingym.com//product/all/cash`)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.products = response.data.map(product => {
@@ -797,9 +797,9 @@ export default {
     },
     getProductCategories() {
 <<<<<<< HEAD
-      gets("https://missfitnessbackend.tajsoft.tjcategory")
+      gets("https://api.mubingym.com/category")
 =======
-      gets("https://missfitnessbackend.tajsoft.tj/category")
+      gets("https://api.mubingym.com//category")
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.productCategories = response.data;
@@ -810,9 +810,9 @@ export default {
     },
     getServiceTypes() {
 <<<<<<< HEAD
-      gets("https://missfitnessbackend.tajsoft.tjapi/services/name")
+      gets("https://api.mubingym.com/api/services/name")
 =======
-      gets("https://missfitnessbackend.tajsoft.tj/api/services/name")
+      gets("https://api.mubingym.com//api/services/name")
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.serviceType = response.data.data;
@@ -850,9 +850,9 @@ export default {
     },
     loadService() {
 <<<<<<< HEAD
-      return gets(`https://missfitnessbackend.tajsoft.tjapi/services/all`)
+      return gets(`https://api.mubingym.com/api/services/all`)
 =======
-      return gets(`https://missfitnessbackend.tajsoft.tj/api/services/all`)
+      return gets(`https://api.mubingym.com//api/services/all`)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           if (response && response.data && response.data.data) {
@@ -1084,9 +1084,9 @@ export default {
       try {
         const response = await posts(
 <<<<<<< HEAD
-          "https://missfitnessbackend.tajsoft.tjapi/order/create/v2",
+          "https://api.mubingym.com/api/order/create/v2",
 =======
-          "https://missfitnessbackend.tajsoft.tj/api/order/create/v2",
+          "https://api.mubingym.com//api/order/create/v2",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           this.FormData
         );

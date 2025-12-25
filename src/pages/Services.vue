@@ -19,9 +19,9 @@
                 @click.self="toggleCollapse(index)">
                 <div class="user-list-item-img">
 <<<<<<< HEAD
-                  <img v-if="trener.img" :src="`https://missfitnessbackend.tajsoft.tj${trener.img}`" alt="" />
+                  <img v-if="trener.img" :src="`https://api.mubingym.com/${trener.img}`" alt="" />
 =======
-                  <img v-if="trener.img" :src="`https://missfitnessbackend.tajsoft.tj/${trener.img}`" alt="" />
+                  <img v-if="trener.img" :src="`https://api.mubingym.com//${trener.img}`" alt="" />
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                   <img v-else src="@/assets/images/user-photo.png" alt="" />
                 </div>
@@ -141,9 +141,9 @@
             <div v-for="(image, index) in formData.img" :key="'old-' + index"
               class="card-add-img m-2 position-relative">
 <<<<<<< HEAD
-              <img :src="'https://missfitnessbackend.tajsoft.tj' + image" class="card-img-top" alt="Product Image" />
+              <img :src="'https://api.mubingym.com/' + image" class="card-img-top" alt="Product Image" />
 =======
-              <img :src="'https://missfitnessbackend.tajsoft.tj/' + image" class="card-img-top" alt="Product Image" />
+              <img :src="'https://api.mubingym.com//' + image" class="card-img-top" alt="Product Image" />
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
               <button type="button" class="btn-close position-absolute top-0 end-0"
                 @click="removeImage(index, true)"></button>
@@ -272,9 +272,9 @@
             (cursData.services_id = curs.id)">
           <!--          <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>-->
 <<<<<<< HEAD
-          <img class="w-100 h-100" :src="'https://missfitnessbackend.tajsoft.tj' + curs.img" alt="">
+          <img class="w-100 h-100" :src="'https://api.mubingym.com/' + curs.img" alt="">
 =======
-          <img class="w-100 h-100" :src="'https://missfitnessbackend.tajsoft.tj/' + curs.img" alt="">
+          <img class="w-100 h-100" :src="'https://api.mubingym.com//' + curs.img" alt="">
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           <div class="at-bottom position-absolute bottom-0 ps-4">
             <h5>{{ curs.name }}</h5>
@@ -498,9 +498,9 @@ export default {
       this.cursData.count = (this.cursData.count * this.addCurs.visit_count)
       posts(
 <<<<<<< HEAD
-        "https://missfitnessbackend.tajsoft.tjenroll/services",
+        "https://api.mubingym.com/enroll/services",
 =======
-        "https://missfitnessbackend.tajsoft.tj/enroll/services",
+        "https://api.mubingym.com//enroll/services",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         {
           ...this.cursData,
@@ -526,9 +526,9 @@ export default {
       const token = Cookies.get("token");
       posts(
 <<<<<<< HEAD
-        `https://missfitnessbackend.tajsoft.tjservices/status/${this.archive_item}`,
+        `https://api.mubingym.com/services/status/${this.archive_item}`,
 =======
-        `https://missfitnessbackend.tajsoft.tj/services/status/${this.archive_item}`,
+        `https://api.mubingym.com//services/status/${this.archive_item}`,
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         token
       )
@@ -540,9 +540,9 @@ export default {
             this.addStatusDelay();
             this.getInfo(
 <<<<<<< HEAD
-              "https://missfitnessbackend.tajsoft.tjapi/services/admin/all",
+              "https://api.mubingym.com/api/services/admin/all",
 =======
-              "https://missfitnessbackend.tajsoft.tj/api/services/admin/all",
+              "https://api.mubingym.com//api/services/admin/all",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
               "cursList",
               2
@@ -587,9 +587,9 @@ export default {
       const token = Cookies.get("token");
       posts(
 <<<<<<< HEAD
-        "https://missfitnessbackend.tajsoft.tjusers",
+        "https://api.mubingym.com/users",
 =======
-        "https://missfitnessbackend.tajsoft.tj/users",
+        "https://api.mubingym.com//users",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         {
           form: "0",
@@ -650,13 +650,13 @@ export default {
 
         if (!this.edit) {
 <<<<<<< HEAD
-          url = "https://missfitnessbackend.tajsoft.tjservices/create";
+          url = "https://api.mubingym.com/services/create";
         } else {
-          url = `https://missfitnessbackend.tajsoft.tjservices/update/${this.formData.id}`;
+          url = `https://api.mubingym.com/services/update/${this.formData.id}`;
 =======
-          url = "https://missfitnessbackend.tajsoft.tj/services/create";
+          url = "https://api.mubingym.com//services/create";
         } else {
-          url = `https://missfitnessbackend.tajsoft.tj/services/update/${this.formData.id}`;
+          url = `https://api.mubingym.com//services/update/${this.formData.id}`;
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         }
 
@@ -668,11 +668,11 @@ export default {
           this.error = false;
           // Обновляем данные
 <<<<<<< HEAD
-          await this.getInfo("https://missfitnessbackend.tajsoft.tjapi/coach/all", "DataUsers", 1);
-          await this.getInfo("https://missfitnessbackend.tajsoft.tjapi/services/admin/all", "cursList", 2);
+          await this.getInfo("https://api.mubingym.com/api/coach/all", "DataUsers", 1);
+          await this.getInfo("https://api.mubingym.com/api/services/admin/all", "cursList", 2);
 =======
-          await this.getInfo("https://missfitnessbackend.tajsoft.tj/api/coach/all", "DataUsers", 1);
-          await this.getInfo("https://missfitnessbackend.tajsoft.tj/api/services/admin/all", "cursList", 2);
+          await this.getInfo("https://api.mubingym.com//api/coach/all", "DataUsers", 1);
+          await this.getInfo("https://api.mubingym.com//api/services/admin/all", "cursList", 2);
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           await this.getInfoUsers();
 
@@ -717,9 +717,9 @@ export default {
     changeCourse() {
       console.log("changeCourse");
 <<<<<<< HEAD
-      posts("https://missfitnessbackend.tajsoft.tjcount/services", {
+      posts("https://api.mubingym.com/count/services", {
 =======
-      posts("https://missfitnessbackend.tajsoft.tj/count/services", {
+      posts("https://api.mubingym.com//count/services", {
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         user_id: this.activeCourse.userId,
         services_id: this.activeCourse.courseId,
@@ -746,18 +746,18 @@ export default {
   mounted() {
     this.getInfo(
 <<<<<<< HEAD
-      "https://missfitnessbackend.tajsoft.tjapi/coach/all",
+      "https://api.mubingym.com/api/coach/all",
 =======
-      "https://missfitnessbackend.tajsoft.tj/api/coach/all",
+      "https://api.mubingym.com//api/coach/all",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
       "DataUsers",
       1
     );
     this.getInfo(
 <<<<<<< HEAD
-      "https://missfitnessbackend.tajsoft.tjapi/services/admin/all",
+      "https://api.mubingym.com/api/services/admin/all",
 =======
-      "https://missfitnessbackend.tajsoft.tj/api/services/admin/all",
+      "https://api.mubingym.com//api/services/admin/all",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
       "cursList",
       2

@@ -261,9 +261,9 @@ export default {
 
       gets(
 <<<<<<< HEAD
-        `https://missfitnessbackend.tajsoft.tjapi/closet/all`,
+        `https://api.mubingym.com/api/closet/all`,
 =======
-        `https://missfitnessbackend.tajsoft.tj/api/closet/all`,
+        `https://api.mubingym.com//api/closet/all`,
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         token
       )
@@ -284,9 +284,9 @@ export default {
 
       posts(
 <<<<<<< HEAD
-        "https://missfitnessbackend.tajsoft.tjusers",
+        "https://api.mubingym.com/users",
 =======
-        "https://missfitnessbackend.tajsoft.tj/users",
+        "https://api.mubingym.com//users",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         { form: "0", to: "0" },
         token
@@ -308,9 +308,9 @@ export default {
       this.isLoading = true;
 
 <<<<<<< HEAD
-      posts('https://missfitnessbackend.tajsoft.tjapi/closet/create', formData)
+      posts('https://api.mubingym.com/api/closet/create', formData)
 =======
-      posts('https://missfitnessbackend.tajsoft.tj/api/closet/create', formData)
+      posts('https://api.mubingym.com//api/closet/create', formData)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
 
@@ -333,9 +333,9 @@ export default {
       this.isLoading = true;
 
 <<<<<<< HEAD
-      deletes(`https://missfitnessbackend.tajsoft.tjapi/closet/delete/${this.deleter}`)
+      deletes(`https://api.mubingym.com/api/closet/delete/${this.deleter}`)
 =======
-      deletes(`https://missfitnessbackend.tajsoft.tj/api/closet/delete/${this.deleter}`)
+      deletes(`https://api.mubingym.com//api/closet/delete/${this.deleter}`)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.isLoading = false;
@@ -360,9 +360,9 @@ export default {
       this.isLoading = true;
 
 <<<<<<< HEAD
-      posts(`https://missfitnessbackend.tajsoft.tjapi/closet/update/${this.edit}`, formData)
+      posts(`https://api.mubingym.com/api/closet/update/${this.edit}`, formData)
 =======
-      posts(`https://missfitnessbackend.tajsoft.tj/api/closet/update/${this.edit}`, formData)
+      posts(`https://api.mubingym.com//api/closet/update/${this.edit}`, formData)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
 

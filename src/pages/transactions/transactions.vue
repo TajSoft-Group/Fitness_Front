@@ -175,7 +175,7 @@
       },
       loadData() {
         const token = Cookies.get("token");
-        gets('https://missfitnessbackend.tajsoft.tj/api/transactions', token)
+        gets('https://api.mubingym.com//api/transactions', token)
             .then((response) => {
               this.transactions = response.data;
               this.filteredTransactions = this.transactions; // Initially, show all transactions
@@ -222,7 +222,7 @@
     loadData() {
       const token = Cookies.get("token");
 
-      gets('https://missfitnessbackend.tajsoft.tjapi/transactions', token)
+      gets('https://api.mubingym.com/api/transactions', token)
         .then((response) => {
           const normalized = {};
 
