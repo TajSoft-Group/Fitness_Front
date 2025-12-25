@@ -345,7 +345,7 @@
     },
     methods:{
       coursesFn(){
-        posts('https://api.mubingym.com/enroll/courses', {...this.cursData})
+        posts('https://missfitnessbackend.tajsoft.tjenroll/courses', {...this.cursData})
             .then(response => {
               this.Delay('loading', 1)
               console.log(this.cursData)
@@ -476,7 +476,7 @@
 
         this.isLoading = true
         try {
-          const response = await form_Data('https://api.mubingym.com/api/courses/create', FormData);
+          const response = await form_Data('https://missfitnessbackend.tajsoft.tjapi/courses/create', FormData);
           this.isLoading = false
 
           console.log(response)
@@ -494,11 +494,11 @@
               td.max_reports = JSON.stringify(td.max_reports)
               console.log(td)
               try {
-                const response = form_Data('https://api.mubingym.com/api/training/create', td);
+                const response = form_Data('https://missfitnessbackend.tajsoft.tjapi/training/create', td);
                 if (response.status === 201) {
                   this.addStatus = true;
-                  // await this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
-                  // await this.getInfo('https://api.mubingym.com/api/courses/all','cursList', 2)
+                  // await this.getInfo('https://missfitnessbackend.tajsoft.tjapi/coach/all','DataUsers', 1)
+                  // await this.getInfo('https://missfitnessbackend.tajsoft.tjapi/courses/all','cursList', 2)
                   // await this.getInfoUsers()
                   router.push("/courses");
                   this.Delay('addStatus', 7);
@@ -512,8 +512,8 @@
               }
             });
             this.addStatus = true;
-            // await this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
-            // await this.getInfo('https://api.mubingym.com/api/courses/all','cursList', 2)
+            // await this.getInfo('https://missfitnessbackend.tajsoft.tjapi/coach/all','DataUsers', 1)
+            // await this.getInfo('https://missfitnessbackend.tajsoft.tjapi/courses/all','cursList', 2)
             // await this.getInfoUsers()
             this.Delay('addStatus', 7);
           } else {
@@ -552,7 +552,7 @@
       },
     },
     mounted() {
-      this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
+      this.getInfo('https://missfitnessbackend.tajsoft.tjapi/coach/all','DataUsers', 1)
       this.getInfo('https://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
       // this.getInfoUsers()
     },
