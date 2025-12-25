@@ -30,6 +30,7 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
     </section>
 
     <div class="container">
@@ -45,6 +46,73 @@
                 <div class="full-name">{{ user.name + ' ' + user.surname }}</div>
                 <div class="phone">{{ user.username }}</div>
               </div>
+=======
+    </div>
+  </section>
+  
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="user-page-header d-flex align-items-center justify-content-between">
+          <div class="left d-flex align-items-center">
+            <div class="user-photo">
+              <img src="@/assets/images/avatar-user-empty.png" v-if="!user.img">
+              <img :src="'https://missfitnessbackend.tajsoft.tj/'+user.img" v-else="">
+            </div>
+            <div class="user-info">
+              <div class="full-name">{{user.name+' '+user.surname}}</div>
+              <div class="phone">{{ user.username }}</div>
+            </div>
+          </div>
+          <div class="right d-flex align-items-center text-center">
+            <div class="item">
+              <div class="age">Возраст</div>
+              <div class="age-value">{{new Date().getFullYear() - new Date(user.birthday).getFullYear() }}</div>
+              <div class="line"></div>
+            </div>
+            <div class="item">
+              <div class="age">Рост</div>
+              <div class="age-value">{{ user.height ? user.height : '-' }}</div>
+              <div class="line"></div>
+            </div>
+            <div class="item">
+              <div class="age">Вес</div>
+              <div class="age-value">{{ user.weight ? user.weight : '-'}}</div>
+              <div class="line"></div>
+            </div>
+          </div>
+          <div @click="UserConfigModal=!UserConfigModal" class="user-configs-modal-icon">
+            <img src="@/assets/images/icons/nav-icon.png" height="26">
+          </div>
+          <div v-show="UserConfigModal" class="user-configs-modal ">
+            <div v-if="false" class="user-configs-modal-item">
+              <a href="#">Добавить услугу</a>
+              <img src="@/assets/images/icons/plus.png" height="22">
+            </div>
+            <div @click="editedUser(), toggleModal('.user-change-modal')" class="user-configs-modal-item">
+              <a class="change-user-btn">Ред. профиль</a>
+              <img src="@/assets/images/icons/pen.png" height="22">
+            </div>
+            <div @click="toggleModal('.add-money-modal')" class="user-configs-modal-item">
+              <a class="add-money-btn">Пополнить счёт</a>
+              <img src="@/assets/images/icons/add-money.png" height="22">
+            </div>
+            <!-- <div @click="toggleModal('.user-block-modal')" class="user-configs-modal-item">
+              <a class="block-user-btn">Заблокировать</a>
+              <img src="@/assets/images/icons/ban.png" height="22">
+            </div> -->
+            <div @click="toggleModal('.user-delete-modal')" class="user-configs-modal-item red">
+              <a class="delete-user-btn">Удалить</a>
+              <img src="@/assets/images/icons/delete.png" height="22">
+            </div>
+            <div v-if="false" @click="toggleModal('.take-money-modal')" class="user-configs-modal-item">
+              <a class="take-money-btn">Снять деньги</a>
+              <img src="@/assets/images/icons/take-money.png" height="22">
+            </div>
+            <div v-if="false" @click="toggleModal('.up-card-modal')" class="user-configs-modal-item">
+              <a class="up-card-btn">Повысить карту</a>
+              <img src="@/assets/images/icons/up.png" height="22">
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
             </div>
             <div class="right d-flex align-items-center text-center">
               <div class="item">
@@ -778,6 +846,7 @@ export default {
       this.modal = this.modal === 'auto' ? 'hidden' : 'auto';
       this.modalSelector = modalSelector
     },
+<<<<<<< HEAD
     async getInfo() {
       const response = await this.apiCall(() =>
         get(`https://missfitnessbackend.tajsoft.tjapi/user/${this.id}`)
@@ -796,6 +865,26 @@ export default {
           get(`https://missfitnessbackend.tajsoft.tjapi/transaction_get/${this.User.user.cards[1].id}`)
         )
       ).data;
+=======
+    getInfo() {
+      this.isLoading = true;
+      get(`https://missfitnessbackend.tajsoft.tj/api/user/${this.id}`,)
+          .then(response => {
+            this.isLoading = false;
+            this.User = response.data;
+                get(`https://missfitnessbackend.tajsoft.tj/api/transaction_get/${this.User.user.cards[0].id}`,)
+                .then(response => {
+                  this.mainCardT = response.data;
+                })
+                get(`https://missfitnessbackend.tajsoft.tj/api/transaction_get/${this.User.user.cards[1].id}`,)
+                .then(response => {
+                  this.secondCardT = response.data;
+                })
+          })
+          .catch(error => {
+            this.error = error;
+          });
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
     },
     editedUser() {
       const editUser = this.User.user
@@ -811,6 +900,7 @@ export default {
     },
     saveUser() {
       this.isLoading = true;
+<<<<<<< HEAD
       form_Data(`https://missfitnessbackend.tajsoft.tjapi/user/update/${this.id}`, { ...this.formData })
         .then(response => {
           this.isLoading = false;
@@ -854,6 +944,45 @@ export default {
           this.toggleModal('.add-money-modal')
           this.error = error;
         });
+=======
+      form_Data(`https://missfitnessbackend.tajsoft.tj/api/user/update/${this.id}`, {...this.formData})
+          .then(response => {
+            this.isLoading = false;
+            this.UserConfigModal=false
+            console.log(this.User)
+            this.getInfo()
+          })
+          .catch(error => {
+            this.error = error;
+          });
+    },
+    disableUser(){
+      gets(`https://missfitnessbackend.tajsoft.tj/user/disable/${this.id}`)
+          .then(response => {
+              console.log(response);
+          })
+    },
+    deleteUser(){
+      deletes(`https://missfitnessbackend.tajsoft.tj/user/delete/${this.id}`)
+    },
+    payment(payCash) {
+      this.isLoading = true;
+      const pay={ owner_id: this.id, payment: payCash, payment_type: "refill"}
+      posts('https://missfitnessbackend.tajsoft.tj/api/payment', pay)
+          .then(response => {
+            this.payed = true;
+            this.isLoading = false;
+            console.log('ok',response)
+            payCash = "";
+            this.toggleModal('.add-money-modal')
+            this.getInfo()
+            setTimeout(()=>{ this.payed=false; },2000)
+          })
+          .catch(error => {
+            this.toggleModal('.add-money-modal')
+            this.error = error;
+          });
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
     }
   },
   props: {

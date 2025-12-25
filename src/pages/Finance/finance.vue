@@ -279,7 +279,11 @@ export default {
 
       if (!this.dateFrom || !this.dateTo) return;
 
+<<<<<<< HEAD
       const baseURL = 'https://missfitnessbackend.tajsoft.tjapi';
+=======
+      const baseURL = 'https://missfitnessbackend.tajsoft.tj/api';
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
       const token = localStorage.getItem('token');
 
       this.isLoading = true;

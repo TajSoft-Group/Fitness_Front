@@ -61,7 +61,11 @@ export default {
     },
     deleteProduct(id){
       console.log(id)
+<<<<<<< HEAD
       deletes(`https://missfitnessbackend.tajsoft.tjproduct/${ parseInt(id) }`)
+=======
+      deletes(`https://missfitnessbackend.tajsoft.tj/product/${ parseInt(id) }`)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           .then(
               (response) =>
               {
@@ -110,7 +114,11 @@ export default {
     // ///////////// //////////// => addCategory // => product
     async addCategory(typeAdd) {
       if (typeAdd === "addCategory") {
+<<<<<<< HEAD
         posts("https://missfitnessbackend.tajsoft.tjcategory_create", {
+=======
+        posts("https://missfitnessbackend.tajsoft.tj/category_create", {
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           name: this.AddCategory,
         })
             .then((response) => {
@@ -118,12 +126,20 @@ export default {
               if (response.status === 200) {
                 this.addStatus = true;
                 this.getInfo(
+<<<<<<< HEAD
                     "https://missfitnessbackend.tajsoft.tjcategory",
+=======
+                    "https://missfitnessbackend.tajsoft.tj/category",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                     "buttonsCategory",
                     1
                 );
                 this.getInfo(
+<<<<<<< HEAD
                     "https://missfitnessbackend.tajsoft.tjproduct/all",
+=======
+                    "https://missfitnessbackend.tajsoft.tj/product/all",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                     "productList",
                     2
                 );
@@ -142,13 +158,21 @@ export default {
             console.log('yes');
             delete FormData.img
             response = await Patch(
+<<<<<<< HEAD
                 `https://missfitnessbackend.tajsoft.tjproduct/${ FormData.id }`,
+=======
+                `https://missfitnessbackend.tajsoft.tj/product/${ FormData.id }`,
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                 FormData
             );
             this.editNull()
           }else{
             response = await form_Data(
+<<<<<<< HEAD
                 "https://missfitnessbackend.tajsoft.tjproduct_create",
+=======
+                "https://missfitnessbackend.tajsoft.tj/product_create",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                 FormData
             );
           }
@@ -157,12 +181,20 @@ export default {
           if (response.status === 200) {
             this.addStatus = true;
             await this.getInfo(
+<<<<<<< HEAD
                 "https://missfitnessbackend.tajsoft.tjcategory",
+=======
+                "https://missfitnessbackend.tajsoft.tj/category",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                 "buttonsCategory",
                 1
             );
             await this.getInfo(
+<<<<<<< HEAD
                 "https://missfitnessbackend.tajsoft.tjproduct/all",
+=======
+                "https://missfitnessbackend.tajsoft.tj/product/all",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                 "productList",
                 2
             );
@@ -219,7 +251,11 @@ export default {
     },
     deleteCategory(id){
       console.log(id)
+<<<<<<< HEAD
       deletes(`https://missfitnessbackend.tajsoft.tjcategory/delete/${ parseInt(id) }`)
+=======
+      deletes(`https://missfitnessbackend.tajsoft.tj/category/delete/${ parseInt(id) }`)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           .then(
               (response) =>
               {
@@ -236,12 +272,20 @@ export default {
   },
   mounted() {
     this.getInfo(
+<<<<<<< HEAD
         "https://missfitnessbackend.tajsoft.tjcategory",
+=======
+        "https://missfitnessbackend.tajsoft.tj/category",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         "buttonsCategory",
         1
     );
     this.getInfo(
+<<<<<<< HEAD
         "https://missfitnessbackend.tajsoft.tjproduct/all",
+=======
+        "https://missfitnessbackend.tajsoft.tj/product/all",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         "productList",
         2
     );

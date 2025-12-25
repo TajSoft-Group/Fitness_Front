@@ -101,7 +101,11 @@ export default {
       this.id = this.$route.params.id;
       const token = Cookies.get("token");
 
+<<<<<<< HEAD
       gets(`https://missfitnessbackend.tajsoft.tjwhh/history/${this.id}`, token)
+=======
+      gets(`https://missfitnessbackend.tajsoft.tj/whh/history/${this.id}`, token)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.Warehouse = response.data.history;
           this.WarehouseItem = response.data.warehouse;
@@ -175,6 +179,7 @@ export default {
         let response;
         if (this.edit) {
           delete FormData.img;
+<<<<<<< HEAD
           response = await Patch(`https://missfitnessbackend.tajsoft.tjwh/update/${FormData.id}`, FormData);
           this.editNull();
         } else {
@@ -183,6 +188,16 @@ export default {
         if (response.status === 200) {
           this.addStatus = true;
           await this.getInfo("https://missfitnessbackend.tajsoft.tjwh", "Warehouse");
+=======
+          response = await Patch(`https://missfitnessbackend.tajsoft.tj/wh/update/${FormData.id}`, FormData);
+          this.editNull();
+        } else {
+          response = await form_Data("https://missfitnessbackend.tajsoft.tj/wh/create", FormData);
+        }
+        if (response.status === 200) {
+          this.addStatus = true;
+          await this.getInfo("https://missfitnessbackend.tajsoft.tj/wh", "Warehouse");
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           await this.Delay("addStatus", 5);
         } else {
           console.error(`Запрос завершился с ошибкой: ${response.status}`);
@@ -214,7 +229,11 @@ export default {
       formData.append("created_at", new Date().toISOString());
 
       try {
+<<<<<<< HEAD
         const response = await fetch(`https://missfitnessbackend.tajsoft.tjwhh/create/${type}`, {
+=======
+        const response = await fetch(`https://missfitnessbackend.tajsoft.tj/whh/create/${type}`, {
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           method: "POST",
           body: formData,
           headers: {
@@ -352,7 +371,11 @@ export default {
       <div class="col-12">
         <div class="bg-gray card-block h-auto position-relative">
           <div class="d-flex justify-content-between">
+<<<<<<< HEAD
             <div class="col-3"><img :src="'https://missfitnessbackend.tajsoft.tj' + WarehouseItem.img" class="warehouse-img"></div>
+=======
+            <div class="col-3"><img :src="'https://missfitnessbackend.tajsoft.tj/' + WarehouseItem.img" class="warehouse-img"></div>
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
             <div class="col-9 px-3">
               <h3>{{ truncatedTitle(WarehouseItem.title) }}</h3>
               <div class="fs-7">

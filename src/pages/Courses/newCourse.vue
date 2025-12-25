@@ -345,7 +345,11 @@
     },
     methods:{
       coursesFn(){
+<<<<<<< HEAD
         posts('https://missfitnessbackend.tajsoft.tjenroll/courses', {...this.cursData})
+=======
+        posts('https://missfitnessbackend.tajsoft.tj/enroll/courses', {...this.cursData})
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
             .then(response => {
               this.Delay('loading', 1)
               console.log(this.cursData)
@@ -476,7 +480,11 @@
 
         this.isLoading = true
         try {
+<<<<<<< HEAD
           const response = await form_Data('https://missfitnessbackend.tajsoft.tjapi/courses/create', FormData);
+=======
+          const response = await form_Data('https://missfitnessbackend.tajsoft.tj/api/courses/create', FormData);
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           this.isLoading = false
 
           console.log(response)
@@ -494,11 +502,19 @@
               td.max_reports = JSON.stringify(td.max_reports)
               console.log(td)
               try {
+<<<<<<< HEAD
                 const response = form_Data('https://missfitnessbackend.tajsoft.tjapi/training/create', td);
                 if (response.status === 201) {
                   this.addStatus = true;
                   // await this.getInfo('https://missfitnessbackend.tajsoft.tjapi/coach/all','DataUsers', 1)
                   // await this.getInfo('https://missfitnessbackend.tajsoft.tjapi/courses/all','cursList', 2)
+=======
+                const response = form_Data('https://missfitnessbackend.tajsoft.tj/api/training/create', td);
+                if (response.status === 201) {
+                  this.addStatus = true;
+                  // await this.getInfo('https://missfitnessbackend.tajsoft.tj/api/coach/all','DataUsers', 1)
+                  // await this.getInfo('https://missfitnessbackend.tajsoft.tj/api/courses/all','cursList', 2)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                   // await this.getInfoUsers()
                   router.push("/courses");
                   this.Delay('addStatus', 7);
@@ -512,8 +528,13 @@
               }
             });
             this.addStatus = true;
+<<<<<<< HEAD
             // await this.getInfo('https://missfitnessbackend.tajsoft.tjapi/coach/all','DataUsers', 1)
             // await this.getInfo('https://missfitnessbackend.tajsoft.tjapi/courses/all','cursList', 2)
+=======
+            // await this.getInfo('https://missfitnessbackend.tajsoft.tj/api/coach/all','DataUsers', 1)
+            // await this.getInfo('https://missfitnessbackend.tajsoft.tj/api/courses/all','cursList', 2)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
             // await this.getInfoUsers()
             this.Delay('addStatus', 7);
           } else {
@@ -552,7 +573,11 @@
       },
     },
     mounted() {
+<<<<<<< HEAD
       this.getInfo('https://missfitnessbackend.tajsoft.tjapi/coach/all','DataUsers', 1)
+=======
+      this.getInfo('https://missfitnessbackend.tajsoft.tj/api/coach/all','DataUsers', 1)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
       this.getInfo('https://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
       // this.getInfoUsers()
     },

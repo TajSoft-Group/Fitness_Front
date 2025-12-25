@@ -276,7 +276,11 @@
                 <div class="row flex-nowrap">
                   <div v-for="item in productList" @click="selectItem(item);"
                     class="product-card p-0 position-relative">
+<<<<<<< HEAD
                     <img :src="`https://missfitnessbackend.tajsoft.tj${item.img[0]}`" />
+=======
+                    <img :src="`https://missfitnessbackend.tajsoft.tj/${item.img[0]}`" />
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                     <div class="product-info">
                       <div class="product-title mb-0">{{ item.title }}</div>
                       <div class="product-price color-yellow d-flex">
@@ -315,7 +319,11 @@
             <div class="scroll-content">
               <div class="row flex-nowrap uslugi-holder">
                 <div v-for="item in serviceList" class="uslug-card p-0 position-relative" @click="selectItem(item)">
+<<<<<<< HEAD
                   <img :src="`https://missfitnessbackend.tajsoft.tj${item?.img?.[0] ? item.img[0] : ''}`" />
+=======
+                  <img :src="`https://missfitnessbackend.tajsoft.tj/${item?.img?.[0] ? item.img[0] : ''}`" />
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                   <div class="product-info">
                     <div class="product-title mb-0 border-color-yellow">
                       {{ item.name }}
@@ -355,7 +363,11 @@
             <div class="scroll-content">
               <div v-if="coursesList.length" class="row flex-nowrap">
                 <div v-for="course in coursesList" class="uslug-card p-0 position-relative" @click="selectItem(course)">
+<<<<<<< HEAD
                   <img :src="`https://missfitnessbackend.tajsoft.tj${course.img}`" />
+=======
+                  <img :src="`https://missfitnessbackend.tajsoft.tj/${course.img}`" />
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                   <div class="product-info">
                     <div class="product-title mb-0 border-color-yellow">
                       {{ course.title }}
@@ -621,7 +633,11 @@ export default {
       if (!isNaN(barcode) && (queryString).length === 13) {
         this.isBarcode(barcode)
       } else {
+<<<<<<< HEAD
         posts("https://missfitnessbackend.tajsoft.tjsearch_all", {
+=======
+        posts("https://missfitnessbackend.tajsoft.tj/search_all", {
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           name: queryString,
         })
           .then((response) => {
@@ -684,7 +700,11 @@ export default {
       this.cart.splice(index, 1);
     },
     getCourseTypes() {
+<<<<<<< HEAD
       gets("https://missfitnessbackend.tajsoft.tjapi/courses_get_type")
+=======
+      gets("https://missfitnessbackend.tajsoft.tj/api/courses_get_type")
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.courseTypes = response.data;
         })
@@ -699,7 +719,11 @@ export default {
     },
     loadCourses() {
       return gets(
+<<<<<<< HEAD
         `https://missfitnessbackend.tajsoft.tjapi/courses/all`
+=======
+        `https://missfitnessbackend.tajsoft.tj/api/courses/all`
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
       )
         .then((response) => {
           this.courses = response.data;
@@ -722,7 +746,11 @@ export default {
         });
     },
     loadProducts() {
+<<<<<<< HEAD
       return gets(`https://missfitnessbackend.tajsoft.tjproduct/all/cash`)
+=======
+      return gets(`https://missfitnessbackend.tajsoft.tj/product/all/cash`)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.products = response.data.map(product => {
             const basePrice = this.resolveProductPrice(product);
@@ -768,7 +796,11 @@ export default {
       return total;
     },
     getProductCategories() {
+<<<<<<< HEAD
       gets("https://missfitnessbackend.tajsoft.tjcategory")
+=======
+      gets("https://missfitnessbackend.tajsoft.tj/category")
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.productCategories = response.data;
         })
@@ -777,7 +809,11 @@ export default {
         });
     },
     getServiceTypes() {
+<<<<<<< HEAD
       gets("https://missfitnessbackend.tajsoft.tjapi/services/name")
+=======
+      gets("https://missfitnessbackend.tajsoft.tj/api/services/name")
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.serviceType = response.data.data;
         })
@@ -813,7 +849,11 @@ export default {
       return normalized.filter(b => b.count > 0);
     },
     loadService() {
+<<<<<<< HEAD
       return gets(`https://missfitnessbackend.tajsoft.tjapi/services/all`)
+=======
+      return gets(`https://missfitnessbackend.tajsoft.tj/api/services/all`)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           if (response && response.data && response.data.data) {
             this.services = response.data.data;
@@ -1043,7 +1083,11 @@ export default {
 
       try {
         const response = await posts(
+<<<<<<< HEAD
           "https://missfitnessbackend.tajsoft.tjapi/order/create/v2",
+=======
+          "https://missfitnessbackend.tajsoft.tj/api/order/create/v2",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           this.FormData
         );
 

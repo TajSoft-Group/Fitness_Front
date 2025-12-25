@@ -172,7 +172,11 @@
               <div class="user-list-item" :class="{ active: activeIndex === index }"
                 @click.self="toggleCollapse(index)">
                 <div class="user-list-item-img">
+<<<<<<< HEAD
                   <img v-if="trener.img" :src="`https://missfitnessbackend.tajsoft.tj${trener.img}`" alt="" />
+=======
+                  <img v-if="trener.img" :src="`https://missfitnessbackend.tajsoft.tj/${trener.img}`" alt="" />
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                   <img v-else src="@/assets/images/user-photo.png" alt="" />
                 </div>
                 {{ trener.name + " " + trener.surname }}
@@ -264,7 +268,11 @@
           </div>
 
           <!-- Фото -->
+<<<<<<< HEAD
           <img class="w-100 h-100" :src="'https://missfitnessbackend.tajsoft.tj' + curs.img" alt="">
+=======
+          <img class="w-100 h-100" :src="'https://missfitnessbackend.tajsoft.tj/' + curs.img" alt="">
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
 
           <!-- Текст -->
           <div class="at-bottom position-absolute bottom-0 ps-4">
@@ -321,7 +329,11 @@
                 -{{ curs.discount + "%" }}
               </div>
               <img
+<<<<<<< HEAD
                 :src="'https://missfitnessbackend.tajsoft.tj' + curs.img"
+=======
+                :src="'https://missfitnessbackend.tajsoft.tj/' + curs.img"
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
               />
               <div class="product-info">
                 <div class="product-title mb-2 border-color-yellow">
@@ -543,9 +555,15 @@ export default {
 
       try {
         const [coursesRes, coachesRes, usersRes] = await Promise.all([
+<<<<<<< HEAD
           gets("https://missfitnessbackend.tajsoft.tjapi/courses/all/admin", token),
           gets("https://missfitnessbackend.tajsoft.tjapi/coach/all", token),
           posts("https://missfitnessbackend.tajsoft.tjusers", { form: "0", to: "0" }, token),
+=======
+          gets("https://missfitnessbackend.tajsoft.tj/api/courses/all/admin", token),
+          gets("https://missfitnessbackend.tajsoft.tj/api/coach/all", token),
+          posts("https://missfitnessbackend.tajsoft.tj/users", { form: "0", to: "0" }, token),
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         ]);
 
         this.cursList = coursesRes.data;
@@ -589,7 +607,11 @@ export default {
 
       try {
         const token = Cookies.get("token");
+<<<<<<< HEAD
         const res = await posts("https://missfitnessbackend.tajsoft.tjenroll/courses", this.cursData, token);
+=======
+        const res = await posts("https://missfitnessbackend.tajsoft.tj/enroll/courses", this.cursData, token);
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         this.showSuccess(res.data.message || "Клиент успешно записан!");
         this.payModalVisible = false;
         await this.loadAllData();
@@ -607,7 +629,11 @@ export default {
 
       try {
         const token = Cookies.get("token");
+<<<<<<< HEAD
         await posts(`https://missfitnessbackend.tajsoft.tjcourses/status/${id}`, {}, token);
+=======
+        await posts(`https://missfitnessbackend.tajsoft.tj/courses/status/${id}`, {}, token);
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         this.showSuccess("Архивы успешно пересобраны");
         await this.loadAllData();
       } catch (err) {
@@ -656,7 +682,11 @@ export default {
       this.loadingText = "Создание курса...";
 
       try {
+<<<<<<< HEAD
         await form_Data("https://missfitnessbackend.tajsoft.tjapi/courses/create", fd);
+=======
+        await form_Data("https://missfitnessbackend.tajsoft.tj/api/courses/create", fd);
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         this.showSuccess("Курс успешно создан!");
         this.addCourseModalVisible = false;
         this.resetForm();

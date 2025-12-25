@@ -126,7 +126,11 @@ export default defineComponent({
           startDate = oneMonthBack.toISOString().split('T')[0];
           endDate = currentDate.toISOString().split('T')[0];
         }
+<<<<<<< HEAD
         const response = await posts("https://missfitnessbackend.tajsoft.tjfinance_chart", {
+=======
+        const response = await posts("https://missfitnessbackend.tajsoft.tj/finance_chart", {
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           start_date: startDate,
           end_date: endDate
         });
