@@ -376,9 +376,9 @@ export default {
 
       // Загрузка пользователей
 <<<<<<< HEAD
-      posts("https://api.mubingym.com/users", { form: "0", to: "0" }, token)
+      posts("https://missfitnessbackend.tajsoft.tjusers", { form: "0", to: "0" }, token)
 =======
-      posts("https://api.mubingym.com//users", { form: "0", to: "0" }, token)
+      posts("https://missfitnessbackend.tajsoft.tj/users", { form: "0", to: "0" }, token)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then(res => {
           this.DataUsers = res.data.users || [];
@@ -396,9 +396,9 @@ export default {
       oneMonthBack = oneMonthBack.toISOString().split("T")[0];
 
 <<<<<<< HEAD
-      posts("https://api.mubingym.com/count", { start_date: oneMonthBack, end_date: currentDate }, token)
+      posts("https://missfitnessbackend.tajsoft.tjcount", { start_date: oneMonthBack, end_date: currentDate }, token)
 =======
-      posts("https://api.mubingym.com//count", { start_date: oneMonthBack, end_date: currentDate }, token)
+      posts("https://missfitnessbackend.tajsoft.tj/count", { start_date: oneMonthBack, end_date: currentDate }, token)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then(res => {
           this.statistic = res.data || {};
@@ -411,9 +411,9 @@ export default {
       const token = Cookies.get("token");
       this.isLoading = true;
 <<<<<<< HEAD
-      posts("https://api.mubingym.com/user_register", { ...this.formData, status: "active" }, token)
+      posts("https://missfitnessbackend.tajsoft.tjuser_register", { ...this.formData, status: "active" }, token)
 =======
-      posts("https://api.mubingym.com//user_register", { ...this.formData, status: "active" }, token)
+      posts("https://missfitnessbackend.tajsoft.tj/user_register", { ...this.formData, status: "active" }, token)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then(res => {
           if (res.status === 200) {

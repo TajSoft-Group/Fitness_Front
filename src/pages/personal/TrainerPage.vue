@@ -31,9 +31,9 @@
               <div class="carousel-inner slider-inner height-400 my-4">
                 <div v-for="(value, index) in DataUsers.cover_imgs" :class="['carousel-item', { active: index === 0 }]">
 <<<<<<< HEAD
-                  <img :src="'https://api.mubingym.com/' + value" class="d-block w-100" alt="..." />
+                  <img :src="'https://missfitnessbackend.tajsoft.tj' + value" class="d-block w-100" alt="..." />
 =======
-                  <img :src="'https://api.mubingym.com//' + value" class="d-block w-100" alt="..." />
+                  <img :src="'https://missfitnessbackend.tajsoft.tj/' + value" class="d-block w-100" alt="..." />
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                 </div>
 
@@ -56,9 +56,9 @@
             <div class="title-trainer">
               <div class="teacher-img img-width-200 border-9px" :style="{ borderColor: DataUsers.color }">
 <<<<<<< HEAD
-                <img :src="'https://api.mubingym.com/' + DataUsers.avatar
+                <img :src="'https://missfitnessbackend.tajsoft.tj' + DataUsers.avatar
 =======
-                <img :src="'https://api.mubingym.com//' + DataUsers.avatar
+                <img :src="'https://missfitnessbackend.tajsoft.tj/' + DataUsers.avatar
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                   " alt="" />
               </div>
@@ -191,9 +191,9 @@ export default {
       const token = Cookies.get("token");
       gets(
 <<<<<<< HEAD
-        `https://api.mubingym.com/api/coach/${this.id}`,
+        `https://missfitnessbackend.tajsoft.tjapi/coach/${this.id}`,
 =======
-        `https://api.mubingym.com//api/coach/${this.id}`,
+        `https://missfitnessbackend.tajsoft.tj/api/coach/${this.id}`,
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         token
       )

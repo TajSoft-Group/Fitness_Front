@@ -40,7 +40,7 @@
             <div class="left d-flex align-items-center">
               <div class="user-photo">
                 <img src="@/assets/images/avatar-user-empty.png" v-if="!user.img">
-                <img :src="'https://api.mubingym.com/' + user.img" v-else="">
+                <img :src="'https://missfitnessbackend.tajsoft.tj' + user.img" v-else="">
               </div>
               <div class="user-info">
                 <div class="full-name">{{ user.name + ' ' + user.surname }}</div>
@@ -57,7 +57,7 @@
           <div class="left d-flex align-items-center">
             <div class="user-photo">
               <img src="@/assets/images/avatar-user-empty.png" v-if="!user.img">
-              <img :src="'https://api.mubingym.com//'+user.img" v-else="">
+              <img :src="'https://missfitnessbackend.tajsoft.tj/'+user.img" v-else="">
             </div>
             <div class="user-info">
               <div class="full-name">{{user.name+' '+user.surname}}</div>
@@ -849,34 +849,34 @@ export default {
 <<<<<<< HEAD
     async getInfo() {
       const response = await this.apiCall(() =>
-        get(`https://api.mubingym.com/api/user/${this.id}`)
+        get(`https://missfitnessbackend.tajsoft.tjapi/user/${this.id}`)
       );
 
       this.User = response.data;
 
       this.mainCardT = (
         await this.apiCall(() =>
-          get(`https://api.mubingym.com/api/transaction_get/${this.User.user.cards[0].id}`)
+          get(`https://missfitnessbackend.tajsoft.tjapi/transaction_get/${this.User.user.cards[0].id}`)
         )
       ).data;
 
       this.secondCardT = (
         await this.apiCall(() =>
-          get(`https://api.mubingym.com/api/transaction_get/${this.User.user.cards[1].id}`)
+          get(`https://missfitnessbackend.tajsoft.tjapi/transaction_get/${this.User.user.cards[1].id}`)
         )
       ).data;
 =======
     getInfo() {
       this.isLoading = true;
-      get(`https://api.mubingym.com//api/user/${this.id}`,)
+      get(`https://missfitnessbackend.tajsoft.tj/api/user/${this.id}`,)
           .then(response => {
             this.isLoading = false;
             this.User = response.data;
-                get(`https://api.mubingym.com//api/transaction_get/${this.User.user.cards[0].id}`,)
+                get(`https://missfitnessbackend.tajsoft.tj/api/transaction_get/${this.User.user.cards[0].id}`,)
                 .then(response => {
                   this.mainCardT = response.data;
                 })
-                get(`https://api.mubingym.com//api/transaction_get/${this.User.user.cards[1].id}`,)
+                get(`https://missfitnessbackend.tajsoft.tj/api/transaction_get/${this.User.user.cards[1].id}`,)
                 .then(response => {
                   this.secondCardT = response.data;
                 })
@@ -901,7 +901,7 @@ export default {
     saveUser() {
       this.isLoading = true;
 <<<<<<< HEAD
-      form_Data(`https://api.mubingym.com/api/user/update/${this.id}`, { ...this.formData })
+      form_Data(`https://missfitnessbackend.tajsoft.tjapi/user/update/${this.id}`, { ...this.formData })
         .then(response => {
           this.isLoading = false;
           this.UserConfigModal = false
@@ -913,14 +913,14 @@ export default {
         });
     },
     disableUser() {
-      gets(`https://api.mubingym.com/user/disable/${this.id}`)
+      gets(`https://missfitnessbackend.tajsoft.tjuser/disable/${this.id}`)
         .then(response => {
           console.log(response);
         })
     },
     async deleteUser() {
       await this.apiCall(() =>
-        deletes(`https://api.mubingym.com/user/delete/${this.id}`)
+        deletes(`https://missfitnessbackend.tajsoft.tjuser/delete/${this.id}`)
       );
 
       this.toggleModal('.user-delete-modal');
@@ -930,7 +930,7 @@ export default {
       this.isLoading = true;
       const pay = { owner_id: this.id, payment: payCash, payment_type: "refill" }
       let t = Cookies.get('token');
-      posts('https://api.mubingym.com/api/payment', pay, t)
+      posts('https://missfitnessbackend.tajsoft.tjapi/payment', pay, t)
         .then(response => {
           this.payed = true;
           this.isLoading = false;
@@ -945,7 +945,7 @@ export default {
           this.error = error;
         });
 =======
-      form_Data(`https://api.mubingym.com//api/user/update/${this.id}`, {...this.formData})
+      form_Data(`https://missfitnessbackend.tajsoft.tj/api/user/update/${this.id}`, {...this.formData})
           .then(response => {
             this.isLoading = false;
             this.UserConfigModal=false
@@ -957,18 +957,18 @@ export default {
           });
     },
     disableUser(){
-      gets(`https://api.mubingym.com//user/disable/${this.id}`)
+      gets(`https://missfitnessbackend.tajsoft.tj/user/disable/${this.id}`)
           .then(response => {
               console.log(response);
           })
     },
     deleteUser(){
-      deletes(`https://api.mubingym.com//user/delete/${this.id}`)
+      deletes(`https://missfitnessbackend.tajsoft.tj/user/delete/${this.id}`)
     },
     payment(payCash) {
       this.isLoading = true;
       const pay={ owner_id: this.id, payment: payCash, payment_type: "refill"}
-      posts('https://api.mubingym.com//api/payment', pay)
+      posts('https://missfitnessbackend.tajsoft.tj/api/payment', pay)
           .then(response => {
             this.payed = true;
             this.isLoading = false;

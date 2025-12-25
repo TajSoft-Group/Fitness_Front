@@ -31,9 +31,9 @@ export default {
 
       posts(
 <<<<<<< HEAD
-        "https://api.mubingym.com/finance",
+        "https://missfitnessbackend.tajsoft.tjfinance",
 =======
-        "https://api.mubingym.com//finance",
+        "https://missfitnessbackend.tajsoft.tj/finance",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         { start_date: dateFrom, end_date: dateTo },
         token
@@ -59,9 +59,9 @@ export default {
 
       posts(
 <<<<<<< HEAD
-        "https://api.mubingym.com/finance",
+        "https://missfitnessbackend.tajsoft.tjfinance",
 =======
-        "https://api.mubingym.com//finance",
+        "https://missfitnessbackend.tajsoft.tj/finance",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         { start_date: start, end_date: end },
         token
@@ -81,9 +81,9 @@ export default {
 
       posts(
 <<<<<<< HEAD
-        "https://api.mubingym.com/finance",
+        "https://missfitnessbackend.tajsoft.tjfinance",
 =======
-        "https://api.mubingym.com//finance",
+        "https://missfitnessbackend.tajsoft.tj/finance",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         {
           start_date: selectedDates.dateFrom,

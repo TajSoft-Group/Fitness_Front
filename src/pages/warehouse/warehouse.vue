@@ -63,9 +63,9 @@ export default {
       if (this.deleter) {
         deletes(
 <<<<<<< HEAD
-          `https://api.mubingym.com/wh/delete/${this.deleter}`,
+          `https://missfitnessbackend.tajsoft.tjwh/delete/${this.deleter}`,
 =======
-          `https://api.mubingym.com//wh/delete/${this.deleter}`,
+          `https://missfitnessbackend.tajsoft.tj/wh/delete/${this.deleter}`,
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           token
         )
@@ -107,9 +107,9 @@ export default {
       const token = Cookies.get("token");
       gets(
 <<<<<<< HEAD
-        "https://api.mubingym.com/wh",
+        "https://missfitnessbackend.tajsoft.tjwh",
 =======
-        "https://api.mubingym.com//wh",
+        "https://missfitnessbackend.tajsoft.tj/wh",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         token
       )
@@ -129,9 +129,9 @@ export default {
       const token = Cookies.get("token");
       gets(
 <<<<<<< HEAD
-        "https://api.mubingym.com/category",
+        "https://missfitnessbackend.tajsoft.tjcategory",
 =======
-        "https://api.mubingym.com//category",
+        "https://missfitnessbackend.tajsoft.tj/category",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         token
       )
@@ -210,9 +210,9 @@ export default {
         let response;
         response = await fetch(
 <<<<<<< HEAD
-          "https://api.mubingym.com/category_create",
+          "https://missfitnessbackend.tajsoft.tjcategory_create",
 =======
-          "https://api.mubingym.com//category_create",
+          "https://missfitnessbackend.tajsoft.tj/category_create",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           {
             headers: {
@@ -252,9 +252,9 @@ export default {
       this.isLoading = true;
       this.loadingText = "Удаление..."
 <<<<<<< HEAD
-      deletes(`https://api.mubingym.com/category/delete/${parseInt(id)}`)
+      deletes(`https://missfitnessbackend.tajsoft.tjcategory/delete/${parseInt(id)}`)
 =======
-      deletes(`https://api.mubingym.com//category/delete/${parseInt(id)}`)
+      deletes(`https://missfitnessbackend.tajsoft.tj/category/delete/${parseInt(id)}`)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then(
           (response) => {
@@ -300,9 +300,9 @@ export default {
         console.log("yes");
         response = await fetch(
 <<<<<<< HEAD
-          `https://api.mubingym.com/whh/create/${this.formDataH.type}`,
+          `https://missfitnessbackend.tajsoft.tjwhh/create/${this.formDataH.type}`,
 =======
-          `https://api.mubingym.com//whh/create/${this.formDataH.type}`,
+          `https://missfitnessbackend.tajsoft.tj/whh/create/${this.formDataH.type}`,
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           {
             headers: {
@@ -418,9 +418,9 @@ export default {
           message = "изменен";
           response = await fetch(
 <<<<<<< HEAD
-            `https://api.mubingym.com/wh/update/${this.formData.id}`,
+            `https://missfitnessbackend.tajsoft.tjwh/update/${this.formData.id}`,
 =======
-            `https://api.mubingym.com//wh/update/${this.formData.id}`,
+            `https://missfitnessbackend.tajsoft.tj/wh/update/${this.formData.id}`,
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
             {
               method: "PATCH", // или PATCH, если API принимает
@@ -435,9 +435,9 @@ export default {
         } else {
           message = "добавлен";
 <<<<<<< HEAD
-          response = await fetch("https://api.mubingym.com/wh/create", {
+          response = await fetch("https://missfitnessbackend.tajsoft.tjwh/create", {
 =======
-          response = await fetch("https://api.mubingym.com//wh/create", {
+          response = await fetch("https://missfitnessbackend.tajsoft.tj/wh/create", {
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
             method: "POST",
             headers: { Authorization: `${token}` },
@@ -746,9 +746,9 @@ export default {
           <router-link :to="'/warehouseItem/' + item.id">
             <div class="d-flex justify-content-between">
 <<<<<<< HEAD
-              <div class="col-4"><img :src="'https://api.mubingym.com/' + item.img" class="warehouse-img"></div>
+              <div class="col-4"><img :src="'https://missfitnessbackend.tajsoft.tj' + item.img" class="warehouse-img"></div>
 =======
-              <div class="col-4"><img :src="'https://api.mubingym.com//' + item.img" class="warehouse-img"></div>
+              <div class="col-4"><img :src="'https://missfitnessbackend.tajsoft.tj/' + item.img" class="warehouse-img"></div>
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
               <div class="col-9 px-3">
                 <h3>{{ truncatedTitle(item.title) }}</h3>

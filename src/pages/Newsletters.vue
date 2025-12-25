@@ -398,9 +398,9 @@ export default {
 
       posts(
 <<<<<<< HEAD
-        "https://api.mubingym.com/users",
+        "https://missfitnessbackend.tajsoft.tjusers",
 =======
-        "https://api.mubingym.com//users",
+        "https://missfitnessbackend.tajsoft.tj/users",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         { form: "0", to: "0" },
         token
@@ -444,9 +444,9 @@ export default {
       this.letter.type = type;
       console.log(this.letter);
 <<<<<<< HEAD
-      posts('https://api.mubingym.com/api/mailings/create', sending, token)
+      posts('https://missfitnessbackend.tajsoft.tjapi/mailings/create', sending, token)
 =======
-      posts('https://api.mubingym.com//api/mailings/create', sending, token)
+      posts('https://missfitnessbackend.tajsoft.tj/api/mailings/create', sending, token)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.isLoading = false;
@@ -519,9 +519,9 @@ export default {
       this.isLoading = true;
       this.loadingText = 'Загрузка рассылок...';
 <<<<<<< HEAD
-      gets('https://api.mubingym.com/api/mailings/get', token)
+      gets('https://missfitnessbackend.tajsoft.tjapi/mailings/get', token)
 =======
-      gets('https://api.mubingym.com//api/mailings/get', token)
+      gets('https://missfitnessbackend.tajsoft.tj/api/mailings/get', token)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.letters = response.data.data.map(letter => ({
@@ -541,9 +541,9 @@ export default {
         this.isLoading = true;
         this.loadingText = 'Удаление рассылки...';
 <<<<<<< HEAD
-        deletes(`https://api.mubingym.com/api/mailings/delete/${id}`)
+        deletes(`https://missfitnessbackend.tajsoft.tjapi/mailings/delete/${id}`)
 =======
-        deletes(`https://api.mubingym.com//api/mailings/delete/${id}`)
+        deletes(`https://missfitnessbackend.tajsoft.tj/api/mailings/delete/${id}`)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           .then((response) => {
             this.isLoading = false;

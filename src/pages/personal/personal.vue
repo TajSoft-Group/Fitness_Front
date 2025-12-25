@@ -165,9 +165,9 @@
                     class="d-flex col-8 align-items-center">
                     <div class="personal-img my-3" :style="{ borderColor: personal.color }">
 <<<<<<< HEAD
-                      <img :src="'https://api.mubingym.com/' +
+                      <img :src="'https://missfitnessbackend.tajsoft.tj' +
 =======
-                      <img :src="'https://api.mubingym.com//' +
+                      <img :src="'https://missfitnessbackend.tajsoft.tj/' +
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                         personal.avatar
                         " alt="" />
@@ -306,9 +306,9 @@ export default {
 
       try {
 <<<<<<< HEAD
-        const response = await deletes(`https://api.mubingym.com/api/coach/delete/${id}`);
+        const response = await deletes(`https://missfitnessbackend.tajsoft.tjapi/coach/delete/${id}`);
 =======
-        const response = await deletes(`https://api.mubingym.com//api/coach/delete/${id}`);
+        const response = await deletes(`https://missfitnessbackend.tajsoft.tj/api/coach/delete/${id}`);
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
 
         // Если нужно проверить статус:
@@ -372,9 +372,9 @@ export default {
     getInfo() {
       const token = Cookies.get("token");
 <<<<<<< HEAD
-      gets("https://api.mubingym.com/api/coach/all", token)
+      gets("https://missfitnessbackend.tajsoft.tjapi/coach/all", token)
 =======
-      gets("https://api.mubingym.com//api/coach/all", token)
+      gets("https://missfitnessbackend.tajsoft.tj/api/coach/all", token)
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.DataUsers = response.data.data;
@@ -488,9 +488,9 @@ export default {
         // Иначе замените на axios.post с заголовком multipart/form-data
         const response = await form_Data(
 <<<<<<< HEAD
-          `https://api.mubingym.com/api/coach/update/${this.editedCoach.id}`,
+          `https://missfitnessbackend.tajsoft.tjapi/coach/update/${this.editedCoach.id}`,
 =======
-          `https://api.mubingym.com//api/coach/update/${this.editedCoach.id}`,
+          `https://missfitnessbackend.tajsoft.tj/api/coach/update/${this.editedCoach.id}`,
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           fd
         )
@@ -537,9 +537,9 @@ export default {
 
         const response = await form_Data(
 <<<<<<< HEAD
-          "https://api.mubingym.com/coach/create",
+          "https://missfitnessbackend.tajsoft.tjcoach/create",
 =======
-          "https://api.mubingym.com//coach/create",
+          "https://missfitnessbackend.tajsoft.tj/coach/create",
 >>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           fd
         );
