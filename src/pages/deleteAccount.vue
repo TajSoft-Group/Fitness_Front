@@ -61,7 +61,7 @@ export default {
     },
     deleteProduct(id){
       console.log(id)
-      deletes(`https://api.mubingym.com/product/${ parseInt(id) }`)
+      deletes(`https://missfitnessbackend.tajsoft.tjproduct/${ parseInt(id) }`)
           .then(
               (response) =>
               {
@@ -110,7 +110,7 @@ export default {
     // ///////////// //////////// => addCategory // => product
     async addCategory(typeAdd) {
       if (typeAdd === "addCategory") {
-        posts("https://api.mubingym.com/category_create", {
+        posts("https://missfitnessbackend.tajsoft.tjcategory_create", {
           name: this.AddCategory,
         })
             .then((response) => {
@@ -118,12 +118,12 @@ export default {
               if (response.status === 200) {
                 this.addStatus = true;
                 this.getInfo(
-                    "https://api.mubingym.com/category",
+                    "https://missfitnessbackend.tajsoft.tjcategory",
                     "buttonsCategory",
                     1
                 );
                 this.getInfo(
-                    "https://api.mubingym.com/product/all",
+                    "https://missfitnessbackend.tajsoft.tjproduct/all",
                     "productList",
                     2
                 );
@@ -142,13 +142,13 @@ export default {
             console.log('yes');
             delete FormData.img
             response = await Patch(
-                `https://api.mubingym.com/product/${ FormData.id }`,
+                `https://missfitnessbackend.tajsoft.tjproduct/${ FormData.id }`,
                 FormData
             );
             this.editNull()
           }else{
             response = await form_Data(
-                "https://api.mubingym.com/product_create",
+                "https://missfitnessbackend.tajsoft.tjproduct_create",
                 FormData
             );
           }
@@ -157,12 +157,12 @@ export default {
           if (response.status === 200) {
             this.addStatus = true;
             await this.getInfo(
-                "https://api.mubingym.com/category",
+                "https://missfitnessbackend.tajsoft.tjcategory",
                 "buttonsCategory",
                 1
             );
             await this.getInfo(
-                "https://api.mubingym.com/product/all",
+                "https://missfitnessbackend.tajsoft.tjproduct/all",
                 "productList",
                 2
             );
@@ -219,7 +219,7 @@ export default {
     },
     deleteCategory(id){
       console.log(id)
-      deletes(`https://api.mubingym.com/category/delete/${ parseInt(id) }`)
+      deletes(`https://missfitnessbackend.tajsoft.tjcategory/delete/${ parseInt(id) }`)
           .then(
               (response) =>
               {
@@ -236,12 +236,12 @@ export default {
   },
   mounted() {
     this.getInfo(
-        "https://api.mubingym.com/category",
+        "https://missfitnessbackend.tajsoft.tjcategory",
         "buttonsCategory",
         1
     );
     this.getInfo(
-        "https://api.mubingym.com/product/all",
+        "https://missfitnessbackend.tajsoft.tjproduct/all",
         "productList",
         2
     );

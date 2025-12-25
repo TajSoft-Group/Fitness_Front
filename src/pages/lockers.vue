@@ -260,7 +260,7 @@ export default {
       const token = Cookies.get("token");
 
       gets(
-        `https://api.mubingym.com/api/closet/all`,
+        `https://missfitnessbackend.tajsoft.tjapi/closet/all`,
         token
       )
         .then((response) => {
@@ -279,7 +279,7 @@ export default {
       const token = Cookies.get("token");
 
       posts(
-        "https://api.mubingym.com/users",
+        "https://missfitnessbackend.tajsoft.tjusers",
         { form: "0", to: "0" },
         token
       )
@@ -299,7 +299,7 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      posts('https://api.mubingym.com/api/closet/create', formData)
+      posts('https://missfitnessbackend.tajsoft.tjapi/closet/create', formData)
         .then((response) => {
 
           if (response.status === 200) {
@@ -320,7 +320,7 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      deletes(`https://api.mubingym.com/api/closet/delete/${this.deleter}`)
+      deletes(`https://missfitnessbackend.tajsoft.tjapi/closet/delete/${this.deleter}`)
         .then((response) => {
           this.isLoading = false;
           this.loadingText = "Удаление...";
@@ -343,7 +343,7 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      posts(`https://api.mubingym.com/api/closet/update/${this.edit}`, formData)
+      posts(`https://missfitnessbackend.tajsoft.tjapi/closet/update/${this.edit}`, formData)
         .then((response) => {
 
           if (response.status === 200) {

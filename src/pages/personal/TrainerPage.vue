@@ -30,7 +30,7 @@
               </div>
               <div class="carousel-inner slider-inner height-400 my-4">
                 <div v-for="(value, index) in DataUsers.cover_imgs" :class="['carousel-item', { active: index === 0 }]">
-                  <img :src="'https://api.mubingym.com/' + value" class="d-block w-100" alt="..." />
+                  <img :src="'https://missfitnessbackend.tajsoft.tj' + value" class="d-block w-100" alt="..." />
                 </div>
 
               </div>
@@ -51,7 +51,7 @@
             </div>
             <div class="title-trainer">
               <div class="teacher-img img-width-200 border-9px" :style="{ borderColor: DataUsers.color }">
-                <img :src="'https://api.mubingym.com/' + DataUsers.avatar
+                <img :src="'https://missfitnessbackend.tajsoft.tj' + DataUsers.avatar
                   " alt="" />
               </div>
             </div>
@@ -182,7 +182,7 @@ export default {
     getInfo() {
       const token = Cookies.get("token");
       gets(
-        `https://api.mubingym.com/api/coach/${this.id}`,
+        `https://missfitnessbackend.tajsoft.tjapi/coach/${this.id}`,
         token
       )
         .then((response) => {

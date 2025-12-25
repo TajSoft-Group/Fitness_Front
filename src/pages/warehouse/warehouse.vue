@@ -62,7 +62,7 @@ export default {
       const token = Cookies.get("token");
       if (this.deleter) {
         deletes(
-          `https://api.mubingym.com/wh/delete/${this.deleter}`,
+          `https://missfitnessbackend.tajsoft.tjwh/delete/${this.deleter}`,
           token
         )
           .then((response) => {
@@ -102,7 +102,7 @@ export default {
       this.isLoading = true;
       const token = Cookies.get("token");
       gets(
-        "https://api.mubingym.com/wh",
+        "https://missfitnessbackend.tajsoft.tjwh",
         token
       )
         .then((response) => {
@@ -120,7 +120,7 @@ export default {
       this.isLoading = true;
       const token = Cookies.get("token");
       gets(
-        "https://api.mubingym.com/category",
+        "https://missfitnessbackend.tajsoft.tjcategory",
         token
       )
         .then((response) => {
@@ -197,7 +197,7 @@ export default {
       try {
         let response;
         response = await fetch(
-          "https://api.mubingym.com/category_create",
+          "https://missfitnessbackend.tajsoft.tjcategory_create",
           {
             headers: {
               "Content-Type": "application/json",
@@ -235,7 +235,7 @@ export default {
       console.log(id)
       this.isLoading = true;
       this.loadingText = "Удаление..."
-      deletes(`https://api.mubingym.com/category/delete/${parseInt(id)}`)
+      deletes(`https://missfitnessbackend.tajsoft.tjcategory/delete/${parseInt(id)}`)
         .then(
           (response) => {
             console.log(response);
@@ -279,7 +279,7 @@ export default {
         let response;
         console.log("yes");
         response = await fetch(
-          `https://api.mubingym.com/whh/create/${this.formDataH.type}`,
+          `https://missfitnessbackend.tajsoft.tjwhh/create/${this.formDataH.type}`,
           {
             headers: {
               Authorization: `${token}`,
@@ -393,7 +393,7 @@ export default {
         if (this.edit) {
           message = "изменен";
           response = await fetch(
-            `https://api.mubingym.com/wh/update/${this.formData.id}`,
+            `https://missfitnessbackend.tajsoft.tjwh/update/${this.formData.id}`,
             {
               method: "PATCH", // или PATCH, если API принимает
               headers: {
@@ -406,7 +406,7 @@ export default {
           );
         } else {
           message = "добавлен";
-          response = await fetch("https://api.mubingym.com/wh/create", {
+          response = await fetch("https://missfitnessbackend.tajsoft.tjwh/create", {
             method: "POST",
             headers: { Authorization: `${token}` },
             body: formDataToSend,
@@ -713,7 +713,7 @@ export default {
         <div class="bg-gray card-block h-auto position-relative">
           <router-link :to="'/warehouseItem/' + item.id">
             <div class="d-flex justify-content-between">
-              <div class="col-4"><img :src="'https://api.mubingym.com/' + item.img" class="warehouse-img"></div>
+              <div class="col-4"><img :src="'https://missfitnessbackend.tajsoft.tj' + item.img" class="warehouse-img"></div>
               <div class="col-9 px-3">
                 <h3>{{ truncatedTitle(item.title) }}</h3>
                 <div class="fs-7">

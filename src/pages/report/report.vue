@@ -114,7 +114,7 @@ export default {
       });
 
       const response = await fetch(
-        `https://api.mubingym.com/export/subscriptions?${params.toString()}`,
+        `https://missfitnessbackend.tajsoft.tjexport/subscriptions?${params.toString()}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -160,7 +160,7 @@ export default {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(
-          `https://api.mubingym.com/api/services/by-date`,
+          `https://missfitnessbackend.tajsoft.tjapi/services/by-date`,
           {
             params: params,
             headers: {
