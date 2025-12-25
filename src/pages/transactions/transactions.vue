@@ -125,16 +125,66 @@
 </template>
 
 <script>
-import gets from "@/components/axios/get.js";
-import Cookies from "js-cookie";
-import DataPicker from "@/pages/transactions/DataPicker.vue";
-export default {
-  components: { DataPicker },
-  data() {
-    return {
-      dates: {
-        dateFrom: '',
-        dateTo: '',
+  import gets from "@/components/axios/get.js";
+  import Cookies from "js-cookie";
+  import DataPicker from "@/pages/transactions/DataPicker.vue";
+  export default {
+    components: {DataPicker},
+    data() {
+      return {
+        dates: {
+          dateFrom: '',
+          dateTo: '',
+        },
+        transactions: [],
+        filteredTransactions: [],
+        isLoading : true,
+        statusPicker:false,
+        selectedUser: null,
+        selectedDate: null,
+        searchActive: "",
+      };
+    },
+    methods: {
+      filterTransactionsByDate(selectedDates) {
+        this.dates = selectedDates;
+
+        // Convert date strings to Date objects for comparison
+        const dateFrom = new Date(this.dates.dateFrom);
+        const dateTo = new Date(this.dates.dateTo);
+
+        // Filter transactions by key (date)
+        this.filteredTransactions = Object.keys(this.transactions).reduce((filtered, key) => {
+          const transactionDate = new Date(key); // Convert the key (which is a date) to a Date object
+
+          if (transactionDate >= dateFrom && transactionDate <= dateTo) {
+            filtered[key] = this.transactions[key];
+          }
+          this.statusPicker = false;
+          return filtered;
+        }, {});
+      },
+      toggleUserTransactions(username, date) {
+        if (this.selectedUser === username && this.selectedDate === date) {
+          this.selectedUser = null;
+          this.selectedDate = null; // Deselect if the same user and date are clicked again
+        } else {
+          this.selectedUser = username; // Set selectedUser to the clicked user's username
+          this.selectedDate = date; // Set selectedDate to the clicked date
+        }
+      },
+      loadData() {
+        const token = Cookies.get("token");
+        gets('https://missfitnessbackend.tajsoft.tj/api/transactions', token)
+            .then((response) => {
+              this.transactions = response.data;
+              this.filteredTransactions = this.transactions; // Initially, show all transactions
+              this.isLoading = false;
+            })
+            .catch((error) => {
+              this.error = error;
+              this.Delay("loading", 1);
+            });
       },
       transactions: [],
       filteredTransactions: [],
@@ -172,7 +222,7 @@ export default {
     loadData() {
       const token = Cookies.get("token");
 
-      gets('https://api.mubingym.com/api/transactions', token)
+      gets('https://missfitnessbackend.tajsoft.tjapi/transactions', token)
         .then((response) => {
           const normalized = {};
 

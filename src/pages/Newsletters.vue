@@ -397,7 +397,11 @@ export default {
       const token = Cookies.get("token");
 
       posts(
-        "https://api.mubingym.com/users",
+<<<<<<< HEAD
+        "https://missfitnessbackend.tajsoft.tjusers",
+=======
+        "https://missfitnessbackend.tajsoft.tj/users",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         { form: "0", to: "0" },
         token
       )
@@ -439,7 +443,11 @@ export default {
 
       this.letter.type = type;
       console.log(this.letter);
-      posts('https://api.mubingym.com/api/mailings/create', sending, token)
+<<<<<<< HEAD
+      posts('https://missfitnessbackend.tajsoft.tjapi/mailings/create', sending, token)
+=======
+      posts('https://missfitnessbackend.tajsoft.tj/api/mailings/create', sending, token)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.isLoading = false;
           this.toaster = true;
@@ -510,7 +518,11 @@ export default {
 
       this.isLoading = true;
       this.loadingText = 'Загрузка рассылок...';
-      gets('https://api.mubingym.com/api/mailings/get', token)
+<<<<<<< HEAD
+      gets('https://missfitnessbackend.tajsoft.tjapi/mailings/get', token)
+=======
+      gets('https://missfitnessbackend.tajsoft.tj/api/mailings/get', token)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.letters = response.data.data.map(letter => ({
             ...letter,
@@ -528,7 +540,11 @@ export default {
       if (confirm('Вы уверены, что хотите удалить эту рассылку?')) {
         this.isLoading = true;
         this.loadingText = 'Удаление рассылки...';
-        deletes(`https://api.mubingym.com/api/mailings/delete/${id}`)
+<<<<<<< HEAD
+        deletes(`https://missfitnessbackend.tajsoft.tjapi/mailings/delete/${id}`)
+=======
+        deletes(`https://missfitnessbackend.tajsoft.tj/api/mailings/delete/${id}`)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           .then((response) => {
             this.isLoading = false;
             this.toaster = true;

@@ -62,7 +62,11 @@ export default {
       const token = Cookies.get("token");
       if (this.deleter) {
         deletes(
-          `https://api.mubingym.com/wh/delete/${this.deleter}`,
+<<<<<<< HEAD
+          `https://missfitnessbackend.tajsoft.tjwh/delete/${this.deleter}`,
+=======
+          `https://missfitnessbackend.tajsoft.tj/wh/delete/${this.deleter}`,
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           token
         )
           .then((response) => {
@@ -102,7 +106,11 @@ export default {
       this.isLoading = true;
       const token = Cookies.get("token");
       gets(
-        "https://api.mubingym.com/wh",
+<<<<<<< HEAD
+        "https://missfitnessbackend.tajsoft.tjwh",
+=======
+        "https://missfitnessbackend.tajsoft.tj/wh",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         token
       )
         .then((response) => {
@@ -120,7 +128,11 @@ export default {
       this.isLoading = true;
       const token = Cookies.get("token");
       gets(
-        "https://api.mubingym.com/category",
+<<<<<<< HEAD
+        "https://missfitnessbackend.tajsoft.tjcategory",
+=======
+        "https://missfitnessbackend.tajsoft.tj/category",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         token
       )
         .then((response) => {
@@ -197,7 +209,11 @@ export default {
       try {
         let response;
         response = await fetch(
-          "https://api.mubingym.com/category_create",
+<<<<<<< HEAD
+          "https://missfitnessbackend.tajsoft.tjcategory_create",
+=======
+          "https://missfitnessbackend.tajsoft.tj/category_create",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           {
             headers: {
               "Content-Type": "application/json",
@@ -235,7 +251,11 @@ export default {
       console.log(id)
       this.isLoading = true;
       this.loadingText = "Удаление..."
-      deletes(`https://api.mubingym.com/category/delete/${parseInt(id)}`)
+<<<<<<< HEAD
+      deletes(`https://missfitnessbackend.tajsoft.tjcategory/delete/${parseInt(id)}`)
+=======
+      deletes(`https://missfitnessbackend.tajsoft.tj/category/delete/${parseInt(id)}`)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then(
           (response) => {
             console.log(response);
@@ -279,7 +299,11 @@ export default {
         let response;
         console.log("yes");
         response = await fetch(
-          `https://api.mubingym.com/whh/create/${this.formDataH.type}`,
+<<<<<<< HEAD
+          `https://missfitnessbackend.tajsoft.tjwhh/create/${this.formDataH.type}`,
+=======
+          `https://missfitnessbackend.tajsoft.tj/whh/create/${this.formDataH.type}`,
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           {
             headers: {
               Authorization: `${token}`,
@@ -393,7 +417,11 @@ export default {
         if (this.edit) {
           message = "изменен";
           response = await fetch(
-            `https://api.mubingym.com/wh/update/${this.formData.id}`,
+<<<<<<< HEAD
+            `https://missfitnessbackend.tajsoft.tjwh/update/${this.formData.id}`,
+=======
+            `https://missfitnessbackend.tajsoft.tj/wh/update/${this.formData.id}`,
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
             {
               method: "PATCH", // или PATCH, если API принимает
               headers: {
@@ -406,7 +434,11 @@ export default {
           );
         } else {
           message = "добавлен";
-          response = await fetch("https://api.mubingym.com/wh/create", {
+<<<<<<< HEAD
+          response = await fetch("https://missfitnessbackend.tajsoft.tjwh/create", {
+=======
+          response = await fetch("https://missfitnessbackend.tajsoft.tj/wh/create", {
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
             method: "POST",
             headers: { Authorization: `${token}` },
             body: formDataToSend,
@@ -713,7 +745,11 @@ export default {
         <div class="bg-gray card-block h-auto position-relative">
           <router-link :to="'/warehouseItem/' + item.id">
             <div class="d-flex justify-content-between">
-              <div class="col-4"><img :src="'https://api.mubingym.com/' + item.img" class="warehouse-img"></div>
+<<<<<<< HEAD
+              <div class="col-4"><img :src="'https://missfitnessbackend.tajsoft.tj' + item.img" class="warehouse-img"></div>
+=======
+              <div class="col-4"><img :src="'https://missfitnessbackend.tajsoft.tj/' + item.img" class="warehouse-img"></div>
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
               <div class="col-9 px-3">
                 <h3>{{ truncatedTitle(item.title) }}</h3>
                 <div class="fs-7">

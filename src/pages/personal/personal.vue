@@ -164,7 +164,11 @@
                   <router-link :to="{ name: 'TrainerPage', params: { id: personal.id } }"
                     class="d-flex col-8 align-items-center">
                     <div class="personal-img my-3" :style="{ borderColor: personal.color }">
-                      <img :src="'https://api.mubingym.com/' +
+<<<<<<< HEAD
+                      <img :src="'https://missfitnessbackend.tajsoft.tj' +
+=======
+                      <img :src="'https://missfitnessbackend.tajsoft.tj/' +
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                         personal.avatar
                         " alt="" />
                     </div>
@@ -301,7 +305,11 @@ export default {
       if (!confirm("Вы уверены, что хотите удалить этого тренера?")) return;
 
       try {
-        const response = await deletes(`https://api.mubingym.com/api/coach/delete/${id}`);
+<<<<<<< HEAD
+        const response = await deletes(`https://missfitnessbackend.tajsoft.tjapi/coach/delete/${id}`);
+=======
+        const response = await deletes(`https://missfitnessbackend.tajsoft.tj/api/coach/delete/${id}`);
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
 
         // Если нужно проверить статус:
         if (response.status === 200) {
@@ -363,7 +371,11 @@ export default {
     },
     getInfo() {
       const token = Cookies.get("token");
-      gets("https://api.mubingym.com/api/coach/all", token)
+<<<<<<< HEAD
+      gets("https://missfitnessbackend.tajsoft.tjapi/coach/all", token)
+=======
+      gets("https://missfitnessbackend.tajsoft.tj/api/coach/all", token)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.DataUsers = response.data.data;
           this.filteredUsers = this.DataUsers;
@@ -475,7 +487,11 @@ export default {
         // Если ваш form_Data — это helper, который принимает FormData — используем его.
         // Иначе замените на axios.post с заголовком multipart/form-data
         const response = await form_Data(
-          `https://api.mubingym.com/api/coach/update/${this.editedCoach.id}`,
+<<<<<<< HEAD
+          `https://missfitnessbackend.tajsoft.tjapi/coach/update/${this.editedCoach.id}`,
+=======
+          `https://missfitnessbackend.tajsoft.tj/api/coach/update/${this.editedCoach.id}`,
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           fd
         )
           .then(() => {
@@ -520,7 +536,11 @@ export default {
         const fd = this.buildCoachFormData(payload);
 
         const response = await form_Data(
-          "https://api.mubingym.com/coach/create",
+<<<<<<< HEAD
+          "https://missfitnessbackend.tajsoft.tjcoach/create",
+=======
+          "https://missfitnessbackend.tajsoft.tj/coach/create",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           fd
         );
 

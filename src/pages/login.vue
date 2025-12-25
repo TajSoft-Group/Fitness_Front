@@ -65,7 +65,11 @@ export default {
         username: this.username,
         password: this.password
       };
-      axios.post('https://api.mubingym.com/login_check', dataToSend)
+<<<<<<< HEAD
+      axios.post('https://missfitnessbackend.tajsoft.tjlogin_check', dataToSend)
+=======
+      axios.post('https://missfitnessbackend.tajsoft.tj/login_check', dataToSend)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           .then(response => {
             const t = response.data.token;
             this.setCookie('token', t, 31)

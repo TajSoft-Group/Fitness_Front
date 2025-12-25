@@ -260,7 +260,11 @@ export default {
       const token = Cookies.get("token");
 
       gets(
-        `https://api.mubingym.com/api/closet/all`,
+<<<<<<< HEAD
+        `https://missfitnessbackend.tajsoft.tjapi/closet/all`,
+=======
+        `https://missfitnessbackend.tajsoft.tj/api/closet/all`,
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         token
       )
         .then((response) => {
@@ -279,7 +283,11 @@ export default {
       const token = Cookies.get("token");
 
       posts(
-        "https://api.mubingym.com/users",
+<<<<<<< HEAD
+        "https://missfitnessbackend.tajsoft.tjusers",
+=======
+        "https://missfitnessbackend.tajsoft.tj/users",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         { form: "0", to: "0" },
         token
       )
@@ -299,7 +307,11 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      posts('https://api.mubingym.com/api/closet/create', formData)
+<<<<<<< HEAD
+      posts('https://missfitnessbackend.tajsoft.tjapi/closet/create', formData)
+=======
+      posts('https://missfitnessbackend.tajsoft.tj/api/closet/create', formData)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
 
           if (response.status === 200) {
@@ -320,7 +332,11 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      deletes(`https://api.mubingym.com/api/closet/delete/${this.deleter}`)
+<<<<<<< HEAD
+      deletes(`https://missfitnessbackend.tajsoft.tjapi/closet/delete/${this.deleter}`)
+=======
+      deletes(`https://missfitnessbackend.tajsoft.tj/api/closet/delete/${this.deleter}`)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.isLoading = false;
           this.loadingText = "Удаление...";
@@ -343,7 +359,11 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      posts(`https://api.mubingym.com/api/closet/update/${this.edit}`, formData)
+<<<<<<< HEAD
+      posts(`https://missfitnessbackend.tajsoft.tjapi/closet/update/${this.edit}`, formData)
+=======
+      posts(`https://missfitnessbackend.tajsoft.tj/api/closet/update/${this.edit}`, formData)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
 
           if (response.status === 200) {
