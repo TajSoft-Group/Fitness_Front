@@ -80,12 +80,12 @@
         <div class="d-flex justify-content-between title-block align-items-center">
           <div @click="addStatus = !addStatus" class="page-title">Услуги</div>
           <div class="user-add-btn d-flex justify-content-center align-items-center relative">
-            <!-- <button
+            <button
               @click="toggleModal('.clients-list')"
               class="add-user-btn mx-3"
-            >
+            > 
               Список клиентов
-            </button> -->
+            </button> 
             <button @click="toggleModal('.add-curs'); (edit = false, setFormData())" class="add-user-btn">
               Добавить
             </button>
