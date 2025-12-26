@@ -174,7 +174,7 @@
       <div v-for="(product, index) in productList" :key="index" class="col-3 position-relative">
         <div class="product-card p-0 position-relative">
           <img
-            :src="'https://missfitnessbackend.tajsoft.tj/' + product.img"
+            :src="'https://api.mubingym.com/' + product.img"
           />
           <div class="product-info">
             <div class="product-title mb-2">{{ product.title }}</div>
@@ -468,7 +468,7 @@ export default {
     },
     deleteProduct(id){
       console.log(id)
-      deletes(`https://missfitnessbackend.tajsoft.tj/product/${ parseInt(id) }`)
+      deletes(`https://api.mubingym.com/product/${ parseInt(id) }`)
           .then(
               (response) =>
               {
@@ -517,7 +517,7 @@ export default {
     // ///////////// //////////// => addCategory // => product
     async addCategory(typeAdd) {
       if (typeAdd === "addCategory") {
-        posts("https://missfitnessbackend.tajsoft.tj/category_create", {
+        posts("https://api.mubingym.com/category_create", {
           name: this.AddCategory,
         })
           .then((response) => {
@@ -525,12 +525,12 @@ export default {
             if (response.status === 200) {
               this.addStatus = true;
               this.getInfo(
-                "https://missfitnessbackend.tajsoft.tj/category",
+                "https://api.mubingym.com/category",
                 "buttonsCategory",
                 1
               );
               this.getInfo(
-                "https://missfitnessbackend.tajsoft.tj/product/all",
+                "https://api.mubingym.com/product/all",
                 "productList",
                 2
               );
@@ -549,13 +549,13 @@ export default {
             console.log('yes');
             delete FormData.img
             response = await Patch(
-                `https://missfitnessbackend.tajsoft.tj/product/${ FormData.id }`,
+                `https://api.mubingym.com/product/${ FormData.id }`,
                 FormData
             );
             this.editNull()
           }else{
             response = await form_Data(
-                "https://missfitnessbackend.tajsoft.tj/product_create",
+                "https://api.mubingym.com/product_create",
                 FormData
             );
           }
@@ -564,12 +564,12 @@ export default {
           if (response.status === 200) {
             this.addStatus = true;
             await this.getInfo(
-              "https://missfitnessbackend.tajsoft.tj/category",
+              "https://api.mubingym.com/category",
               "buttonsCategory",
               1
             );
             await this.getInfo(
-              "https://missfitnessbackend.tajsoft.tj/product/all",
+              "https://api.mubingym.com/product/all",
               "productList",
               2
             );
@@ -626,7 +626,7 @@ export default {
     },
     deleteCategory(id){
       console.log(id)
-      deletes(`https://missfitnessbackend.tajsoft.tj/category/delete/${ parseInt(id) }`)
+      deletes(`https://api.mubingym.com/category/delete/${ parseInt(id) }`)
           .then(
               (response) =>
               {
@@ -644,12 +644,12 @@ export default {
   },
   mounted() {
     this.getInfo(
-      "https://missfitnessbackend.tajsoft.tj/category",
+      "https://api.mubingym.com/category",
       "buttonsCategory",
       1
     );
     this.getInfo(
-      "https://missfitnessbackend.tajsoft.tj/product/all",
+      "https://api.mubingym.com/product/all",
       "productList",
       2
     );

@@ -18,7 +18,7 @@
               <div class="user-list-item" :class="{ active: activeIndex === index }"
                 @click.self="toggleCollapse(index)">
                 <div class="user-list-item-img">
-                  <img v-if="trener.img" :src="`https://missfitnessbackend.tajsoft.tj/${trener.img}`" alt="" />
+                  <img v-if="trener.img" :src="`https://api.mubingym.com/${trener.img}`" alt="" />
                   <img v-else src="@/assets/images/user-photo.png" alt="" />
                 </div>
                 {{ trener.name + " " + trener.surname }}
@@ -136,7 +136,7 @@
             <!-- Существующие изображения при редактировании -->
             <div v-for="(image, index) in formData.img" :key="'old-' + index"
               class="card-add-img m-2 position-relative">
-              <img :src="'https://missfitnessbackend.tajsoft.tj/' + image" class="card-img-top" alt="Product Image" />
+              <img :src="'https://api.mubingym.com/' + image" class="card-img-top" alt="Product Image" />
               <button type="button" class="btn-close position-absolute top-0 end-0"
                 @click="removeImage(index, true)"></button>
             </div>
@@ -263,7 +263,7 @@
           @click="
             (cursData.services_id = curs.id)">
           <!--          <div class="at-top bg-red position-absolute top-0 right me-3 mt-3 px-2 border-radius-25">-{{ curs.discount + "%" }}</div>-->
-          <img class="w-100 h-100" :src="'https://missfitnessbackend.tajsoft.tj/' + curs.img" alt="">
+          <img class="w-100 h-100" :src="'https://api.mubingym.com/' + curs.img" alt="">
           <div class="at-bottom position-absolute bottom-0 ps-4">
             <h5>{{ curs.name }}</h5>
             <p class="m-0">{{ curs.price }} TJS </p>
@@ -485,7 +485,7 @@ export default {
       const token = Cookies.get("token");
       this.cursData.count = (this.cursData.count * this.addCurs.visit_count)
       posts(
-        "https://missfitnessbackend.tajsoft.tj/enroll/services",
+        "https://api.mubingym.com/enroll/services",
         {
           ...this.cursData,
         },
@@ -509,7 +509,7 @@ export default {
 
       const token = Cookies.get("token");
       posts(
-        `https://missfitnessbackend.tajsoft.tj/services/status/${this.archive_item}`,
+        `https://api.mubingym.com/services/status/${this.archive_item}`,
         token
       )
         .then((response) => {
@@ -519,7 +519,7 @@ export default {
             this.addStatus = true;
             this.addStatusDelay();
             this.getInfo(
-              "https://missfitnessbackend.tajsoft.tj/api/services/admin/all",
+              "https://api.mubingym.com/api/services/admin/all",
               "cursList",
               2
             );
@@ -562,7 +562,7 @@ export default {
     getInfoUsers() {
       const token = Cookies.get("token");
       posts(
-        "https://missfitnessbackend.tajsoft.tj/users",
+        "https://api.mubingym.com/users",
         {
           form: "0",
           to: "0",
@@ -621,9 +621,9 @@ export default {
         this.loadingText = this.edit ? "Изменение услуги" : "Создание услуги";
 
         if (!this.edit) {
-          url = "https://missfitnessbackend.tajsoft.tj/services/create";
+          url = "https://api.mubingym.com/services/create";
         } else {
-          url = `https://missfitnessbackend.tajsoft.tj/services/update/${this.formData.id}`;
+          url = `https://api.mubingym.com/services/update/${this.formData.id}`;
         }
 
         // POST-запрос с FormData
@@ -633,8 +633,8 @@ export default {
           this.addStatus = true;
           this.error = false;
           // Обновляем данные
-          await this.getInfo("https://missfitnessbackend.tajsoft.tj/api/coach/all", "DataUsers", 1);
-          await this.getInfo("https://missfitnessbackend.tajsoft.tj/api/services/admin/all", "cursList", 2);
+          await this.getInfo("https://api.mubingym.com/api/coach/all", "DataUsers", 1);
+          await this.getInfo("https://api.mubingym.com/api/services/admin/all", "cursList", 2);
           await this.getInfoUsers();
 
           this.messageSuccess = this.edit ? "Успешно изменен" : "Успешно добавлен";
@@ -677,7 +677,7 @@ export default {
     },
     changeCourse() {
       console.log("changeCourse");
-      posts("https://missfitnessbackend.tajsoft.tj/count/services", {
+      posts("https://api.mubingym.com/count/services", {
         user_id: this.activeCourse.userId,
         services_id: this.activeCourse.courseId,
       })
@@ -702,12 +702,12 @@ export default {
   },
   mounted() {
     this.getInfo(
-      "https://missfitnessbackend.tajsoft.tj/api/coach/all",
+      "https://api.mubingym.com/api/coach/all",
       "DataUsers",
       1
     );
     this.getInfo(
-      "https://missfitnessbackend.tajsoft.tj/api/services/admin/all",
+      "https://api.mubingym.com/api/services/admin/all",
       "cursList",
       2
     );
