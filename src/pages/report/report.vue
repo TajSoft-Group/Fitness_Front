@@ -44,6 +44,7 @@
             <th>Использовано</th>
             <th>Осталось</th>
             <th>Дата</th>
+            <th>Действие</th>
           </tr>
         </thead>
 
@@ -60,6 +61,17 @@
             <td class="text-danger fw-bold">{{ item.used_count }}</td>
             <td class="text-success fw-bold">{{ item.count }}</td>
             <td>{{ formatDate(item.created_at) }}</td>
+            <td>
+              <!-- ЕСЛИ ПАУЗА -->
+              <button v-if="item.paused_at" class="btn btn-secondary btn-sm" disabled>
+                Приостановлено: {{ formatDate(item.paused_at) }}
+              </button>
+
+              <!-- ЕСЛИ НЕ НА ПАУЗЕ -->
+              <button v-else class="btn btn-warning btn-sm" @click="pauseService(item)">
+                Приостановить
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -107,6 +119,30 @@ export default {
   },
 
   methods: {
+    async pauseService(item) {
+      if (!confirm("Приостановить абонемент?")) return;
+
+      try {
+        const token = localStorage.getItem("token");
+
+        await axios.post(
+          `https://api.mubingym.com/api/enroll-services/pause/${item.id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        // 🔥 ЛОКАЛЬНО ОБНОВЛЯЕМ
+        item.paused_at = new Date().toISOString().slice(0, 10);
+
+      } catch (e) {
+        console.error("Ошибка при приостановке:", e);
+        alert("Не удалось приостановить абонемент");
+      }
+    },
     async downloadFile() {
       const params = new URLSearchParams({
         dateFrom: this.dateFrom, // yyyy-mm-dd
