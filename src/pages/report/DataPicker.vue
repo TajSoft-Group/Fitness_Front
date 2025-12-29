@@ -3,30 +3,20 @@
     <div class="header mx-5 mt-5">
       <button class="current-month-bt button-left" @click="previousMonth"></button>
       <div class="current-month mx-3">{{ monthName }}</div>
-      <button class="current-month-bt"   @click="nextMonth"></button>
+      <button class="current-month-bt" @click="nextMonth"></button>
     </div>
     <div class="week-days mx-3 mt-5">
       <span v-for="day in weekDays" :key="day">{{ day }}</span>
     </div>
     <div class="days mx-3 mt-4">
-      <span
-          v-for="day in emptyDays"
-          :key="'empty-' + day"
-          class="empty"
-      ></span>
-      <span
-          class=""
-          v-for="day in daysInMonth"
-          :key="day"
-          :class="{
-          selected: isSelected(day),
-          'range-start': isRangeStart(day),
-          'range-end': isRangeEnd(day),
-          'in-range': isInRange(day),
-          today: isToday(day)
-        }"
-          @click="selectDate(day)"
-      >
+      <span v-for="day in emptyDays" :key="'empty-' + day" class="empty"></span>
+      <span class="" v-for="day in daysInMonth" :key="day" :class="{
+        selected: isSelected(day),
+        'range-start': isRangeStart(day),
+        'range-end': isRangeEnd(day),
+        'in-range': isInRange(day),
+        today: isToday(day)
+      }" @click="selectDate(day)">
         {{ day }}
       </span>
     </div>
@@ -38,7 +28,7 @@
 </template>
 
 <script>
-export default  {
+export default {
   data() {
     return {
       currentDate: new Date(),
@@ -70,6 +60,13 @@ export default  {
     },
   },
   methods: {
+    cancel() {
+      this.rangeStart = null;
+      this.rangeEnd = null;
+      this.selectingRangeEnd = false;
+
+      this.$emit('close'); // ⬅️ сообщаем родителю закрыть модалку
+    },
     previousMonth() {
       this.currentDate.setMonth(this.currentMonth - 1);
       this.currentDate = new Date(this.currentDate);
@@ -96,10 +93,10 @@ export default  {
     },
     isSelected(day) {
       return (
-          this.rangeStart &&
-          this.rangeStart.getDate() === day &&
-          this.rangeStart.getMonth() === this.currentMonth &&
-          this.rangeStart.getFullYear() === this.currentYear
+        this.rangeStart &&
+        this.rangeStart.getDate() === day &&
+        this.rangeStart.getMonth() === this.currentMonth &&
+        this.rangeStart.getFullYear() === this.currentYear
       );
     },
     isRangeStart(day) {
@@ -107,10 +104,10 @@ export default  {
     },
     isRangeEnd(day) {
       return (
-          this.rangeEnd &&
-          this.rangeEnd.getDate() === day &&
-          this.rangeEnd.getMonth() === this.currentMonth &&
-          this.rangeEnd.getFullYear() === this.currentYear
+        this.rangeEnd &&
+        this.rangeEnd.getDate() === day &&
+        this.rangeEnd.getMonth() === this.currentMonth &&
+        this.rangeEnd.getFullYear() === this.currentYear
       );
     },
     isInRange(day) {
@@ -123,9 +120,9 @@ export default  {
     isToday(day) {
       const today = new Date();
       return (
-          today.getDate() === day &&
-          today.getMonth() === this.currentMonth &&
-          today.getFullYear() === this.currentYear
+        today.getDate() === day &&
+        today.getMonth() === this.currentMonth &&
+        today.getFullYear() === this.currentYear
       );
     },
     cancel() {
@@ -178,38 +175,46 @@ export default  {
   height: 600px;
   padding: 0 10px;
 }
+
 .header {
   display: flex;
   justify-content: end;
   align-items: center;
   margin-bottom: 10px;
 }
+
 .week-days span,
 .days span {
   width: 14.28%;
   text-align: center;
   margin-bottom: 5px;
 }
+
 .empty {
   visibility: hidden;
 }
+
 .days span {
   cursor: pointer;
   padding: 5px;
   border-radius: 5px;
 }
+
 .days span:hover {
   background-color: #555;
 }
+
 .selected,
 .range-start,
 .range-end {
   background-color: #ccff33;
   color: #333;
 }
+
 .in-range {
   background-color: rgba(204, 255, 51, 0.5);
 }
+
 .today {
   border: 1px solid #ccff33;
 }

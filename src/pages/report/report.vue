@@ -22,13 +22,15 @@
       </div>
     </div>
 
+
     <!-- DATE PICKER MODAL -->
     <div v-if="showPicker" class="user-page-card cards-modal d-flex justify-content-center align-items-center"
       @click="showPicker = false">
       <div @click.stop class="content">
-        <DataPicker @date-selected="onDateSelected" />
+        <DataPicker @date-selected="onDateSelected" @close="showPicker = false" />
       </div>
     </div>
+
 
 
 
@@ -44,7 +46,7 @@
             <th>Использовано</th>
             <th>Осталось</th>
             <th>Дата</th>
-            <th>Действие</th>
+            <!-- <th>Действие</th> -->
           </tr>
         </thead>
 
@@ -61,17 +63,15 @@
             <td class="text-danger fw-bold">{{ item.used_count }}</td>
             <td class="text-success fw-bold">{{ item.count }}</td>
             <td>{{ formatDate(item.created_at) }}</td>
-            <td>
-              <!-- ЕСЛИ ПАУЗА -->
+            <!-- <td>
               <button v-if="item.paused_at" class="btn btn-secondary btn-sm" disabled>
                 Приостановлено: {{ formatDate(item.paused_at) }}
               </button>
 
-              <!-- ЕСЛИ НЕ НА ПАУЗЕ -->
               <button v-else class="btn btn-warning btn-sm" @click="pauseService(item)">
                 Приостановить
               </button>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>
