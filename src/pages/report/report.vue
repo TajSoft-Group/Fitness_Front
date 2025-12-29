@@ -53,7 +53,7 @@
             <th>Использовано</th>
             <th>Осталось</th>
             <th>Дата</th>
-            <!-- <th>Действие</th> -->
+            <th>Действие</th>
           </tr>
         </thead>
 
@@ -70,7 +70,7 @@
             <td class="text-danger fw-bold">{{ item.used_count }}</td>
             <td class="text-success fw-bold">{{ item.count }}</td>
             <td>{{ formatDate(item.created_at) }}</td>
-            <!-- <td>
+            <td>
               <button v-if="item.paused_at" class="btn btn-secondary btn-sm" disabled>
                 Приостановлено: {{ formatDate(item.paused_at) }}
               </button>
@@ -78,7 +78,7 @@
               <button v-else class="btn btn-warning btn-sm" @click="pauseService(item)">
                 Приостановить
               </button>
-            </td> -->
+            </td>
           </tr>
         </tbody>
       </table>
@@ -137,7 +137,7 @@ export default {
       });
 
       const response = await fetch(
-        `https://missfitnessbackend.tajsoft.tj/export/subscriptions?${params.toString()}`,
+        `https://api.mubingym.com/export/subscriptions?${params.toString()}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -170,7 +170,7 @@ export default {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(
-          "https://missfitnessbackend.tajsoft.tj/api/services/by-date",
+          "https://api.mubingym.com/api/services/by-date",
           {
             params: this.dateFrom && this.dateTo
               ? { from: this.dateFrom, to: this.dateTo }
