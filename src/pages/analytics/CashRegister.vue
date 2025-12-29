@@ -30,7 +30,7 @@ export default {
       const dateTo = new Date(this.dates.dateTo);
 
       posts(
-        "https://missfitnessbackend.tajsoft.tj/finance",
+        "https://api.mubingym.com/finance",
         { start_date: dateFrom, end_date: dateTo },
         token
       )
@@ -54,7 +54,7 @@ export default {
       const end = currentDate.toISOString().split('T')[0];
 
       posts(
-        "https://missfitnessbackend.tajsoft.tj/finance",
+        "https://api.mubingym.com/finance",
         { start_date: start, end_date: end },
         token
       )
@@ -72,7 +72,7 @@ export default {
       this.dates = selectedDates;
 
       posts(
-        "https://missfitnessbackend.tajsoft.tj/finance",
+        "https://api.mubingym.com/finance",
         {
           start_date: selectedDates.dateFrom,
           end_date: selectedDates.dateTo
