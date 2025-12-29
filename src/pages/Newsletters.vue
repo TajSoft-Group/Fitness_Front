@@ -61,7 +61,7 @@
         <div class="position-relative">
           <label for="name" class="color-yellow" style="margin: 10px 0px 10px 20px;">Выберите получателя</label>
           <input type="text" id="present" class="mb-3" v-model="activeTR" @click="presentMenu2 = !presentMenu2"
-            required />
+             />
           <img @click="presentMenu2 = !presentMenu2" :class="{ 'rotate-90': presentMenu2 }" class="row-right-icon mt-2"
             src="@/assets/images/icons/row-right.png" />
           <div :class="{ 'd-block': presentMenu2 }" class="menu-type-1 pt-4 pb-3 px-3">
