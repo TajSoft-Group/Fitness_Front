@@ -83,15 +83,15 @@
 
         <div class="menu-type-2 d-flex justify-content-between mt-3 px-3">
           <div class="form-recipients">
-            <input type="radio" id="all" v-model="letter.gender" value="0" name="gender" required>
+            <input type="radio" id="all" v-model="letter.gender" value="0" name="gender" >
             <label for="all">Все</label>
           </div>
           <div class="form-recipients">
-            <input type="radio" id="man" v-model="letter.gender" value="1" name="gender" required>
+            <input type="radio" id="man" v-model="letter.gender" value="1" name="gender" >
             <label for="man">Мужчина</label>
           </div>
           <div class="form-recipients">
-            <input type="radio" id="woman" v-model="letter.gender" value="2" name="gender" required>
+            <input type="radio" id="woman" v-model="letter.gender" value="2" name="gender" >
             <label for="woman">Женщина</label>
           </div>
         </div>
