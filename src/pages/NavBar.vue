@@ -10,7 +10,7 @@ export default {
       this.anim.goToAndPlay(0, true)
     },
     openDoor() {
-      posts('https://api.mubingym.com/post/door')
+      posts('https://missfitnessbackend.tajsoft.tj/post/door')
         .then((response) => {
           console.log('Турникет открыт:', response.data);
         })
@@ -97,11 +97,11 @@ export default {
     </div>
   </div>
 
-  <button @click="playOnce(), openDoor()"
+  <!-- <button @click="playOnce(), openDoor()"
     class="turnstile-btn d-flex align-items-center gap-2 mt-3 bg-yellow rounded-3 px-3 py-2 position-fixed end-0 bottom-0 m-4">
     <div ref="lottie" class="lottie-icon"></div>
     Открыть турникет
-  </button>
+  </button> -->
 
 
 </template>
