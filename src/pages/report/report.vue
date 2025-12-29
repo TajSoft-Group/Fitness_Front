@@ -26,8 +26,8 @@
     <!-- DATE PICKER MODAL -->
     <div v-if="showPicker" class="user-page-card cards-modal d-flex justify-content-center align-items-center"
       @click="showPicker = false">
-      <div @click.stop class="content">
-        <DataPicker @date-selected="onDateSelected" @close="showPicker = false" />
+      <div @click.stop class="content position-relative">
+        <DataPicker @date-selected="onDateSelected" @close-picker="showPicker = false"/>
       </div>
     </div>
 
@@ -89,7 +89,7 @@
 </template>
 <script>
 import axios from "axios";
-import DataPicker from "@/pages/transactions/DataPicker.vue";
+import DataPicker from "@/pages/report/DataPicker.vue";
 
 export default {
   components: { DataPicker },

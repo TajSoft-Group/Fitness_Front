@@ -1,5 +1,6 @@
 <template>
   <div class="">
+      <button class="position-absolute top-0 end-0 mt-4 mx-4 bg-transparent border-0 fs-2 color-yellow" @click="(this.$emit('close-picker'))"><i class="">&times;</i></button>
     <div class="header mx-5 mt-5">
       <button class="current-month-bt button-left" @click="previousMonth"></button>
       <div class="current-month mx-3">{{ monthName }}</div>

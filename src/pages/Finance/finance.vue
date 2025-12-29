@@ -23,8 +23,8 @@
         @click="statusPicker = false"
         class="user-page-card cards-modal d-flex justify-content-center align-items-center"
       >
-        <div @click.stop class="content">
-          <DataPicker @date-selected="reloadAPI" />
+        <div @click.stop class="content position-relative">
+          <DataPicker @date-selected="reloadAPI" @close-picker="statusPicker = false" />
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
 <template>
   <div @click="statusPicker = false" v-if="statusPicker"
     class="user-page-card cards-modal d-flex justify-content-center align-items-center">
-    <div @click.stop class="content">
-      <DataPicker @date-selected="filterTransactionsByDate" />
+    <div @click.stop class="content position-relative">
+      <DataPicker @date-selected="filterTransactionsByDate" @close-picker="statusPicker = false" />
     </div>
   </div>
   <div class="container">
