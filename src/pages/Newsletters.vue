@@ -91,7 +91,7 @@
             <label for="man">Мужчина</label>
           </div>
           <div class="form-recipients">
-            <input type="radio" id="woman" v-model="letter.gender" value="2" name="gender" >
+            <input type="radio" id="woman" v-model="letter.gender" value="2" name="gender" a>
             <label for="woman">Женщина</label>
           </div>
         </div>
