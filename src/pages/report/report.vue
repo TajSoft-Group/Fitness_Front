@@ -22,16 +22,23 @@
       </div>
     </div>
 
-    
+
     <!-- DATE PICKER MODAL -->
     <div v-if="showPicker" class="user-page-card cards-modal d-flex justify-content-center align-items-center"
       @click="showPicker = false">
       <div @click.stop class="content position-relative">
-        <DataPicker @date-selected="onDateSelected" @close-picker="showPicker = false"/>
+        <DataPicker @date-selected="onDateSelected" @close-picker="showPicker = false" />
       </div>
     </div>
 
-
+    <div class="d-flex justify-content-between align-items-center search-block mb-4">
+      <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center">
+          <img src="@/assets/images/icons/search.png" alt="search" />
+          <input v-model="search" type="text" id="searchInput" placeholder="Поиск по пользователю" />
+        </div>
+      </div>
+    </div>
 
 
     <!-- TABLE -->
@@ -106,54 +113,34 @@ export default {
 
   computed: {
     filteredServices() {
-      if (!this.search) return this.services;
+      const q = this.search.trim().toLowerCase();
 
-      const q = this.search.toLowerCase();
+      if (!q) return this.services;
 
-      return this.services.filter(i =>
-        `${i.user_name} ${i.user_surname}`.toLowerCase().includes(q) ||
-        i.user.includes(q) ||
-        i.services_name.toLowerCase().includes(q)
-      );
+      return this.services.filter(item => {
+        const fullName = `${item.user_name ?? ""} ${item.user_surname ?? ""}`.toLowerCase();
+        const phone = (item.user ?? "").toLowerCase();
+
+        return (
+          fullName.includes(q) ||
+          phone.includes(q)
+        );
+      });
     }
   },
 
   methods: {
-    async pauseService(item) {
-      if (!confirm("Приостановить абонемент?")) return;
-
-      try {
-        const token = localStorage.getItem("token");
-
-        await axios.post(
-          `https://missfitnessbackend.tajsoft.tj/api/enroll-services/pause/${item.id}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
-
-        // 🔥 ЛОКАЛЬНО ОБНОВЛЯЕМ
-        item.paused_at = new Date().toISOString().slice(0, 10);
-
-      } catch (e) {
-        console.error("Ошибка при приостановке:", e);
-        alert("Не удалось приостановить абонемент");
-      }
-    },
     async downloadFile() {
       const params = new URLSearchParams({
-        dateFrom: this.dateFrom, // yyyy-mm-dd
+        dateFrom: this.dateFrom,
         dateTo: this.dateTo
       });
 
       const response = await fetch(
-        `https://missfitnessbackend.tajsoft.tj/export/subscriptions?${params.toString()}`,
+        `https://api.mubingym.com/export/subscriptions?${params.toString()}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
+            Authorization: `Bearer ${localStorage.getItem("token")}`
           }
         }
       );
@@ -161,51 +148,40 @@ export default {
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
 
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = 'subscription_report.xlsx';
+      a.download = "subscription_report.xlsx";
       a.click();
 
       window.URL.revokeObjectURL(url);
     },
-    /** 🔥 ПРИНИМАЕМ ДАТЫ ИЗ DataPicker */
+
     onDateSelected({ dateFrom, dateTo }) {
       this.dateFrom = dateFrom;
       this.dateTo = dateTo;
       this.showPicker = false;
-
       this.fetchServices();
     },
 
-    /** 🔥 ЗАПРОС К API */
     async fetchServices() {
-      console.log(this.dateFrom, this.dateTo);
-      let params = {};
-      if (!this.dateFrom || !this.dateTo) {
-        params = {};
-      } else {
-        params = {
-          from: this.dateFrom,
-          to: this.dateTo
-        };
-      }
-
       this.isLoading = true;
 
       try {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(
-          `https://missfitnessbackend.tajsoft.tj/api/services/by-date`,
+          "https://api.mubingym.com/api/services/by-date",
           {
-            params: params,
+            params: this.dateFrom && this.dateTo
+              ? { from: this.dateFrom, to: this.dateTo }
+              : {},
             headers: {
               Authorization: `Bearer ${token}`
             }
           }
         );
 
-        this.services = res.data.data || [];
+        this.services = res.data.data ?? [];
       } catch (e) {
         console.error("Ошибка загрузки услуг:", e);
       } finally {
@@ -214,12 +190,11 @@ export default {
     },
 
     formatDate(dateTime) {
-      return dateTime.split(" ")[0];
+      return dateTime?.split(" ")[0] ?? "";
     }
   },
 
   mounted() {
-    /** 🔹 ДЕФОЛТ — ПОСЛЕДНИЙ МЕСЯЦ */
     const today = new Date();
     const to = today.toISOString().slice(0, 10);
 
@@ -234,6 +209,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .bg-gray {
   background: #2c2c2e85;
