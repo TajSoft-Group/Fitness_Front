@@ -125,11 +125,6 @@ export default {
         today.getFullYear() === this.currentYear
       );
     },
-    cancel() {
-      this.rangeStart = null;
-      this.rangeEnd = null;
-      this.selectingRangeEnd = false;
-    },
     formatDate(date) {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so add 1
