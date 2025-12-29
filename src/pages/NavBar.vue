@@ -10,7 +10,7 @@ export default {
       this.anim.goToAndPlay(0, true)
     },
     openDoor() {
-      posts('https://api.mubingym.com/post/door')
+      posts('https://missfitnessbackend.tajsoft.tj/post/door')
         .then((response) => {
           console.log('Турникет открыт:', response.data);
         })
