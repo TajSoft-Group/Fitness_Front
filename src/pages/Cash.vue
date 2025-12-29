@@ -33,7 +33,7 @@
             <div class="form-recipients">
               <input autocomplete="off" class="form-check-input" type="radio" id="cash" name="type" value="cash"
                 v-model="type">
-              <label for="cash" class="text-white">Наличными</label>
+              <label for="cash" class="text-white ms-0">Наличными</label>
             </div>
             <div class="form-recipients">
               <input autocomplete="off" class="form-check-input" type="radio" id="card" name="type" value="card"
