@@ -412,6 +412,8 @@ export default {
 
     },
     submitLetter() {
+      this.error = false;
+
       const token = Cookies.get("token");
 
       this.isLoading = true;
