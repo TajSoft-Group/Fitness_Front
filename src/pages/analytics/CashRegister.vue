@@ -30,7 +30,11 @@ export default {
       const dateTo = new Date(this.dates.dateTo);
 
       posts(
+<<<<<<< HEAD
+        "https://missfitnessbackend.tajsoft.tjfinance",
+=======
         "https://missfitnessbackend.tajsoft.tj/finance",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         { start_date: dateFrom, end_date: dateTo },
         token
       )
@@ -54,7 +58,11 @@ export default {
       const end = currentDate.toISOString().split('T')[0];
 
       posts(
+<<<<<<< HEAD
+        "https://missfitnessbackend.tajsoft.tjfinance",
+=======
         "https://missfitnessbackend.tajsoft.tj/finance",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         { start_date: start, end_date: end },
         token
       )
@@ -72,7 +80,11 @@ export default {
       this.dates = selectedDates;
 
       posts(
+<<<<<<< HEAD
+        "https://missfitnessbackend.tajsoft.tjfinance",
+=======
         "https://missfitnessbackend.tajsoft.tj/finance",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         {
           start_date: selectedDates.dateFrom,
           end_date: selectedDates.dateTo
@@ -158,7 +170,7 @@ export default {
           <div class="d-flex justify-content-between">
             <div class="card-left">
               <div class="card-title">Пользователи IOS</div>
-              <div class="card-quantity">{{ statistic.new_users }}</div>
+              <div class="card-quantity">{{ statistic.user_mobile_ios_count }}</div>
             </div>
           </div>
         </div>
@@ -168,7 +180,7 @@ export default {
           <div class="d-flex justify-content-between">
             <div class="card-left">
               <div class="card-title">Пользователи Android</div>
-              <div class="card-quantity">{{ statistic.new_users }}</div>
+              <div class="card-quantity">{{ statistic.user_mobile_android_count }}</div>
             </div>
           </div>
         </div>

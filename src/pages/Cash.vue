@@ -45,6 +45,11 @@
                 v-model="type">
               <label for="bonus" class="text-white">Бонусами</label>
             </div>
+            <div class="form-recipients">
+              <input autocomplete="off" class="form-check-input" type="radio" id="discount" name="type" value="discount"
+                v-model="type">
+              <label for="discount" class="text-white">Скидка</label>
+            </div>
           </div>
           <div v-if="type === 'cash'">
             <label for="title">Оплата наличными</label>
@@ -164,7 +169,7 @@
           <div class="col-5 px-0">
             <div class="d-flex justify-content-between statistics bg-gray h-auto mt-3">
               <div>
-                <div class="fs-6">Цена:</div>
+                <div class="fs-6">Цена (от):</div>
                 <div class="fs-6">Бонус:</div>
                 <div class="h5">Итого:</div>
               </div>
@@ -184,7 +189,7 @@
                   <tr>
                     <th class="col-3 text-start"> &nbsp; Название</th>
                     <th>Кол-во (шт)</th>
-                    <th>Цена</th>
+                    <th>Цена (от)</th>
                     <th>Скидка</th>
                     <th class="total">Итого</th>
                     <th>&nbsp;</th>
@@ -212,8 +217,19 @@
                     <td>{{ item.price }} сом</td>
                     <td>- {{ item.discount }} %</td>
                     <td>
-                      {{ itemTotalPrice(item.count, item.price_discount).toFixed(2) }}
-                      сом<br />
+                      <!-- PRODUCT -->
+                      <span v-if="item.type === 'product'">
+                        {{ calculateFifoPrice(
+                          item.history_count,
+                          item.count,
+                          item.count_on_stock
+                        ).toFixed(2) }} сом
+                      </span>
+
+                      <!-- SERVICE / COURSE -->
+                      <span v-else>
+                        {{ (Number(item.discount_price) * (item.count || 1)).toFixed(2) }} сом
+                      </span>
                     </td>
                     <td>
                       <button @click="deleteProduct(index)" class="delete-product">
@@ -260,12 +276,17 @@
                 <div class="row flex-nowrap">
                   <div v-for="item in productList" @click="selectItem(item);"
                     class="product-card p-0 position-relative">
+<<<<<<< HEAD
+                    <img :src="`https://missfitnessbackend.tajsoft.tj${item.img[0]}`" />
+=======
                     <img :src="`https://missfitnessbackend.tajsoft.tj/${item.img[0]}`" />
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                     <div class="product-info">
                       <div class="product-title mb-0">{{ item.title }}</div>
                       <div class="product-price color-yellow d-flex">
                         {{ (item.price_one - (item.price_one * item.discount) / 100) }} TJS
-                        <span class="product-old-price text-white" v-if="item.discount!=0"><s>{{ item.price_one }} c</s>
+                        <span class="product-old-price text-white" v-if="item.discount != 0"><s>{{ item.price_one }}
+                            c</s>
                         </span>
                       </div>
                     </div>
@@ -298,7 +319,11 @@
             <div class="scroll-content">
               <div class="row flex-nowrap uslugi-holder">
                 <div v-for="item in serviceList" class="uslug-card p-0 position-relative" @click="selectItem(item)">
+<<<<<<< HEAD
+                  <img :src="`https://missfitnessbackend.tajsoft.tj${item?.img?.[0] ? item.img[0] : ''}`" />
+=======
                   <img :src="`https://missfitnessbackend.tajsoft.tj/${item?.img?.[0] ? item.img[0] : ''}`" />
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                   <div class="product-info">
                     <div class="product-title mb-0 border-color-yellow">
                       {{ item.name }}
@@ -338,7 +363,11 @@
             <div class="scroll-content">
               <div v-if="coursesList.length" class="row flex-nowrap">
                 <div v-for="course in coursesList" class="uslug-card p-0 position-relative" @click="selectItem(course)">
+<<<<<<< HEAD
+                  <img :src="`https://missfitnessbackend.tajsoft.tj${course.img}`" />
+=======
                   <img :src="`https://missfitnessbackend.tajsoft.tj/${course.img}`" />
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
                   <div class="product-info">
                     <div class="product-title mb-0 border-color-yellow">
                       {{ course.title }}
@@ -398,6 +427,7 @@ import Cookies from "js-cookie";
 export default {
   data() {
     return {
+      discountCard: null,
       isLoading: false,
       loadingText: "Идет загрузка...",
       toastMessage: 'Транзакция успешно проведена',
@@ -454,13 +484,53 @@ export default {
   },
   computed: {
     totalPrice() {
-      return this.cart.reduce((total, item) => {
-        return total + (parseFloat(item.price_discount) * parseFloat(item.count ? item.count : 1));
+      let total = this.cart.reduce((sum, item) => {
+
+        if (item.type === 'product') {
+          const v = this.calculateFifoPrice(
+            item.history_count,
+            item.count,
+            item.count_on_stock
+          );
+          return Number.isNaN(v) ? sum : sum + v;
+        }
+
+        // service / course
+        const price = Number(item.discount_price ?? item.price);
+        const count = Number(item.count || 1);
+        const v = price * count;
+
+        return Number.isNaN(v) ? sum : sum + v;
+
       }, 0);
+
+      // 🔥 ПРИМЕНЯЕМ СКИДКУ
+      if (this.type === 'discount' && this.discountCard) {
+        total -= (total * Number(this.discountCard)) / 100;
+      }
+
+      return Number(total.toFixed(2));
     },
     totalWithoutDiscount() {
       return this.cart.reduce((total, item) => {
-        return total + (parseFloat(item.price) * parseFloat(item.count ? item.count : 1));
+
+        if (item.type === 'product') {
+          const sum = this.calculateFifoPrice(
+            item.history_count,
+            item.count,
+            item.count_on_stock
+          );
+
+          return Number.isNaN(sum) ? total : total + sum;
+        }
+
+        // service / course — БЕЗ discount_price
+        const price = Number(item.price);
+        const count = Number(item.count || 1);
+        const sum = price * count;
+
+        return Number.isNaN(sum) ? total : total + sum;
+
       }, 0);
     }
   },
@@ -541,6 +611,7 @@ export default {
           this.loadService(),
           this.loadCourses(),
           this.loadProducts(),
+          this.loadDiscount(),
           this.getCourseTypes(),
           this.getProductCategories(),
           this.getServiceTypes(),
@@ -562,7 +633,11 @@ export default {
       if (!isNaN(barcode) && (queryString).length === 13) {
         this.isBarcode(barcode)
       } else {
+<<<<<<< HEAD
+        posts("https://missfitnessbackend.tajsoft.tjsearch_all", {
+=======
         posts("https://missfitnessbackend.tajsoft.tj/search_all", {
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           name: queryString,
         })
           .then((response) => {
@@ -581,13 +656,28 @@ export default {
         this[target] = false
       }, t * 1000)
     },
-    itemCnt(action, item) {
+    itemCnt(action, index) {
+      const item = this.cart[index];
+
       if (action === '+') {
-        if (this.cart[item].count < 99)
-          this.cart[item].count += 1
+
+        // 🔴 ПРОВЕРКА ОСТАТКА
+        if (
+          item.type === 'product' &&
+          item.count >= item.count_on_stock
+        ) {
+          this.success = false;
+          this.toastMessage = 'Недостаточно товара на складе';
+          this.toaster = true;
+          this.Delay('toaster', 2);
+          return;
+        }
+
+        item.count += 1;
       } else {
-        if (this.cart[item].count > 1)
-          this.cart[item].count -= 1
+        if (item.count > 1) {
+          item.count -= 1;
+        }
       }
     },
     isBarcode(barcode) {
@@ -610,7 +700,11 @@ export default {
       this.cart.splice(index, 1);
     },
     getCourseTypes() {
+<<<<<<< HEAD
+      gets("https://missfitnessbackend.tajsoft.tjapi/courses_get_type")
+=======
       gets("https://missfitnessbackend.tajsoft.tj/api/courses_get_type")
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.courseTypes = response.data;
         })
@@ -625,7 +719,11 @@ export default {
     },
     loadCourses() {
       return gets(
+<<<<<<< HEAD
+        `https://missfitnessbackend.tajsoft.tjapi/courses/all`
+=======
         `https://missfitnessbackend.tajsoft.tj/api/courses/all`
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
       )
         .then((response) => {
           this.courses = response.data;
@@ -641,50 +739,68 @@ export default {
         return value.category === id;
       })
     },
+    loadDiscount() {
+      return gets(`https://missfitnessbackend.tajsoft.tjapi/discountCards`)
+        .then((response) => {
+          this.discountCard = response.data.percent;
+        });
+    },
     loadProducts() {
+<<<<<<< HEAD
+      return gets(`https://missfitnessbackend.tajsoft.tjproduct/all/cash`)
+=======
       return gets(`https://missfitnessbackend.tajsoft.tj/product/all/cash`)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.products = response.data.map(product => {
             const basePrice = this.resolveProductPrice(product);
             const discount = parseFloat(product.discount || 0);
 
-            const priceWithDiscount =
-              basePrice - (basePrice * discount) / 100;
-
             return {
               ...product,
               type: 'product',
-
-              // 🔥 единый источник истины
               price: basePrice,
-              price_discount: priceWithDiscount
+              price_discount: basePrice - (basePrice * discount) / 100
             };
           });
 
-          // сразу отображаем
           this.productList = this.products;
-        })
-        .catch((error) => {
-          console.error('Ошибка загрузки товаров:', error);
-          this.error = error;
         });
     },
     resolveProductPrice(product) {
-      // если есть история склада — берём последнюю цену
       if (
         Array.isArray(product.history_count) &&
         product.history_count.length > 0
       ) {
-        return parseFloat(
-          product.history_count[product.history_count.length - 1].price
-        );
+        // FIFO — продаём по самой старой цене
+        return parseFloat(product.history_count[0].price);
       }
 
-      // fallback
+      // fallback если истории нет
       return parseFloat(product.price_one || 0);
     },
+    calculateFifoPrice(history, sellCount, stockCount) {
+      const normalizedHistory = this.normalizeHistory(history, stockCount);
+
+      let remaining = sellCount;
+      let total = 0;
+
+      for (const batch of normalizedHistory) {
+        if (remaining <= 0) break;
+
+        const used = Math.min(batch.count, remaining);
+        total += used * Number(batch.price);
+        remaining -= used;
+      }
+
+      return total;
+    },
     getProductCategories() {
+<<<<<<< HEAD
+      gets("https://missfitnessbackend.tajsoft.tjcategory")
+=======
       gets("https://missfitnessbackend.tajsoft.tj/category")
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.productCategories = response.data;
         })
@@ -693,7 +809,11 @@ export default {
         });
     },
     getServiceTypes() {
+<<<<<<< HEAD
+      gets("https://missfitnessbackend.tajsoft.tjapi/services/name")
+=======
       gets("https://missfitnessbackend.tajsoft.tj/api/services/name")
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           this.serviceType = response.data.data;
         })
@@ -708,8 +828,32 @@ export default {
         return this.services.find(service => { console.log('services.name', service.name); console.log('setted name', name); return service.name === name });
       }
     },
+    normalizeHistory(history, stockCount = 0) {
+      let historySum = history.reduce((s, h) => s + Number(h.count), 0);
+      let toRemove = historySum - stockCount;
+
+      if (toRemove <= 0) {
+        return history.map(h => ({ ...h }));
+      }
+
+      const normalized = history.map(h => ({ ...h }));
+
+      for (const batch of normalized) {
+        if (toRemove <= 0) break;
+
+        const diff = Math.min(batch.count, toRemove);
+        batch.count -= diff;
+        toRemove -= diff;
+      }
+
+      return normalized.filter(b => b.count > 0);
+    },
     loadService() {
+<<<<<<< HEAD
+      return gets(`https://missfitnessbackend.tajsoft.tjapi/services/all`)
+=======
       return gets(`https://missfitnessbackend.tajsoft.tj/api/services/all`)
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
         .then((response) => {
           if (response && response.data && response.data.data) {
             this.services = response.data.data;
@@ -762,20 +906,43 @@ export default {
         return;
       }
 
-      // товары / услуги / курсы
-      if (item.type !== "user") {
-        const index = this.cart.findIndex(
-          v => v.id === item.id && v.type === item.type
-        );
+      // 🔴 ПРОВЕРКИ ТОЛЬКО ДЛЯ ПРОДУКТОВ
+      if (item.type === 'product') {
 
-        if (index === -1) {
-          this.cart.push({
-            ...item,
-            count: 1
-          });
-        } else {
-          this.itemCnt('+', index);
+        // ❌ нет истории
+        if (!Array.isArray(item.history_count) || item.history_count.length === 0) {
+          this.success = false;
+          this.toastMessage = 'У товара нет истории поступлений';
+          this.toaster = true;
+          this.Delay('toaster', 2);
+          return;
         }
+
+        // ❌ нет остатка
+        if (!item.count || item.count <= 0) {
+          this.success = false;
+          this.toastMessage = 'Товара нет в наличии';
+          this.toaster = true;
+          this.Delay('toaster', 2);
+          return;
+        }
+      }
+
+      // товары / услуги / курсы
+      const index = this.cart.findIndex(
+        v => v.id === item.id && v.type === item.type
+      );
+
+      if (index === -1) {
+        this.cart.push({
+          ...item,
+          count: 1,
+
+          // фиксируем остаток
+          count_on_stock: item.count ?? 0
+        });
+      } else {
+        this.itemCnt('+', index);
       }
     },
     itemTotalPrice(count, price) {
@@ -816,7 +983,7 @@ export default {
       }
 
 
-      if (this.type != 'cash' && this.FormData.user_id == null) {
+      if (this.type != 'cash' && this.type!='discount' && this.FormData.user_id == null) {
         this.success = false;
         this.toaster = true;
         this.toastMessage = 'Выберите пользователя чтобы оплатить картой/баллами';
@@ -856,6 +1023,29 @@ export default {
         }
       }
 
+
+      if (this.type === "discount") {
+        this.FormData.payment_type = "discount";
+      }
+
+      // 🔴 ВАЛИДАЦИЯ ПРОДУКТОВ ПЕРЕД ОПЛАТОЙ
+      const invalidProduct = this.cart.find(item =>
+        item.type === 'product' && (
+          !Array.isArray(item.history_count) ||
+          item.history_count.length === 0 ||
+          item.count <= 0
+        )
+      );
+
+      if (invalidProduct) {
+        this.success = false;
+        this.toastMessage = 'В корзине есть товар без остатка или истории';
+        this.toaster = true;
+        this.Delay('toaster', 2);
+        return;
+      }
+
+
       if (this.cart.length === 0) {
         this.success = false;
         this.toaster = true;
@@ -893,7 +1083,11 @@ export default {
 
       try {
         const response = await posts(
+<<<<<<< HEAD
+          "https://missfitnessbackend.tajsoft.tjapi/order/create/v2",
+=======
           "https://missfitnessbackend.tajsoft.tj/api/order/create/v2",
+>>>>>>> 5edc2b79a871b8df02cdcacfb27fbde3b8d02c8b
           this.FormData
         );
 
@@ -953,7 +1147,11 @@ export default {
 
 <style lang="scss" scoped>
 .base-modal {
-  z-index: 1 !important;
+  z-index: 2 !important;
+}
+
+.overlay {
+  z-index: 99 !important;
 }
 
 .error-toast {
