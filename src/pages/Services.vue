@@ -15,13 +15,16 @@
           <div class="clients-list-holder">
             <div role="button" v-for="(trener, index) in filteredClients" :key="trener.id"
               class="user-list h-auto m-0 p-2">
-              <div class="user-list-item" :class="{ active: activeIndex === index }"
+              <div class="user-list-item" style="font-size: 20px" :class="{ active: activeIndex === index }"
                 @click.self="toggleCollapse(index)">
-                <div class="user-list-item-img">
+                <div class="user-list-item-img"
+                  style="width: 50px; aspect-ratio: 1/1; overflow: hidden; border-radius: 50%; object-fit: cover; margin-right: 15px;">
                   <img v-if="trener.img" :src="`https://api.mubingym.com/${trener.img}`" alt="" />
                   <img v-else src="@/assets/images/user-photo.png" alt="" />
                 </div>
-                {{ trener.name + " " + trener.surname }}
+                <p class="w-100 m-0">{{ trener.name + " " + trener.surname }} <br> <span class="badge bg-yellow">{{
+                  trener.registration_date }}</span>
+                </p>
               </div>
               <div v-if="activeIndex === index && trener.services.length" class="collapse-content">
                 <ul class="user-list-inner">
@@ -80,12 +83,9 @@
         <div class="d-flex justify-content-between title-block align-items-center">
           <div @click="addStatus = !addStatus" class="page-title">Услуги</div>
           <div class="user-add-btn d-flex justify-content-center align-items-center relative">
-            <button
-              @click="toggleModal('.clients-list')"
-              class="add-user-btn mx-3"
-            > 
+            <button @click="toggleModal('.clients-list')" class="add-user-btn mx-3">
               Список клиентов
-            </button> 
+            </button>
             <button @click="toggleModal('.add-curs'); (edit = false, setFormData())" class="add-user-btn">
               Добавить
             </button>
@@ -180,8 +180,7 @@
           </div>
           <div>
             <label for="duration">Продолжительность (дней)</label>
-            <input type="text" placeholder="Пример: 30" id="duration" v-model="formData.duration"
-              required />
+            <input type="text" placeholder="Пример: 30" id="duration" v-model="formData.duration" required />
           </div>
         </div>
 
@@ -241,7 +240,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <label for="title">Количество</label>
           <p class="m-0"> Кол-во посещений: <span class="color-yellow fw-bold">{{ cursData.count * addCurs.visit_count
-              }}</span> </p>
+          }}</span> </p>
         </div>
         <input type="text" placeholder="Введите количество" id="title" v-model="cursData.count" />
         <div class="d-flex justify-content-between add-user-buttons">
