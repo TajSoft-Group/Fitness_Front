@@ -130,6 +130,10 @@
                       @click="toggleModal('.add-user-modal'); editStatus = true; edit = i.id; addLockers.id = i.id; addLockers.status = i.status; addLockers.user_id = i.user_id;">
                       Редактировать
                     </li>
+                    <li class="text-left text-warning fs-6" v-if="i.statusTranslate !== 'Свободно'"
+                      @click="freeCloset(i.id)">
+                      Освободить
+                    </li>
                     <li class="text-left text-danger fs-6" @click="deleter = i.id; removeCloset()">
                       Удалить
                     </li>
@@ -246,6 +250,33 @@ export default {
         if (el.id !== item.id) el.showMenu = false;
       });
     },
+    async freeCloset(id) {
+      this.error = false
+      this.loadingText = "Освобождение шкафчика..."
+      this.isLoading = true
+
+      posts(`https://api.mubingym.com/api/closet/free/${id}`)
+        .then((response) => {
+          if (response.status === 200) {
+            this.toastMessage = "Шкафчик успешно освобождён"
+            this.success = true
+            this.toaster = true
+
+            setTimeout(() => {
+              this.toaster = false
+            }, 3000)
+
+            this.loadCollection()
+          }
+        })
+        .catch((error) => {
+          this.error = error
+          this.success = false
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
+    },
 
     handleClickOutside(e) {
       // закрываем если клик вне меню
@@ -260,7 +291,7 @@ export default {
       const token = Cookies.get("token");
 
       gets(
-        `https://missfitnessbackend.tajsoft.tj/api/closet/all`,
+        `https://api.mubingym.com/api/closet/all`,
         token
       )
         .then((response) => {
@@ -279,7 +310,7 @@ export default {
       const token = Cookies.get("token");
 
       posts(
-        "https://missfitnessbackend.tajsoft.tj/users",
+        "https://api.mubingym.com/users",
         { form: "0", to: "0" },
         token
       )
@@ -299,7 +330,7 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      posts('https://missfitnessbackend.tajsoft.tj/api/closet/create', formData)
+      posts('https://api.mubingym.com/api/closet/create', formData)
         .then((response) => {
 
           if (response.status === 200) {
@@ -320,7 +351,7 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      deletes(`https://missfitnessbackend.tajsoft.tj/api/closet/delete/${this.deleter}`)
+      deletes(`https://api.mubingym.com/api/closet/delete/${this.deleter}`)
         .then((response) => {
           this.isLoading = false;
           this.loadingText = "Удаление...";
@@ -343,7 +374,7 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      posts(`https://missfitnessbackend.tajsoft.tj/api/closet/update/${this.edit}`, formData)
+      posts(`https://api.mubingym.com/api/closet/update/${this.edit}`, formData)
         .then((response) => {
 
           if (response.status === 200) {
@@ -355,7 +386,7 @@ export default {
             }, 3000);
             this.isLoading = false;
 
-            this.picked='';
+            this.picked = '';
             this.addLockers.user_id = '';
           }
           this.loadCollection();
