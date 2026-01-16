@@ -676,7 +676,7 @@ export default {
     },
     changeCourse() {
       console.log("changeCourse");
-      posts("https://api.mubingym.com/count/services", {
+      posts("https://api.mubingym.com/count/services/admin", {
         user_id: this.activeCourse.userId,
         services_id: this.activeCourse.courseId,
       })
