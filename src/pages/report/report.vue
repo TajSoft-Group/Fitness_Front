@@ -70,7 +70,7 @@
             <td class="text-danger fw-bold">{{ item.used_count }}</td>
             <td class="text-success fw-bold">{{ item.count }}</td>
             <td>{{ formatDate(item.created_at) }}</td>
-            <!-- <td>
+            <td>
               <button v-if="item.paused_at" class="btn btn-secondary btn-sm" disabled>
                 Приостановлено: {{ formatDate(item.paused_at) }}
               </button>
@@ -78,7 +78,7 @@
               <button v-else class="btn btn-warning btn-sm" @click="pauseService(item)">
                 Приостановить
               </button>
-            </td> -->
+            </td>
           </tr>
         </tbody>
       </table>
