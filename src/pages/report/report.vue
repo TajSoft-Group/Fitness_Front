@@ -226,7 +226,10 @@ export default {
         const token = Cookies.get("token");
 
         posts(
-          "https://api.mubingym.com/users",
+          "https://api.mubingym.com/users", {
+          form: "0",
+          to: "0",
+        }, token
         )
         .then((res) => {
           this.clientsLoading = false;
