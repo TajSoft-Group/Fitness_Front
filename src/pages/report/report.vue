@@ -53,7 +53,7 @@
             <th>Использовано</th>
             <th>Осталось</th>
             <th>Дата</th>
-            <!-- <th>Действие</th> -->
+            <th>Действие</th>
           </tr>
         </thead>
 
@@ -71,13 +71,20 @@
             <td class="text-success fw-bold">{{ item.count }}</td>
             <td>{{ formatDate(item.created_at) }}</td>
             <td>
-              <button v-if="item.paused_at" class="btn btn-secondary btn-sm" disabled>
-                Приостановлено: {{ formatDate(item.paused_at) }}
+              <button v-if="item.paused" class="btn btn-secondary btn-sm" disabled>
+                Приостановлено: {{ formatDate(item.paused.substr(0, 10)) }}
               </button>
 
               <button v-else class="btn btn-warning btn-sm" @click="pauseService(item)">
                 Приостановить
               </button>
+
+              <a @click="editEnrollment(item)" class="ms-4 me-2">
+                <img data-v-7847d557="" src="/src/assets/images/icons/pen.png" height="22">
+              </a>
+              <a @click="removeEnrollment(item)" class="mx-3"> <img data-v-7847d557=""
+                  src="/src/assets/images/icons/delete.png" height="22">
+              </a>
             </td>
           </tr>
         </tbody>
@@ -91,10 +98,66 @@
     </div>
 
   </div>
+
+
+
+
+  <!-- EDIT ENROLLMENT MODAL -->
+  <div @click="toggleModal('.clients-list')"
+    class="base-modal clients-list d-none d-flex justify-content-center align-items-center">
+    <div @click.stop class="holder">
+      <div class="base-modal-top">
+        <div class="title">Список клиентов</div>
+        <button class="button-close" @click="toggleModal('.clients-list')"></button>
+      </div>
+
+      <div class="content">
+        <form class="form" @submit.prevent="submitEnrollmentEdit">
+          <!-- SEARCH -->
+          <div class="search-input pb-4">
+            <input v-model="clientsSearch" type="text" placeholder="Поиск клиента" />
+          </div>
+          <div v-if="clientsLoading" class="text-center">
+            <div class="spinner-border text-warning"></div>
+            <div class="text-light">Загрузка...</div>
+          </div>
+          <!-- CLIENTS LIST -->
+          <div class="clients-list-holder">
+            <div v-for="client in filteredClients" :key="client.id" role="button" class="user-list h-auto m-0 p-2"
+              :class="{ active: selectedUserId === client.id }" @click="selectClient(client)">
+              <div class="user-list-item d-flex justify-content-between" style="font-size: 18px">
+                <p class="m-0 col-10">
+                  {{ client.name }} {{ client.surname }} <br />
+                  <span class="badge bg-yellow">{{ client.username }}</span>
+                </p>
+                <p class="col-2">
+                  {{ client.registration_date.split(' ')[0] }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACTIONS -->
+          <div class="d-flex justify-content-between add-user-buttons mt-3">
+            <button type="button" class="dont" @click="toggleModal('.clients-list')">
+              Отмена
+            </button>
+
+            <button class="submit" type="submit" :disabled="!selectedUserId">
+              Сохранить
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
 </template>
 <script>
 import axios from "axios";
 import DataPicker from "@/pages/report/DataPicker.vue";
+import Cookies from "js-cookie";
+import posts from "@/components/axios/posts";
 
 export default {
   components: { DataPicker },
@@ -105,13 +168,28 @@ export default {
       isLoading: false,
       showPicker: false,
       search: "",
-
+      clientsLoading: false,
       dateFrom: null,
       dateTo: null,
+      clients: [],
+      clientsSearch: "",
+      selectedUserId: null,
+      selectedEnrollId: null
     };
   },
 
   computed: {
+    filteredClients() {
+      const q = this.clientsSearch.toLowerCase().trim();
+
+      if (!q) return this.clients;
+
+      return this.clients.filter(c =>
+        `${c.name} ${c.surname} ${c.phone}`
+          .toLowerCase()
+          .includes(q)
+      );
+    },
     filteredServices() {
       const q = this.search.trim().toLowerCase();
 
@@ -130,6 +208,138 @@ export default {
   },
 
   methods: {
+    toggleModal(selector) {
+      document.querySelector(selector)?.classList.toggle("d-none");
+    },
+    async editEnrollment(item) {
+      this.selectedEnrollId = item.id;
+      this.selectedUserId = item.user_id ?? null;
+      this.clientsSearch = "";
+
+      await this.fetchClients();
+      this.toggleModal(".clients-list");
+    },
+
+    async fetchClients() {
+      this.clientsLoading =  true;
+      try {
+        const token = Cookies.get("token");
+
+        posts(
+          "https://api.mubingym.com/users",
+        )
+        .then((res) => {
+          this.clientsLoading = false;
+          console.log(res);
+          this.clients = res.data.users ?? [];
+        })
+      } catch (e) {
+        this.clientsLoading = false;
+        console.error("Ошибка загрузки клиентов", e);
+      }
+    },
+
+    selectClient(client) {
+      this.selectedUserId = client.id;
+    },
+
+    async submitEnrollmentEdit() {
+      if (!this.selectedUserId || !this.selectedEnrollId) return;
+
+      this.isLoading = true;
+
+      try {
+        const token = localStorage.getItem("token");
+
+        await axios.post(
+          `https://api.mubingym.com/api/enroll-services/update/${this.selectedEnrollId}`,
+          {
+            user_id: this.selectedUserId
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        this.toggleModal(".clients-list");
+        this.fetchServices(); // обновить таблицу
+
+      } catch (e) {
+        console.error("Ошибка обновления абонемента", e);
+        alert("Не удалось сохранить изменения");
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async removeEnrollment(item) {
+      const confirmed = confirm(
+        `Вы уверены, что хотите удалить абонемент "${item.services_name}" у клиента ${item.user_name}?`
+      );
+
+      if (!confirmed) return;
+
+      this.isLoading = true;
+
+      try {
+        const token = localStorage.getItem("token");
+
+        await axios.delete(
+          `https://api.mubingym.com/api/enroll-services/delete/${item.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        // удаляем из списка без перезагрузки
+        this.services = this.services.filter(s => s.id !== item.id);
+
+        alert("Абонемент удалён");
+
+      } catch (error) {
+        console.error("Ошибка при удалении абонемента:", error);
+        alert("Не удалось удалить абонемент");
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async pauseService(item) {
+      this.isLoading = true;
+      const confirmed = confirm(
+        `Вы уверены, что хотите приостановить услугу "${item.services_name}" для клиента ${item.user_name}?`
+      );
+
+      if (!confirmed) return;
+
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.post(
+          `https://api.mubingym.com/api/enroll-services/pause/${item.id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        this.isLoading = false;
+
+        // Если backend возвращает paused_at — используем его
+        item.paused =
+          res?.data?.paused ??
+          new Date().toISOString().slice(0, 19).replace("T", " ");
+
+      } catch (error) {
+        console.error("Ошибка при приостановке абонемента:", error);
+        alert("Не удалось приостановить абонемент. Попробуйте позже.");
+      }
+    },
     async downloadFile() {
       const params = new URLSearchParams({
         dateFrom: this.dateFrom,
@@ -211,6 +421,10 @@ export default {
 </script>
 
 <style scoped>
+.active{
+  border: 2px solid #D0FD3E;
+  border-radius: 5px;
+}
 .bg-gray {
   background: #2c2c2e85;
 }
