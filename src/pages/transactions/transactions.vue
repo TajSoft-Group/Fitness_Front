@@ -25,7 +25,7 @@
           <h3 class="mt-3 fw-bolder">{{ index }}</h3>
         </div>
 
-        <div class="col-md-4 mb-3" v-for="(userTransactions, idx) in transaction" :key="idx">
+        <div class="col-md-5 mb-3" v-for="(userTransactions, idx) in transaction" :key="idx">
           <div class="cardUser p-3 d-flex align-items-center"
             :class="{ 'bottomBorders': selectedUser === userTransactions.user.username && selectedDate === index }"
             @click="toggleUserTransactions(userTransactions.user.username, index)">
@@ -62,6 +62,7 @@
                     <th>Тип</th>
                     <th>Цена</th>
                     <th>Кол-во</th>
+                    <th>Оплата</th>
                     <th>Сумма</th>
                   </tr>
                 </thead>
@@ -81,6 +82,13 @@
 
                     <td>{{ Number(item.price).toFixed(2) }}</td>
                     <td>{{ item.count }}</td>
+                    <td>
+                      {{
+                        item.bank_name === ''
+                          ? 'Наличные'
+                          : item.bank_name
+                      }}
+                    </td>
                     <td>{{ Number(item.total_price).toFixed(2) }}</td>
                   </tr>
                 </tbody>

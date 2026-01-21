@@ -50,7 +50,7 @@
             <th>Телефон</th>
             <th>Услуга</th>
             <th>Куплено</th>
-            <th>Использовано</th>
+            <th>Исп.</th>
             <th>Осталось</th>
             <th>Дата</th>
             <th>Действие</th>
@@ -69,7 +69,7 @@
             <td>{{ item.start_count }}</td>
             <td class="text-danger fw-bold">{{ item.used_count }}</td>
             <td class="text-success fw-bold">{{ item.count }}</td>
-            <td>{{ formatDate(item.created_at) }}</td>
+            <td>{{ item.created_at }}</td>
             <td>
               <button v-if="item.paused" class="btn btn-secondary btn-sm" disabled>
                 Приостановлено: {{ formatDate(item.paused.substr(0, 10)) }}

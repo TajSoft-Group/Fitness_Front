@@ -33,7 +33,7 @@
             <div class="form-recipients">
               <input autocomplete="off" class="form-check-input" type="radio" id="cash" name="type" value="cash"
                 v-model="type">
-              <label for="cash" class="text-white ms-0">Наличными</label>
+              <label for="cash" class="text-white ms-0">Оплата</label>
             </div>
             <div class="form-recipients">
               <input autocomplete="off" class="form-check-input" type="radio" id="card" name="type" value="card"
@@ -52,7 +52,7 @@
             </div>
           </div>
           <div v-if="type === 'cash'">
-            <label for="title">Оплата наличными</label>
+            <label for="title">Оплачено</label>
             <input type="text" placeholder="Наличные" id="title" v-model="payment" required />
           </div>
           <div v-show="type === 'bonus' || type === 'card'">
@@ -63,6 +63,14 @@
               счёта будет снято {{ totalPrice.toFixed(2) }} <span v-show="type === 'bonus'">баллов</span> <span
                 v-show="type === 'card'">TJS</span></label>
             <label class="mx-0 mt-3 text-danger" v-else>У вас недостаточно средств для совершения покупки</label>
+          </div>
+          <div class="bank-selection mt-4" v-show="type !== 'bonus' && type !== 'card'">
+            
+            <span class="py-2 px-3 rounded-4 me-3" style="cursor: pointer;" :class="{ active: item.id === bankId }" v-for="item in banks" :key="item.id" @click="bankId === item.id ? bankId = null : bankId = item.id">
+              <small>{{ item.name }}</small>
+            </span>
+            
+            
           </div>
           <div class="cart-text">
             <div class="cart-text-row">
@@ -409,7 +417,6 @@
 <script>
 import posts from "@/components/axios/posts.js";
 import gets from "@/components/axios/get.js";
-import product from "@/pages/products/product.vue";
 import Cookies from "js-cookie";
 
 export default {
@@ -427,6 +434,13 @@ export default {
       success: false,
       type: 'cash',
       payment: "",
+      bankId: null,
+      banks: [
+        {
+          id: null,
+          name: "Банков нету"
+        },
+      ],
       FormData: {
         cards_id: "",
         items: [],
@@ -592,10 +606,25 @@ export default {
     this.doAll();
   },
   methods: {
+    async loadBanks() {
+      const token = Cookies.get("token");
+
+      try {
+        const response = await gets(
+          "https://api.mubingym.com/api/banks/get/all",
+          token
+        );
+
+        this.banks = response.data.data ?? [];
+      } catch (error) {
+        console.error("Banks load error:", error);
+      }
+    },
     doAll() {
       this.isLoading = true;
       try {
         Promise.all([
+          this.loadBanks(),
           this.loadService(),
           this.loadCourses(),
           this.loadProducts(),
@@ -930,6 +959,7 @@ export default {
         payment: parseFloat(this.payment).toFixed(2),
         payment_type: "cash",
         user_id: this.currentUser.id,
+        bank_id: this.bankId,
         create_add: new Date()
       };
 
@@ -1102,6 +1132,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.bank-selection span{
+  border: #c3ff00;
+  background-color: #282829;
+  color: #fff;
+  font-weight: 600;
+}
+.bank-selection > span.active{
+  background-color: #c3ff00;
+  font-weight: 600;
+  color: #000000;
+}
 .base-modal {
   z-index: 2 !important;
 }
