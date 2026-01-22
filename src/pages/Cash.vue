@@ -284,7 +284,7 @@
                 <div class="row flex-nowrap">
                   <div v-for="item in productList" @click="selectItem(item);"
                     class="product-card p-0 position-relative">
-                    <img :src="`https://api.mubingym.com/${item.img[0]}`" />
+                    <img :src="`https://missfitnessbackend.tajsoft.tj/${item.img[0]}`" />
                     <div class="product-info">
                       <div class="product-title mb-0">{{ item.title }}</div>
                       <div class="product-price color-yellow d-flex">
@@ -323,7 +323,7 @@
             <div class="scroll-content">
               <div class="row flex-nowrap uslugi-holder">
                 <div v-for="item in serviceList" class="uslug-card p-0 position-relative" @click="selectItem(item)">
-                  <img :src="`https://api.mubingym.com/${item?.img?.[0] ? item.img[0] : ''}`" />
+                  <img :src="`https://missfitnessbackend.tajsoft.tj/${item?.img?.[0] ? item.img[0] : ''}`" />
                   <div class="product-info">
                     <div class="product-title mb-0 border-color-yellow">
                       {{ item.name }}
@@ -363,7 +363,7 @@
             <div class="scroll-content">
               <div v-if="coursesList.length" class="row flex-nowrap">
                 <div v-for="course in coursesList" class="uslug-card p-0 position-relative" @click="selectItem(course)">
-                  <img :src="`https://api.mubingym.com/${course.img}`" />
+                  <img :src="`https://missfitnessbackend.tajsoft.tj/${course.img}`" />
                   <div class="product-info">
                     <div class="product-title mb-0 border-color-yellow">
                       {{ course.title }}
@@ -611,7 +611,7 @@ export default {
 
       try {
         const response = await gets(
-          "https://api.mubingym.com/api/banks/get/all",
+          "https://missfitnessbackend.tajsoft.tj/api/banks/get/all",
           token
         );
 
@@ -650,7 +650,7 @@ export default {
       if (!isNaN(barcode) && (queryString).length === 13) {
         this.isBarcode(barcode)
       } else {
-        posts("https://api.mubingym.com/search_all", {
+        posts("https://missfitnessbackend.tajsoft.tj/search_all", {
           name: queryString,
         })
           .then((response) => {
@@ -713,7 +713,7 @@ export default {
       this.cart.splice(index, 1);
     },
     getCourseTypes() {
-      gets("https://api.mubingym.com/api/courses_get_type")
+      gets("https://missfitnessbackend.tajsoft.tj/api/courses_get_type")
         .then((response) => {
           this.courseTypes = response.data;
         })
@@ -728,7 +728,7 @@ export default {
     },
     loadCourses() {
       return gets(
-        `https://api.mubingym.com/api/courses/all`
+        `https://missfitnessbackend.tajsoft.tj/api/courses/all`
       )
         .then((response) => {
           this.courses = response.data;
@@ -745,13 +745,13 @@ export default {
       })
     },
     loadDiscount() {
-      return gets(`https://api.mubingym.com/api/discountCards`)
+      return gets(`https://missfitnessbackend.tajsoft.tj/api/discountCards`)
         .then((response) => {
           this.discountCard = response.data.percent;
         });
     },
     loadProducts() {
-      return gets(`https://api.mubingym.com/product/all/cash`)
+      return gets(`https://missfitnessbackend.tajsoft.tj/product/all/cash`)
         .then((response) => {
           this.products = response.data.map(product => {
             const basePrice = this.resolveProductPrice(product);
@@ -797,7 +797,7 @@ export default {
       return total;
     },
     getProductCategories() {
-      gets("https://api.mubingym.com/category")
+      gets("https://missfitnessbackend.tajsoft.tj/category")
         .then((response) => {
           this.productCategories = response.data;
         })
@@ -806,7 +806,7 @@ export default {
         });
     },
     getServiceTypes() {
-      gets("https://api.mubingym.com/api/services/name")
+      gets("https://missfitnessbackend.tajsoft.tj/api/services/name")
         .then((response) => {
           this.serviceType = response.data.data;
         })
@@ -842,7 +842,7 @@ export default {
       return normalized.filter(b => b.count > 0);
     },
     loadService() {
-      return gets(`https://api.mubingym.com/api/services/all`)
+      return gets(`https://missfitnessbackend.tajsoft.tj/api/services/all`)
         .then((response) => {
           if (response && response.data && response.data.data) {
             this.services = response.data.data;
@@ -1073,7 +1073,7 @@ export default {
 
       try {
         const response = await posts(
-          "https://api.mubingym.com/api/order/create/v2",
+          "https://missfitnessbackend.tajsoft.tj/api/order/create/v2",
           this.FormData
         );
 
