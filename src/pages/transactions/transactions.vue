@@ -36,7 +36,7 @@
               <p class="m-0 fw-bold">{{ userTransactions.user.name + ' ' + userTransactions.user.surname }}</p>
               <p class="m-0 d-flex justify-content-between w-100">
                 <span>{{ userTransactions.user.username }}</span>
-                <span>{{ userTransactions.user.cards[0] ?  userTransactions.user.cards[0].balance : '0' }} TJS</span>
+                <span>{{ userTransactions.user.cards[0] ? userTransactions.user.cards[0].balance : '0' }} TJS</span>
               </p>
               <p class="m-0 d-flex justify-content-between w-100">
                 <span class="color-yellow">Карта</span>
@@ -68,18 +68,18 @@
                 </thead>
                 <tbody>
                   <tr v-for="item in userTransactions.items" :key="item.id">
-                    <td colspan="2">{{ item.title }}</td>
-
+                    <td colspan="2">{{ item.title == "Пополнение баланса" ? "Пополнение" : item.title }}</td>
                     <td>
                       {{
                         item.type === 'service'
                           ? 'Услуга'
                           : item.type === 'product'
                             ? 'Продукт'
-                            : 'Курс'
+                            : item.type === 'course'
+                              ? 'Курс'
+                              : ''
                       }}
                     </td>
-
                     <td>{{ Number(item.price).toFixed(2) }}</td>
                     <td>{{ item.count }}</td>
                     <td>
@@ -91,21 +91,62 @@
                     </td>
                     <td>{{ Number(item.total_price).toFixed(2) }}</td>
                   </tr>
+
+                  <tr v-for="item in userTransactions.duty_items" :key="item.id" class="text-danger">
+                    <td colspan="2">{{ item.title }}</td>
+                    <td>{{
+                      item.type === 'service'
+                        ? 'Услуга'
+                        : item.type === 'product'
+                          ? 'Продукт'
+                          : item.type === 'course'
+                            ? 'Курс'
+                            : ''
+                    }}</td>
+                    <td>{{ Number(item.price).toFixed(2) }}</td>
+                    <td>{{ item.count }}</td>
+                    <td>В долг</td>
+                    <td>{{ Number(item.total_price).toFixed(2) }}</td>
+                  </tr>
                 </tbody>
               </table>
+
+
               <div class="w-100">
                 <div class="d-flex justify-content-between">
                   <span class="fw-bold">ИТОГО</span>
                   <span class="fw-bold">
                     <span class="color-yellow">
-                      {{ Number(userTransactions.summary.total_amount).toFixed(2) }}
-                    </span> TJS
+                      {{
+                        Number(
+                          userTransactions.summary.total_amount
+                        ).toFixed(2)
+                      }}
+                    </span>
+                    TJS
                   </span>
                 </div>
+
+                <div v-if="userTransactions.summary.duty.total_amount > 0" class="d-flex justify-content-between">
+                  <span class="fw-bold color-yellow">Задолженность</span>
+                  <span class="fw-bold color-yellow">
+                    {{
+                      Number(
+                        userTransactions.summary.duty.total_amount
+                      ).toFixed(2)
+                    }}
+                    TJS
+                  </span>
+                </div>
+
                 <div class="d-flex justify-content-between">
                   <span class="fw-bold">Транзакции</span>
-                  <span class="fw-bold"><span class="color-yellow">{{ userTransactions.summary.total_transactions
-                  }}</span> раз(а)</span>
+                  <span class="fw-bold">
+                    <span class="color-yellow">
+                      {{ userTransactions.summary.total_transactions }}
+                    </span>
+                    раз(а)
+                  </span>
                 </div>
               </div>
             </div>
@@ -117,7 +158,7 @@
 
     </div>
     <div class="row" v-else>
-        <h3 class="text-center color-yellow my-5 py-5">Транзакций пока нету...</h3>
+      <h3 class="text-center color-yellow my-5 py-5">Транзакций пока нету...</h3>
     </div>
   </div>
 
@@ -180,12 +221,12 @@ export default {
     loadData() {
       const token = Cookies.get("token");
 
-      gets('https://missfitnessbackend.tajsoft.tj/api/transactions', token)
+      gets('https://api.mubingym.com/api/transactions', token)
         .then((response) => {
           const normalized = {};
 
           Object.keys(response.data).forEach(date => {
-            if (!date) return; 
+            if (!date) return;
 
             normalized[date] = Object.values(response.data[date]).map(userTx => {
               return {

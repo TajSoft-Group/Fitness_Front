@@ -63,14 +63,22 @@
               счёта будет снято {{ totalPrice.toFixed(2) }} <span v-show="type === 'bonus'">баллов</span> <span
                 v-show="type === 'card'">TJS</span></label>
             <label class="mx-0 mt-3 text-danger" v-else>У вас недостаточно средств для совершения покупки</label>
+            
+            <div v-if="type==='card'">
+              <div class="form-recipients">
+                <input autocomplete="off" class="form-check-input" type="checkbox" id="ind" name="type" value="1" v-model="duty">
+                <label for="ind" class="text-white" >В долг</label>
+              </div>
+            </div>
           </div>
           <div class="bank-selection mt-4" v-show="type !== 'bonus' && type !== 'card'">
-            
-            <span class="py-2 px-3 rounded-4 me-3" style="cursor: pointer;" :class="{ active: item.id === bankId }" v-for="item in banks" :key="item.id" @click="bankId === item.id ? bankId = null : bankId = item.id">
+
+            <span class="py-2 px-3 rounded-4 me-3" style="cursor: pointer;" :class="{ active: item.id === bankId }"
+              v-for="item in banks" :key="item.id" @click="bankId === item.id ? bankId = null : bankId = item.id">
               <small>{{ item.name }}</small>
             </span>
-            
-            
+
+
           </div>
           <div class="cart-text">
             <div class="cart-text-row">
@@ -284,7 +292,7 @@
                 <div class="row flex-nowrap">
                   <div v-for="item in productList" @click="selectItem(item);"
                     class="product-card p-0 position-relative">
-                    <img :src="`https://missfitnessbackend.tajsoft.tj/${item.img[0]}`" />
+                    <img :src="`https://api.mubingym.com/${item.img[0]}`" />
                     <div class="product-info">
                       <div class="product-title mb-0">{{ item.title }}</div>
                       <div class="product-price color-yellow d-flex">
@@ -323,7 +331,7 @@
             <div class="scroll-content">
               <div class="row flex-nowrap uslugi-holder">
                 <div v-for="item in serviceList" class="uslug-card p-0 position-relative" @click="selectItem(item)">
-                  <img :src="`https://missfitnessbackend.tajsoft.tj/${item?.img?.[0] ? item.img[0] : ''}`" />
+                  <img :src="`https://api.mubingym.com/${item?.img?.[0] ? item.img[0] : ''}`" />
                   <div class="product-info">
                     <div class="product-title mb-0 border-color-yellow">
                       {{ item.name }}
@@ -363,7 +371,7 @@
             <div class="scroll-content">
               <div v-if="coursesList.length" class="row flex-nowrap">
                 <div v-for="course in coursesList" class="uslug-card p-0 position-relative" @click="selectItem(course)">
-                  <img :src="`https://missfitnessbackend.tajsoft.tj/${course.img}`" />
+                  <img :src="`https://api.mubingym.com/${course.img}`" />
                   <div class="product-info">
                     <div class="product-title mb-0 border-color-yellow">
                       {{ course.title }}
@@ -433,6 +441,7 @@ export default {
       // type: 'cash','card','bonus',
       success: false,
       type: 'cash',
+      duty: 0,
       payment: "",
       bankId: null,
       banks: [
@@ -611,7 +620,7 @@ export default {
 
       try {
         const response = await gets(
-          "https://missfitnessbackend.tajsoft.tj/api/banks/get/all",
+          "https://api.mubingym.com/api/banks/get/all",
           token
         );
 
@@ -650,7 +659,7 @@ export default {
       if (!isNaN(barcode) && (queryString).length === 13) {
         this.isBarcode(barcode)
       } else {
-        posts("https://missfitnessbackend.tajsoft.tj/search_all", {
+        posts("https://api.mubingym.com/search_all", {
           name: queryString,
         })
           .then((response) => {
@@ -713,7 +722,7 @@ export default {
       this.cart.splice(index, 1);
     },
     getCourseTypes() {
-      gets("https://missfitnessbackend.tajsoft.tj/api/courses_get_type")
+      gets("https://api.mubingym.com/api/courses_get_type")
         .then((response) => {
           this.courseTypes = response.data;
         })
@@ -728,7 +737,7 @@ export default {
     },
     loadCourses() {
       return gets(
-        `https://missfitnessbackend.tajsoft.tj/api/courses/all`
+        `https://api.mubingym.com/api/courses/all`
       )
         .then((response) => {
           this.courses = response.data;
@@ -745,13 +754,13 @@ export default {
       })
     },
     loadDiscount() {
-      return gets(`https://missfitnessbackend.tajsoft.tj/api/discountCards`)
+      return gets(`https://api.mubingym.com/api/discountCards`)
         .then((response) => {
           this.discountCard = response.data.percent;
         });
     },
     loadProducts() {
-      return gets(`https://missfitnessbackend.tajsoft.tj/product/all/cash`)
+      return gets(`https://api.mubingym.com/product/all/cash`)
         .then((response) => {
           this.products = response.data.map(product => {
             const basePrice = this.resolveProductPrice(product);
@@ -797,7 +806,7 @@ export default {
       return total;
     },
     getProductCategories() {
-      gets("https://missfitnessbackend.tajsoft.tj/category")
+      gets("https://api.mubingym.com/category")
         .then((response) => {
           this.productCategories = response.data;
         })
@@ -806,7 +815,7 @@ export default {
         });
     },
     getServiceTypes() {
-      gets("https://missfitnessbackend.tajsoft.tj/api/services/name")
+      gets("https://api.mubingym.com/api/services/name")
         .then((response) => {
           this.serviceType = response.data.data;
         })
@@ -842,7 +851,7 @@ export default {
       return normalized.filter(b => b.count > 0);
     },
     loadService() {
-      return gets(`https://missfitnessbackend.tajsoft.tj/api/services/all`)
+      return gets(`https://api.mubingym.com/api/services/all`)
         .then((response) => {
           if (response && response.data && response.data.data) {
             this.services = response.data.data;
@@ -973,7 +982,7 @@ export default {
       }
 
 
-      if (this.type != 'cash' && this.type!='discount' && this.FormData.user_id == null) {
+      if (this.type != 'cash' && this.type != 'discount' && this.FormData.user_id == null) {
         this.success = false;
         this.toaster = true;
         this.toastMessage = 'Выберите пользователя чтобы оплатить картой/баллами';
@@ -983,6 +992,10 @@ export default {
       }
 
       delete this.FormData.payment
+      if(this.duty==1){
+        this.FormData.payment_type = "duty";
+        this.type = "duty";
+      }
 
       // тип оплаты
       if (this.type === "card") {
@@ -1071,9 +1084,11 @@ export default {
 
       console.log("Отправляем FormData:", this.FormData);
 
+      
+
       try {
         const response = await posts(
-          "https://missfitnessbackend.tajsoft.tj/api/order/create/v2",
+          "https://api.mubingym.com/api/order/create/v2",
           this.FormData
         );
 
@@ -1132,17 +1147,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.bank-selection span{
+.bank-selection span {
   border: #c3ff00;
   background-color: #282829;
   color: #fff;
   font-weight: 600;
 }
-.bank-selection > span.active{
+
+.bank-selection>span.active {
   background-color: #c3ff00;
   font-weight: 600;
   color: #000000;
 }
+
 .base-modal {
   z-index: 2 !important;
 }

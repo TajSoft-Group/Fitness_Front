@@ -226,7 +226,7 @@ export default {
         const token = Cookies.get("token");
 
         posts(
-          "https://missfitnessbackend.tajsoft.tj/users", {
+          "https://api.mubingym.com/users", {
           form: "0",
           to: "0",
         }, token
@@ -255,7 +255,7 @@ export default {
         const token = localStorage.getItem("token");
 
         await axios.post(
-          `https://missfitnessbackend.tajsoft.tj/api/enroll-services/update/${this.selectedEnrollId}`,
+          `https://api.mubingym.com/api/enroll-services/update/${this.selectedEnrollId}`,
           {
             user_id: this.selectedUserId
           },
@@ -290,7 +290,7 @@ export default {
         const token = localStorage.getItem("token");
 
         await axios.delete(
-          `https://missfitnessbackend.tajsoft.tj/api/enroll-services/delete/${item.id}`,
+          `https://api.mubingym.com/api/enroll-services/delete/${item.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -322,7 +322,7 @@ export default {
         const token = localStorage.getItem("token");
 
         const res = await axios.post(
-          `https://missfitnessbackend.tajsoft.tj/api/enroll-services/pause/${item.id}`,
+          `https://api.mubingym.com/api/enroll-services/pause/${item.id}`,
           {},
           {
             headers: {
@@ -350,7 +350,7 @@ export default {
       });
 
       const response = await fetch(
-        `https://missfitnessbackend.tajsoft.tj/export/subscriptions?${params.toString()}`,
+        `https://api.mubingym.com/export/subscriptions?${params.toString()}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -383,7 +383,7 @@ export default {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(
-          "https://missfitnessbackend.tajsoft.tj/api/services/by-date",
+          "https://api.mubingym.com/api/services/by-date",
           {
             params: this.dateFrom && this.dateTo
               ? { from: this.dateFrom, to: this.dateTo }
