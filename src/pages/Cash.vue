@@ -84,7 +84,7 @@
             <div class="cart-text-row d-flex align-items-center">
               <span>Получение бонусов</span>
               <span v-show="type !== 'bonus'"> {{ (totalPrice.toFixed(2) * currentUser.cards[1].percent) / 100 }}
-                GymКоинов</span>
+                баллов</span>
               <span v-show="type === 'bonus'" class="text-danger h6 my-0">начисление бонусов недоступно!</span>
             </div>
             <div class="cart-text-row cart-total pb-0">
