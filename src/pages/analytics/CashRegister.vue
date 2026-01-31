@@ -175,7 +175,7 @@ export default {
           <div class="d-flex justify-content-between">
             <div class="card-left">
               <div class="card-title">Пользователи IOS <img src="@/assets/images/ios.png" width="40"
-                  class="position-absolute bottom-0 end-0 m-4"></div>
+                  class="position-absolute bottom-0 end-0 m-3"></div>
               <div class="card-quantity">{{ statistic.user_mobile_ios_count }}</div>
             </div>
           </div>
@@ -186,7 +186,7 @@ export default {
           <div class="d-flex justify-content-between">
             <div class="card-left">
               <div class="card-title">Пользователи Android <img src="@/assets/images/android.png" width="40"
-                  class="position-absolute bottom-0 end-0 m-4" style="object-fit: cover;"></div>
+                  class="position-absolute bottom-0 end-0 m-3" style="object-fit: cover;"></div>
               <div class="card-quantity">{{ statistic.user_mobile_android_count }}</div>
             </div>
           </div>
