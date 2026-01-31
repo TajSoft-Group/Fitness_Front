@@ -58,7 +58,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="item in filteredServices" :key="item.id" class="text-start">
+          <tr v-for="item in paginatedServices" :key="item.id" class="text-start">
             <td>{{ item.user_name }} {{ item.user_surname }}</td>
             <td>{{ item.user }}</td>
             <td>
@@ -90,6 +90,31 @@
         </tbody>
       </table>
     </div>
+    <div class="pagination-wrapper mt-4">
+        <button class="page-btn" :disabled="currentPage === 1" @click="currentPage--">
+          ‹
+        </button>
+
+        <button class="page-btn" :class="{ active: currentPage === 1 }" @click="currentPage = 1">
+          1
+        </button>
+
+        <span v-for="(p, i) in visiblePages" :key="i">
+          <span v-if="p === '...'" class="dots">…</span>
+          <button v-else class="page-btn" :class="{ active: currentPage === p }" @click="currentPage = p">
+            {{ p }}
+          </button>
+        </span>
+
+        <button v-if="totalPages > 1" class="page-btn" :class="{ active: currentPage === totalPages }"
+          @click="currentPage = totalPages">
+          {{ totalPages }}
+        </button>
+
+        <button class="page-btn" :disabled="currentPage === totalPages" @click="currentPage++">
+          ›
+        </button>
+      </div>
 
     <!-- LOADER -->
     <div v-if="isLoading" class="text-center mt-3">
@@ -168,6 +193,10 @@ export default {
       isLoading: false,
       showPicker: false,
       search: "",
+
+      currentPage: 1,
+      itemsPerPage: 10,
+
       clientsLoading: false,
       dateFrom: null,
       dateTo: null,
@@ -204,6 +233,41 @@ export default {
           phone.includes(q)
         );
       });
+    },
+    paginatedServices() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      return this.filteredServices.slice(start, start + this.itemsPerPage);
+    },
+
+    totalPages() {
+      return Math.ceil(this.filteredServices.length / this.itemsPerPage);
+    },
+
+    visiblePages() {
+      const total = this.totalPages;
+      const current = this.currentPage;
+      const delta = 2;
+
+      let start = Math.max(2, current - delta);
+      let end = Math.min(total - 1, current + delta);
+
+      if (current <= 3) {
+        start = 2;
+        end = Math.min(5, total - 1);
+      }
+
+      if (current >= total - 2) {
+        start = Math.max(total - 4, 2);
+        end = total - 1;
+      }
+
+      const pages = [];
+
+      if (start > 2) pages.push("...");
+      for (let i = start; i <= end; i++) pages.push(i);
+      if (end < total - 1) pages.push("...");
+
+      return pages;
     }
   },
 
@@ -221,7 +285,7 @@ export default {
     },
 
     async fetchClients() {
-      this.clientsLoading =  true;
+      this.clientsLoading = true;
       try {
         const token = Cookies.get("token");
 
@@ -231,11 +295,11 @@ export default {
           to: "0",
         }, token
         )
-        .then((res) => {
-          this.clientsLoading = false;
-          console.log(res);
-          this.clients = res.data.users ?? [];
-        })
+          .then((res) => {
+            this.clientsLoading = false;
+            console.log(res);
+            this.clients = res.data.users ?? [];
+          })
       } catch (e) {
         this.clientsLoading = false;
         console.error("Ошибка загрузки клиентов", e);
@@ -419,15 +483,25 @@ export default {
     this.dateTo = to;
 
     this.fetchServices();
+  },
+  watch: {
+    search() {
+      this.currentPage = 1;
+    },
+    currentPage(newPage) {
+      if (newPage < 1) this.currentPage = 1;
+      else if (newPage > this.totalPages) this.currentPage = this.totalPages;
+    }
   }
 };
 </script>
 
 <style scoped>
-.active{
+.active {
   border: 2px solid #D0FD3E;
   border-radius: 5px;
 }
+
 .bg-gray {
   background: #2c2c2e85;
 }
@@ -484,4 +558,54 @@ table td {
   background-color: #6f42c1;
   color: #ffffff;
 }
+.pagination-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  max-width: 25%;
+  margin-left: auto;
+
+  @media (max-width: 1200px) {
+    max-width: 40%;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    justify-content: center;
+  }
+}
+
+.page-btn {
+  min-width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  background: #2c2c2e;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    background: #3a3a3c;
+  }
+
+  &.active {
+    background: #D0FD3E;
+    color: #000;
+    font-weight: 700;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.dots {
+  padding: 0 6px;
+  color: #999;
+}
+
 </style>

@@ -1,16 +1,10 @@
 <template>
   <div class="container">
     <div class="row relative">
-      <div
-        :class="[addStatus ? 'show-false' : 'show-add']"
-        class="added-user-message"
-      >
+      <div :class="[addStatus ? 'show-false' : 'show-add']" class="added-user-message">
         <div class="result-true">
           <div class="result-true-card d-flex align-items-center">
-            <img
-              class="m-4 img-width-40"
-              src="@/assets/images/icons/check_add.png"
-            />
+            <img class="m-4 img-width-40" src="@/assets/images/icons/check_add.png" />
             <div class="result-true-content">
               <div class="result-true-title">
                 Пользователь
@@ -39,11 +33,8 @@
   </div>
 
   <!-- Modal Add User -->
-  <div
-    @click="addCard = !addCard"
-    v-if="addCard"
-    class="add-user-modal d-flex justify-content-center align-items-center"
-  >
+  <div @click="addCard = !addCard" v-if="addCard"
+    class="add-user-modal d-flex justify-content-center align-items-center">
     <div @click.stop class="content">
       <div class="title">ДОБАВИТЬ ПОЛЬЗОВАТЕЛЯ</div>
       <form class="form" @submit.prevent="submitForm(), (addCard = false)">
@@ -141,22 +132,19 @@
   </div>
 
   <!-- Search & Table -->
-  <div class="container relative">
+  <div class="container">
     <div class="row">
       <div class="col-12">
-        <div :class="{ 'search-input': searchActive.length > 0 }" class="d-flex justify-content-between align-items-center search-block">
+        <div :class="{ 'search-input': searchActive.length > 0 }"
+          class="d-flex justify-content-between align-items-center search-block">
           <div class="d-flex align-items-center">
             <div class="d-flex align-items-center">
               <img src="@/assets/images/icons/search.png" alt="search" />
-              <input
-                v-model="searchActive"
-                type="text"
-                id="searchInput"
-                placeholder="Поиск по всем параметрам"
-              />
+              <input v-model="searchActive" type="text" id="searchInput" placeholder="Поиск по всем параметрам" />
             </div>
             <div class="d-flex mx-4">
-              <select v-model="itemsPerPage" class="form-select px-4 py-3 rounded-4 bg-gray border-0 text-gray" data-bs-theme="dark">
+              <select v-model="itemsPerPage" class="form-select px-4 py-3 rounded-4 bg-gray border-0 text-gray"
+                data-bs-theme="dark">
                 <option value="10">Отображение строк: 10</option>
                 <option value="25">Отображение строк: 25</option>
                 <option value="50">Отображение строк: 50</option>
@@ -166,26 +154,6 @@
             </div>
           </div>
           <!-- <router-link to="user-locked">Заблокированные</router-link> -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Search Results Preview (твой старый блок — оставлен как есть) -->
-    <div class="row" v-if="searchActive.length > 0">
-      <div class="col">
-        <div class="users-block bg-gray search-result-block">
-          <table>
-            <thead>
-              <tr style="opacity: 0">
-                <th>ФИО</th><th>Телефон</th><th>Статус</th><th>Абонемент</th><th>Курсы</th><th>Услуги</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Это просто примеры — они не мешают основной таблице -->
-              <tr><td><router-link to="userpage">Азиза Султанова</router-link></td><td>92 000 00 00</td><td>Bronze</td><td class="d-flex justify-content-center"><div class="abonent">1</div></td><td>Кардио</td><td class="d-flex justify-content-center"><div class="uslugi red">1</div><div class="uslugi green">1</div></td></tr>
-              <!-- остальные строки опущены для краткости -->
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
@@ -244,20 +212,30 @@
               Общее количество пользователей:
               <span class="users-quantity" v-if="DataUsers">{{ filteredUsers.length }} из {{ DataUsers.length }}</span>
             </div>
-            <div class="right">
-              <a
-                v-for="page in totalPages"
-                :key="page"
-                href="#"
-                @click.prevent="changePage(page)"
-                :class="{ active: currentPage === page }"
-              >
-                {{ page }}
-              </a>
-              <a v-if="totalPages > 10">...</a>
-              <a v-if="totalPages > 10" href="#" @click.prevent="changePage(totalPages)">
+            <div class="pagination-wrapper">
+              <button class="page-btn" :disabled="currentPage === 1" @click="changePage(currentPage - 1)">
+                ‹
+              </button>
+
+              <button class="page-btn" :class="{ active: currentPage === 1 }" @click="changePage(1)">
+                1
+              </button>
+
+              <span v-for="(page, index) in visiblePages" :key="index">
+                <span v-if="page === '...'" class="dots">…</span>
+                <button v-else class="page-btn" :class="{ active: currentPage === page }" @click="changePage(page)">
+                  {{ page }}
+                </button>
+              </span>
+
+              <button v-if="totalPages > 1" class="page-btn" :class="{ active: currentPage === totalPages }"
+                @click="changePage(totalPages)">
                 {{ totalPages }}
-              </a>
+              </button>
+
+              <button class="page-btn" :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">
+                ›
+              </button>
             </div>
           </div>
         </div>
@@ -266,7 +244,8 @@
   </div>
 
   <!-- Loading Overlay -->
-  <div v-if="isLoading" class="overlay w-100 h-100 position-fixed top-0 start-0 z-3" style="background-color: rgba(0, 0, 0, 0.5);">
+  <div v-if="isLoading" class="overlay w-100 h-100 position-fixed top-0 start-0 z-3"
+    style="background-color: rgba(0, 0, 0, 0.5);">
     <div class="position-fixed top-50 start-50 translate-middle z-3 text-center">
       <div class="spinner-border text-warning" role="status">
         <span class="sr-only"></span>
@@ -308,6 +287,43 @@ export default {
   },
 
   computed: {
+    visiblePages() {
+      const total = this.totalPages;
+      const current = this.currentPage;
+      const delta = 2; // сколько страниц показывать слева и справа
+
+      const range = [];
+      const rangeWithDots = [];
+
+      let start = Math.max(2, current - delta);
+      let end = Math.min(total - 1, current + delta);
+
+      if (current - delta <= 2) {
+        start = 2;
+        end = Math.min(5, total - 1);
+      }
+
+      if (current + delta >= total - 1) {
+        start = Math.max(total - 4, 2);
+        end = total - 1;
+      }
+
+      for (let i = start; i <= end; i++) {
+        range.push(i);
+      }
+
+      if (start > 2) {
+        rangeWithDots.push("...");
+      }
+
+      rangeWithDots.push(...range);
+
+      if (end < total - 1) {
+        rangeWithDots.push("...");
+      }
+
+      return rangeWithDots;
+    },
     // Фильтрация по всем полям
     filteredUsers() {
       if (!this.searchActive || this.searchActive.trim() === "") {
@@ -433,20 +449,103 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.mh-40 { min-height: 38px; }
-.abonent, .uslugi { margin-top: 0; }
+.mh-40 {
+  min-height: 38px;
+}
+
+.abonent,
+.uslugi {
+  margin-top: 0;
+}
 
 .card {
   --bs-body-bg: #2c2c2e85 !important;
   border: none;
 }
-.card table tr { height: 50px; }
-.search-block img { top: auto !important; }
+
+.card table tr {
+  height: 50px;
+}
+
+.search-block img {
+  top: auto !important;
+}
 
 /* Цвета бейджей */
-.bg-green-text-white { background-color: #28a745; color: #ffffff; }
-.bg-red-text-white { background-color: #dc3545; color: #ffffff; }
-.bg-blue-text-white { background-color: #007bff; color: #ffffff; }
-.bg-yellow-text-dark { background-color: #ffc107; color: #343a40; }
-.bg-purple-text-white { background-color: #6f42c1; color: #ffffff; }
+.bg-green-text-white {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.bg-red-text-white {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+.bg-blue-text-white {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.bg-yellow-text-dark {
+  background-color: #ffc107;
+  color: #343a40;
+}
+
+.bg-purple-text-white {
+  background-color: #6f42c1;
+  color: #ffffff;
+}
+.pagination-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  @media (max-width: 1200px) {
+    max-width: 40%;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    justify-content: center;
+  }
+}
+
+.page-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+
+  border-radius: 10px;
+  border: none;
+  background: #2c2c2e;
+  color: #fff;
+
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #3a3a3c;
+  }
+
+  &.active {
+    background: #ffc107;
+    color: #000;
+    font-weight: 700;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.dots {
+  padding: 0 6px;
+  color: #999;
+  font-size: 18px;
+}
+
 </style>

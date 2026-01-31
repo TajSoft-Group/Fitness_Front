@@ -30,11 +30,17 @@ import warehouse from "@/pages/warehouse/warehouse.vue";
 import warehousePage from "@/pages/warehouse/warehousePage.vue";
 import deleteAccount from "@/pages/deleteAccount.vue"
 import EditCourse from '@/pages/Courses/editCourse.vue';
+import VisitorsNow from '@/pages/analytics/VisitorsNow.vue';
 
 const routes = [{
     path: '/',
     name: 'analytics',
     component: analytics
+  },
+  {
+    path: '/visitors-now',
+    name: 'visitors',
+    component: VisitorsNow
   },
   {
     path: '/subscription',
