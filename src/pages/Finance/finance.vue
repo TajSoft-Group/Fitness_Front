@@ -354,4 +354,31 @@ export default {
 .text-yellow {
   color: #D0FD3E;
 }
+
+.nav-tabs {
+  border-bottom: none;
+}
+
+.nav-tabs .nav-link {
+  background: #2c2c2e85;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px 12px 0 0;
+  margin-right: 6px;
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background: rgba(208, 253, 62, 0.25);
+    color: #212529;
+  }
+}
+
+.nav-tabs .nav-link.active {
+  background: #D0FD3E;
+  color: #212529;
+  font-weight: 600;
+}
+
 </style>

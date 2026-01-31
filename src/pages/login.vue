@@ -5,7 +5,7 @@
         <img class="full-screen-image" src="@/assets/images/login-bg.jpg" alt="Login Background">
       </div>
 
-      <div class="col-6 p-0 d-flex justify-content-center align-items-center">
+      <div class="col-6 p-0 d-flex justify-content-center align-items-center direction-column">
         <div class="login-form">
           <form @submit.prevent="submitData">
             <div class="sign-in">Войти</div>
@@ -17,9 +17,8 @@
 
 
             <div class="login">
-              <input v-model="username" type="text" :class="{ 'input-error': error }" id="phoneNumberInput"
-                @input="error = false">
-              <span class="line"></span>
+              <input v-model="username" type="text" :class="{ 'input-error': error }" id="phoneNumberInput" class="ps-3"
+                @input="error = false" placeholder="Логин">
             </div>
 
             <div class="password">
@@ -50,6 +49,8 @@
             </div>
           </form>
         </div>
+
+        <p class="pt-5 mt-5">Продукт разработан IT-компанией <a href="https://tajsoft.tj/">TAJSOFT.TJ</a></p>
       </div>
     </div>
   </div>
@@ -147,5 +148,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* дизайн не меняли */
+.direction-column{
+    flex-direction: column;
+}
+
 </style>

@@ -713,7 +713,7 @@ export default {
         <div class="bg-gray card-block h-auto position-relative">
           <router-link :to="'/warehouseItem/' + item.id">
             <div class="d-flex justify-content-between">
-              <div class="col-4"><img :src="'https://api.mubingym.com/' + item.img" class="warehouse-img"></div>
+              <div class="col-4"><img :src="'https://api.mubingym.com/' + item.img" class="warehouse-img aspect-ratio-1-1"></div>
               <div class="col-9 px-3">
                 <h3>{{ truncatedTitle(item.title) }}</h3>
                 <div class="fs-7">
@@ -784,6 +784,10 @@ export default {
 <style scoped lang="scss">
 .aspect-ratio-11 {
   width: 50px;
+  aspect-ratio: 1/1;
+}
+.aspect-ratio-1-1 {
+  width: 100%;
   aspect-ratio: 1/1;
 }
 

@@ -53,7 +53,7 @@ export default {
     <div class="row">
       <div class="col">
         <header class="header d-flex justify-content-between align-items-center">
-          <div class="logo-img"><img src="@/assets/images/logo%20gum.png" alt="Logo"></div>
+          <router-link :to="{name: 'analytics'}"><div class="logo-img"><img src="@/assets/images/logo%20gum.png" alt="Logo"></div></router-link>
 
           <nav class="menu">
             <ul class="d-flex justify-content-between align-items-center">
