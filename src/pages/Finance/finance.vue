@@ -154,7 +154,7 @@
               <div class="card-quantity fs-4 text-yellow">
                 {{ item.total_revenue }} смн.
               </div>
-              <div class="text-muted small">
+              <div class="text-white small">
                 Продано: {{ item.total_sold_count }}
               </div>
             </div>
