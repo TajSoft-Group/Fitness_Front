@@ -19,8 +19,8 @@
         </div>
       </div>
     </div>
-    <div class="row" v-if="Object.keys(filteredTransactions).length">
-      <template v-for="(transaction, index) in filteredTransactions" :key="index">
+    <div class="row" v-if="Object.keys(searchFilteredTransactions).length">
+      <template v-for="(transaction, index) in searchFilteredTransactions" :key="index">
         <div class="col-md-12">
           <h3 class="mt-3 fw-bolder">{{ index }}</h3>
         </div>
@@ -221,7 +221,7 @@ export default {
     loadData() {
       const token = Cookies.get("token");
 
-      gets('https://missfitnessbackend.tajsoft.tj/api/transactions', token)
+      gets('https://api.mubingym.com/api/transactions', token)
         .then((response) => {
           const normalized = {};
 
@@ -241,6 +241,39 @@ export default {
           this.filteredTransactions = normalized;
         });
     },
+  },
+  computed: {
+    searchFilteredTransactions() {
+      if (!this.searchActive.trim()) {
+        return this.filteredTransactions
+      }
+
+      const query = this.searchActive.toLowerCase()
+      const result = {}
+
+      Object.entries(this.filteredTransactions).forEach(([date, users]) => {
+        const filteredUsers = users.filter(userTx => {
+          const user = userTx.user || {}
+
+          return [
+            user.name,
+            user.surname,
+            user.username,
+            user.phone_number
+          ]
+            .filter(Boolean)
+            .some(field =>
+              field.toString().toLowerCase().includes(query)
+            )
+        })
+
+        if (filteredUsers.length) {
+          result[date] = filteredUsers
+        }
+      })
+
+      return result
+    }
   },
   mounted() {
     this.loadData()
