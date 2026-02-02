@@ -14,7 +14,7 @@ const loadEntries = async () => {
 
     try {
         const res = await gets(
-            "https://api.mubingym.com/api/services",
+            "https://missfitnessbackend.tajsoft.tj/api/services",
             token
         );
 

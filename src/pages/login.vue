@@ -97,7 +97,7 @@ export default {
       };
 
       axios
-        .post('https://api.mubingym.com/login_check', dataToSend)
+        .post('https://missfitnessbackend.tajsoft.tj/login_check', dataToSend)
         .then(response => {
           const token = response.data.token;
           this.setCookie('token', token, 31);
