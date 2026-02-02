@@ -53,7 +53,7 @@
           </div>
           <div v-if="type === 'cash'">
             <label for="title">Оплачено</label>
-            <input type="text" placeholder="Наличные" id="title" v-model="payment" required />
+            <input type="number" step="any" placeholder="Введите сумму покупки" id="title" v-model="payment" required />
           </div>
           <div v-show="type === 'bonus' || type === 'card'">
             <label class="mx-0 mt-3" v-if="currentUser.cards[0].balance >= totalPrice">С вашего счёта будет снято {{
