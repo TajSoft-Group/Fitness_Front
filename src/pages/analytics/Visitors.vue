@@ -290,8 +290,8 @@ export default {
       const token = Cookies.get("token");
 
       const url = this.bankForm.id
-        ? `https://api.mubingym.com/api/banks/update/${this.bankForm.id}`
-        : `https://api.mubingym.com/api/banks/create`;
+        ? `https://missfitnessbackend.tajsoft.tj/api/banks/update/${this.bankForm.id}`
+        : `https://missfitnessbackend.tajsoft.tj/api/banks/create`;
 
       try {
         await posts(url, this.bankForm, token);
@@ -322,7 +322,7 @@ export default {
 
       try {
         await posts(
-          `https://api.mubingym.com/api/banks/delete/${this.deleteBankItem.id}`,
+          `https://missfitnessbackend.tajsoft.tj/api/banks/delete/${this.deleteBankItem.id}`,
           {},
           token
         );
@@ -345,7 +345,7 @@ export default {
 
       try {
         const response = await gets(
-          "https://api.mubingym.com/api/banks/get/all",
+          "https://missfitnessbackend.tajsoft.tj/api/banks/get/all",
           token
         );
 

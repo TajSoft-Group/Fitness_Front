@@ -43,7 +43,8 @@
         <input type="text" placeholder="Введите фамилию" id="surname" v-model="formData.surname" required />
 
         <label for="phone_number">Номер телефона**</label>
-        <input type="text" placeholder="Введите номер телефона" id="phone_number" v-model="formData.phone_number" required />
+        <input type="text" placeholder="Введите номер телефона" id="phone_number" v-model="formData.phone_number"
+          required />
         <!--        <div class="form position-relative">-->
         <!--          <label for="name">Должность*</label>-->
         <!--          <input  type="text" :value="picked"   id="present">-->
@@ -67,7 +68,8 @@
         <!--          </div>-->
         <!--        </div>-->
         <label for="work_experience">Опыт работы*</label>
-        <input type="text" placeholder="Укажите опыт работы" id="work_experience" v-model="formData.work_experience" required />
+        <input type="text" placeholder="Укажите опыт работы" id="work_experience" v-model="formData.work_experience"
+          required />
 
         <!--        <label for="surname">Направление*</label>-->
         <!--        <div class="menu-type-2 d-flex justify-content-between  ">-->
@@ -80,6 +82,12 @@
         <!--            <label class="text-white" for="woman">Силовая нагрузка</label>-->
         <!--          </div>-->
         <!--        </div>-->
+
+        <label for="description">Описание</label>
+        <textarea id="description" placeholder="Краткое описание тренера" v-model="formData.description"
+          rows="4"></textarea>
+
+
         <label for="surname">Фотография тренера*</label>
         <div class="form position-relative mt-2">
           <div class="row p-1 justify-content-center img-card">
@@ -164,7 +172,7 @@
                   <router-link :to="{ name: 'TrainerPage', params: { id: personal.id } }"
                     class="d-flex col-8 align-items-center">
                     <div class="personal-img my-3" :style="{ borderColor: personal.color }">
-                      <img :src="'https://api.mubingym.com/' +
+                      <img :src="'https://missfitnessbackend.tajsoft.tj/' +
                         personal.avatar
                         " alt="" />
                     </div>
@@ -264,6 +272,7 @@ export default {
         surname: "",
         phone_number: "",
         work_experience: "",
+        description: "",
         avatar: "",
         cover_imgs: "",
         color: "",
@@ -301,7 +310,7 @@ export default {
       if (!confirm("Вы уверены, что хотите удалить этого тренера?")) return;
 
       try {
-        const response = await deletes(`https://api.mubingym.com/api/coach/delete/${id}`);
+        const response = await deletes(`https://missfitnessbackend.tajsoft.tj/api/coach/delete/${id}`);
 
         // Если нужно проверить статус:
         if (response.status === 200) {
@@ -332,6 +341,7 @@ export default {
       this.formData.surname = coach.surname;
       this.formData.phone_number = coach.phone_number;
       this.formData.work_experience = coach.work_experience;
+      this.formData.description = coach.description || "";
       this.formData.color = coach.color;
       this.formData.completed_courses = coach.completed_courses;
       this.formData.avatar = null;
@@ -363,7 +373,7 @@ export default {
     },
     getInfo() {
       const token = Cookies.get("token");
-      gets("https://api.mubingym.com/api/coach/all", token)
+      gets("https://missfitnessbackend.tajsoft.tj/api/coach/all", token)
         .then((response) => {
           this.DataUsers = response.data.data;
           this.filteredUsers = this.DataUsers;
@@ -467,6 +477,7 @@ export default {
           phone_number: this.formData.phone_number,
           work_experience: this.formData.work_experience,
           color: this.activeColor || this.formData.color,
+          description: this.formData.description,
           // другие текстовые поля, если нужны...
         };
 
@@ -475,7 +486,7 @@ export default {
         // Если ваш form_Data — это helper, который принимает FormData — используем его.
         // Иначе замените на axios.post с заголовком multipart/form-data
         const response = await form_Data(
-          `https://api.mubingym.com/api/coach/update/${this.editedCoach.id}`,
+          `https://missfitnessbackend.tajsoft.tj/api/coach/update/${this.editedCoach.id}`,
           fd
         )
           .then(() => {
@@ -514,13 +525,14 @@ export default {
           surname: this.formData.surname,
           phone_number: this.formData.phone_number,
           work_experience: this.formData.work_experience,
+          description: this.formData.description,
           color: this.activeColor || this.formData.color,
         };
 
         const fd = this.buildCoachFormData(payload);
 
         const response = await form_Data(
-          "https://api.mubingym.com/coach/create",
+          "https://missfitnessbackend.tajsoft.tj/coach/create",
           fd
         );
 
@@ -551,6 +563,7 @@ export default {
         surname: "",
         phone_number: "",
         work_experience: "",
+        description: "", // ✅
         avatar: "",
         cover_imgs: "",
         color: "",
