@@ -549,7 +549,7 @@ export default {
 
       <div class="form position-relative pe-2">
           <label for="description">Описание <span class="text-gray">(максимум: 255 символов)</span></label>
-          <textarea rows="3" placeholder="Введите описание товара" id="description" v-model="formData.description" >
+          <textarea rows="3" placeholder="Введите описание товара" id="description" maxlength="255" v-model="formData.description" >
           </textarea>
       </div>
 
