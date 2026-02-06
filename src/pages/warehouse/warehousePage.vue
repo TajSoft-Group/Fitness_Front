@@ -370,6 +370,10 @@ export default {
                       <span class="me-3 fw-bold">Прод. цена:</span>
                       <span class="color-yellow fw-bold">{{ WarehouseItem.sale }} TJS</span>
                     </div>
+                    <div class="d-flex">
+                      <span class="me-3 fw-bold">Описание:</span>
+                      <span class="color-yellow fw-bold">{{ WarehouseItem.description }}</span>
+                    </div>
                   </div>
                   <div class="ms-4">
                     <div class="d-flex">
