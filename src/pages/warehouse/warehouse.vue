@@ -38,6 +38,7 @@ export default {
         sale: "",
         discount: "",
         barcode: "",
+        description: "",
         type: "1",
         category: null,
       },
@@ -374,7 +375,7 @@ export default {
       // formDataToSend.append("count", Number(this.formData.count));
       // formDataToSend.append("balance", Number(this.formData.count));
       // formDataToSend.append("purchase", Number(this.formData.purchase));
-      // formDataToSend.append("sale", Number(this.formData.sale));
+      formDataToSend.append("description", this.formData.description);
       formDataToSend.append("discount", Number(this.formData.discount) || 0);
       formDataToSend.append("barcode", this.formData.barcode);
       formDataToSend.append("type", Number(this.formData.type) || 1);
@@ -516,28 +517,22 @@ export default {
           <input ref="inputText" type="text" placeholder="Введите количество" id="count" v-model="formData.count"
             required />
         </div> -->
-        <div class="form position-relative w-50 ps-2">
+        <div class="form position-relative w-50 pe-2">
           <label for="purchase">Тип*</label>
           <select name="" id="purchase" v-model="formData.type" required>
             <option value="1">Продаваемый</option>
             <option value="2">Не продаваемый</option>
           </select>
         </div>
+        <div class="form position-relative w-50 ps-2">
+          <label for="purchase">Категория*</label>
+          <select name="" id="" v-model="formData.category">
+            <option selected disabled>Выберите категорию</option>
+            <option v-for="value in collection" :value="value.id">{{ value.name }}</option>
+          </select>
+        </div>
       </div>
 
-
-      <div class="d-flex">
-        <!-- <div class="form position-relative w-50 pe-2">
-          <label for="purchase">Закупочная цена*</label>
-          <input type="text" placeholder="Введите закупочную цену" id="purchase" v-model="formData.purchase" required />
-        </div> -->
-
-
-        <!-- <div class="form position-relative w-50 ps-2">
-          <label for="sale">Продажная цена*</label>
-          <input type="text" placeholder="Введите продажную цену" id="sale" v-model="formData.sale" required />
-        </div> -->
-      </div>
 
       <div class="d-flex">
         <div class="form position-relative w-50 pe-2">
@@ -552,12 +547,10 @@ export default {
         </div>
       </div>
 
-      <div class="form position-relative">
-        <label for="purchase">Категория*</label>
-        <select name="" id="" v-model="formData.category">
-          <option selected disabled>Выберите категорию</option>
-          <option v-for="value in collection" :value="value.id">{{ value.name }}</option>
-        </select>
+      <div class="form position-relative pe-2">
+          <label for="description">Описание <span class="text-gray">(максимум: 255 символов)</span></label>
+          <textarea rows="3" placeholder="Введите описание товара" id="description" v-model="formData.description" >
+          </textarea>
       </div>
 
       <div class="d-flex justify-content-between add-user-buttons">
@@ -607,14 +600,13 @@ export default {
 
         <div class="form position-relative">
           <label for="purchase">Закупочная цена*</label>
-          <input type="text" placeholder="Введите закупочную цену" id="purchase" v-model="formDataH.purchase"
-             />
+          <input type="text" placeholder="Введите закупочную цену" id="purchase" v-model="formDataH.purchase" />
         </div>
 
 
         <div class="form position-relative">
           <label for="sale">Продажная цена*</label>
-          <input type="text" placeholder="Введите продажную цену" id="sale" v-model="formDataH.sale"  />
+          <input type="text" placeholder="Введите продажную цену" id="sale" v-model="formDataH.sale" />
         </div>
 
         <div class="d-flex justify-content-between add-user-buttons">
@@ -647,7 +639,7 @@ export default {
         </div>
       </div>
     </div>
-    <div class="row px-3 pt-5">
+    <div class="row px-3 pt-5 align-items-center">
       <button class="btn btn-dark border-0 bg-yellow w-auto rounded-pill me-3" @click="setCategory(null)">Все</button>
       <button class="btn btn-dark w-auto rounded-pill me-3" v-for="item in collection" @click="setCategory(item.id)">
         {{ item.name }}
@@ -713,7 +705,8 @@ export default {
         <div class="bg-gray card-block h-auto position-relative">
           <router-link :to="'/warehouseItem/' + item.id">
             <div class="d-flex justify-content-between">
-              <div class="col-4"><img :src="'https://api.mubingym.com/' + item.img" class="warehouse-img aspect-ratio-1-1"></div>
+              <div class="col-4"><img :src="'https://api.mubingym.com/' + item.img"
+                  class="warehouse-img aspect-ratio-1-1"></div>
               <div class="col-9 px-3">
                 <h3>{{ truncatedTitle(item.title) }}</h3>
                 <div class="fs-7">
@@ -786,6 +779,7 @@ export default {
   width: 50px;
   aspect-ratio: 1/1;
 }
+
 .aspect-ratio-1-1 {
   width: 100%;
   aspect-ratio: 1/1;

@@ -8,21 +8,28 @@
             <router-link to="/">Финансы</router-link>
           </div>
 
-          <div
-            @click="statusPicker = !statusPicker"
-            class="dpi filter-icon d-flex justify-content-center align-items-center"
-          >
-            <img height="29" width="37" src="@/assets/images/icons/filter.png" />
+          <div class="d-flex">
+            <div class="dpi me-3 filter-icon d-flex justify-content-center align-items-center color-yellow"
+              @click="downloadFile()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download"
+                viewBox="0 0 16 16">
+                <path
+                  d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                <path
+                  d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+              </svg>
+            </div>
+            <div @click="statusPicker = !statusPicker"
+              class="dpi filter-icon d-flex justify-content-center align-items-center">
+              <img height="29" width="37" src="@/assets/images/icons/filter.png" />
+            </div>
           </div>
         </div>
       </div>
 
       <!-- DATE PICKER -->
-      <div
-        v-if="statusPicker"
-        @click="statusPicker = false"
-        class="user-page-card cards-modal d-flex justify-content-center align-items-center"
-      >
+      <div v-if="statusPicker" @click="statusPicker = false"
+        class="user-page-card cards-modal d-flex justify-content-center align-items-center">
         <div @click.stop class="content position-relative">
           <DataPicker @date-selected="reloadAPI" @close-picker="statusPicker = false" />
         </div>
@@ -34,31 +41,19 @@
   <div class="container mt-3">
     <ul class="nav nav-tabs">
       <li class="nav-item">
-        <button
-          class="nav-link"
-          :class="{ active: activeTab === 'products' }"
-          @click="activeTab = 'products'"
-        >
+        <button class="nav-link" :class="{ active: activeTab === 'products' }" @click="activeTab = 'products'">
           Товары
         </button>
       </li>
 
       <li class="nav-item">
-        <button
-          class="nav-link"
-          :class="{ active: activeTab === 'services' }"
-          @click="activeTab = 'services'"
-        >
+        <button class="nav-link" :class="{ active: activeTab === 'services' }" @click="activeTab = 'services'">
           Услуги
         </button>
       </li>
 
       <li class="nav-item">
-        <button
-          class="nav-link"
-          :class="{ active: activeTab === 'courses' }"
-          @click="activeTab = 'courses'"
-        >
+        <button class="nav-link" :class="{ active: activeTab === 'courses' }" @click="activeTab = 'courses'">
           Курсы
         </button>
       </li>
@@ -97,12 +92,8 @@
             </div>
           </div>
 
-          <div
-            v-for="(item, index) in products.data"
-            :key="index"
-            class="col-3"
-            :class="item.total_sales == 0 ? 'd-none' : ''"
-          >
+          <div v-for="(item, index) in products.data" :key="index" class="col-3"
+            :class="item.total_sales == 0 ? 'd-none' : ''">
             <div class="bg-gray card-block">
               <div class="card-title">{{ item.product_name }}</div>
               <div class="card-quantity fs-4 text-yellow">
@@ -148,11 +139,7 @@
             </div>
           </div>
 
-          <div
-            v-for="(item, index) in services.data"
-            :key="index"
-            class="col-3"
-          >
+          <div v-for="(item, index) in services.data" :key="index" class="col-3">
             <div class="bg-gray card-block">
               <div class="card-title">{{ item.service_name }}</div>
               <div class="card-quantity fs-4 text-yellow">
@@ -198,11 +185,7 @@
             </div>
           </div>
 
-          <div
-            v-for="(item, index) in courses.data"
-            :key="index"
-            class="col-3"
-          >
+          <div v-for="(item, index) in courses.data" :key="index" class="col-3">
             <div class="bg-gray card-block">
               <div class="card-title">{{ item.service_name }}</div>
               <div class="card-quantity fs-4 text-yellow">
@@ -221,11 +204,7 @@
   </div>
 
   <!-- LOADER -->
-  <div
-    v-if="isLoading"
-    class="overlay position-fixed top-0 start-0 w-100 h-100"
-    style="background: rgba(0,0,0,.5)"
-  >
+  <div v-if="isLoading" class="overlay position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,.5)">
     <div class="position-fixed top-50 start-50 translate-middle text-center">
       <div class="spinner-border text-warning"></div>
       <div class="mt-2 text-light">Идет загрузка...</div>
@@ -277,9 +256,34 @@ export default {
   },
 
   methods: {
+    async downloadFile() {
+      const params = new URLSearchParams({
+        dateFrom: this.dateFrom,
+        dateTo: this.dateTo
+      });
+
+      const response = await fetch(
+        `https://api.mubingym.com/api/reports/products-sales-all/excel?${params.toString()}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "subscription_report.xlsx";
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+    },
     async reloadAPI(payload = {}) {
       this.dateFrom = payload.dateFrom || this.dateFrom;
-      this.dateTo   = payload.dateTo || this.dateTo;
+      this.dateTo = payload.dateTo || this.dateTo;
 
       if (!this.dateFrom || !this.dateTo) return;
 
@@ -384,5 +388,4 @@ export default {
   color: #212529;
   font-weight: 600;
 }
-
 </style>

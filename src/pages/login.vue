@@ -132,7 +132,10 @@ export default {
     },
 
     getToken() {
-      this.statusReg = !this.getCookie('token');
+      this.statusReg = this.getCookie('token');
+      if (this.statusReg) {
+        router.push("/");
+      }
     },
 
     logout() {
