@@ -101,11 +101,15 @@
             v-for="(item, index) in products.data"
             :key="index"
             class="col-3"
+            :class="item.total_sales == 0 ? 'd-none' : ''"
           >
             <div class="bg-gray card-block">
               <div class="card-title">{{ item.product_name }}</div>
               <div class="card-quantity fs-4 text-yellow">
                 {{ item.total_sales }} смн.
+              </div>
+              <div>
+                Продано: {{ item.sold_qty }}
               </div>
             </div>
           </div>
