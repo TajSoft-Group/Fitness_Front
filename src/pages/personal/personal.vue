@@ -34,66 +34,70 @@
   <div @click="toggleModal('.add-user-modal')" style="overflow: auto"
     class="add-user-modal d-none d-flex justify-content-center align-items-center">
     <div @click.stop class="content">
-      <div class="title"> {{ editedCoach ? "Изменить" : "Добавить" }} персонал</div>
-      <form class="form" @submit.prevent="saveCoach(), (addCard = false)">
-        <label for="name">Имя*</label>
-        <input type="text" placeholder="Введите имя" id="name" v-model="formData.name" required />
-
-        <label for="surname">Фамилия*</label>
-        <input type="text" placeholder="Введите фамилию" id="surname" v-model="formData.surname" required />
-
-        <label for="phone_number">Номер телефона**</label>
-        <input type="text" placeholder="Введите номер телефона" id="phone_number" v-model="formData.phone_number"
-          required />
-        <!--        <div class="form position-relative">-->
-        <!--          <label for="name">Должность*</label>-->
-        <!--          <input  type="text" :value="picked"   id="present">-->
-        <!--          <img @click="presentMenu=!presentMenu" :class="{'rotate-90':presentMenu}" class="row-right-icon" src="@/assets/images/icons/row-right.png">-->
-        <!--          <div :class="{'d-block':presentMenu}" class="menu-type-1 pt-4 px-4 ">-->
-        <!--            <h1 >Услуги</h1>-->
-        <!--            <div @click="presentMenu=!presentMenu" class="menu-type-2 d-flex justify-content-between align-items-center flex-row-reverse">-->
-        <!--              <input type="radio" id="yoga" value="Йога" v-model="picked" />-->
-        <!--              <label class="text-white" for="yoga">Тренер</label>-->
-        <!--            </div>-->
-        <!--            <hr>-->
-        <!--            <div @click="presentMenu=!presentMenu" class="menu-type-2 d-flex justify-content-between align-items-center flex-row-reverse">-->
-        <!--              <input type="radio" id="solarium" value="Солярий" v-model="picked" />-->
-        <!--              <label class="text-white" for="solarium">Администратор</label>-->
-        <!--            </div>-->
-        <!--            <hr>-->
-        <!--            <div @click="presentMenu=!presentMenu" class="menu-type-2 d-flex justify-content-between align-items-center flex-row-reverse">-->
-        <!--              <input type="radio" id="dancing" value="Танцы" v-model="picked" />-->
-        <!--              <label class="text-white" for="dancing">Менеджер</label>-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--        </div>-->
-        <label for="work_experience">Опыт работы*</label>
-        <input type="text" placeholder="Укажите опыт работы" id="work_experience" v-model="formData.work_experience"
-          required />
-
-        <!--        <label for="surname">Направление*</label>-->
-        <!--        <div class="menu-type-2 d-flex justify-content-between  ">-->
-        <!--          <div class="form-recipients">-->
-        <!--            <input type="radio" id="man" name="gender" value="1" v-model="formData.gender">-->
-        <!--            <label class="text-white" for="man">Кардио нагрузка</label>-->
-        <!--          </div>-->
-        <!--          <div class="form-recipients">-->
-        <!--            <input type="radio" id="woman" name="gender" value="2" v-model="formData.gender">-->
-        <!--            <label class="text-white" for="woman">Силовая нагрузка</label>-->
-        <!--          </div>-->
-        <!--        </div>-->
-
-        <label for="description">Описание</label>
-        <textarea id="description" placeholder="Краткое описание тренера" v-model="formData.description"
-          rows="4"></textarea>
+      <div class="title text-center mb-4"> {{ editedCoach ? "Изменить" : "Добавить" }} персонал</div>
+      <form class="form d-flex flex-wrap" @submit.prevent="saveCoach(), (addCard = false)">
+        <div class="w-50 ps-5 pe-3">
+          <div class="d-flex">
+            <div class="w-50 pe-2">
+              <label for="name">Имя*</label>
+              <input type="text" placeholder="Введите имя" id="name" v-model="formData.name" required />
+            </div>
+            <div class="w-50 ps-2">
+              <label for="surname">Фамилия*</label>
+              <input type="text" placeholder="Введите фамилию" id="surname" v-model="formData.surname" required />
+            </div>
+          </div>
 
 
-        <label for="surname">Фотография тренера*</label>
-        <div class="form position-relative mt-2">
+          <label for="phone_number">Номер телефона**</label>
+          <input type="text" placeholder="Введите номер телефона" id="phone_number" v-model="formData.phone_number"
+            required />
+          <!--        <div class="form position-relative">-->
+          <!--          <label for="name">Должность*</label>-->
+          <!--          <input  type="text" :value="picked"   id="present">-->
+          <!--          <img @click="presentMenu=!presentMenu" :class="{'rotate-90':presentMenu}" class="row-right-icon" src="@/assets/images/icons/row-right.png">-->
+          <!--          <div :class="{'d-block':presentMenu}" class="menu-type-1 pt-4 px-4 ">-->
+          <!--            <h1 >Услуги</h1>-->
+          <!--            <div @click="presentMenu=!presentMenu" class="menu-type-2 d-flex justify-content-between align-items-center flex-row-reverse">-->
+          <!--              <input type="radio" id="yoga" value="Йога" v-model="picked" />-->
+          <!--              <label class="text-white" for="yoga">Тренер</label>-->
+          <!--            </div>-->
+          <!--            <hr>-->
+          <!--            <div @click="presentMenu=!presentMenu" class="menu-type-2 d-flex justify-content-between align-items-center flex-row-reverse">-->
+          <!--              <input type="radio" id="solarium" value="Солярий" v-model="picked" />-->
+          <!--              <label class="text-white" for="solarium">Администратор</label>-->
+          <!--            </div>-->
+          <!--            <hr>-->
+          <!--            <div @click="presentMenu=!presentMenu" class="menu-type-2 d-flex justify-content-between align-items-center flex-row-reverse">-->
+          <!--              <input type="radio" id="dancing" value="Танцы" v-model="picked" />-->
+          <!--              <label class="text-white" for="dancing">Менеджер</label>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <!--        </div>-->
+          <label for="work_experience">Опыт работы*</label>
+          <input type="text" placeholder="Укажите опыт работы" id="work_experience" v-model="formData.work_experience"
+            required />
+
+          <!--        <label for="surname">Направление*</label>-->
+          <!--        <div class="menu-type-2 d-flex justify-content-between  ">-->
+          <!--          <div class="form-recipients">-->
+          <!--            <input type="radio" id="man" name="gender" value="1" v-model="formData.gender">-->
+          <!--            <label class="text-white" for="man">Кардио нагрузка</label>-->
+          <!--          </div>-->
+          <!--          <div class="form-recipients">-->
+          <!--            <input type="radio" id="woman" name="gender" value="2" v-model="formData.gender">-->
+          <!--            <label class="text-white" for="woman">Силовая нагрузка</label>-->
+          <!--          </div>-->
+          <!--        </div>-->
+
+          <label for="description">Описание</label>
+          <textarea id="description" placeholder="Краткое описание тренера" v-model="formData.description"
+            rows="4"></textarea>
+
+          <label for="surname">Фотография фона*</label>
           <div class="row p-1 justify-content-center img-card">
             <div v-if="images.length <= 0" class="opacity-50 text-center">
-              Фотография тренера Минимальный размер 200x200 px Максимальное
-              кол-во фотографий: 1
+              Фотография тренера Минимальный размер 200x200 px 
             </div>
             <div v-for="(image, index) in images" :key="index" class="card-add-img m-2">
               <img :src="image" class="card-img-top" alt="Product Image" />
@@ -103,34 +107,42 @@
               <button type="button" class="add-button">+</button>
             </div>
           </div>
-          <label for="surname">Фотография фона*</label>
-          <div class="col-12 p-1 img-card mt-4 d-flex flex-wrap">
-            <div v-if="images.length <= 0" class="opacity-50 text-center w-100">
-              Фотография фона Минимальный размер 1240x400 px Максимальное кол-во
-              фотографий: 5
+        </div>
+
+
+        <div class="w-50 px-5">
+          <label for="surname">Фотография тренера*</label>
+          <div class="form position-relative mt-2">
+            <div class="col-12 p-1 img-card mt-4 d-flex flex-wrap">
+              <div v-if="images.length <= 0" class="opacity-50 text-center w-100">
+                Фотография фона Минимальный размер 1240x400 px Максимальное кол-во
+                фотографий: 5
+              </div>
+              <div v-for="(image, index) in images2" :key="index" class="card-add-img m-2">
+                <img :src="image" class="card-img-top" alt="Product Image" />
+              </div>
+              <div @click="selectImage(2)" v-show="images2.length < 5"
+                class="card-button align-content-center text-center m-2">
+                <button type="button" class="add-button">+</button>
+              </div>
             </div>
-            <div v-for="(image, index) in images2" :key="index" class="card-add-img m-2">
-              <img :src="image" class="card-img-top" alt="Product Image" />
-            </div>
-            <div @click="selectImage(2)" v-show="images2.length < 5"
-              class="card-button align-content-center text-center m-2">
-              <button type="button" class="add-button">+</button>
+            <input type="file" ref="fileInput1" @change="handleFileChange(1)" style="display: none"
+              accept="image/png,image/jpeg,image/jpg" />
+            <input type="file" ref="fileInput2" @change="handleFileChange(2)" style="display: none"
+              accept="image/png,image/jpeg,image/jpg" />
+          </div>
+          <label for="surname">Выберите цвет</label>
+          <div class="ps-3 img-card d-flex flex-wrap">
+            <div v-for="(color, index) in colors" :key="index" :class="{ 'bg-black_2': activeColor === color }"
+              class="p-2">
+              <div :style="{ backgroundColor: color }" class="color-circle" @click="selectColor(color)"></div>
             </div>
           </div>
-          <input type="file" ref="fileInput1" @change="handleFileChange(1)" style="display: none"
-            accept="image/png,image/jpeg,image/jpg" />
-          <input type="file" ref="fileInput2" @change="handleFileChange(2)" style="display: none"
-            accept="image/png,image/jpeg,image/jpg" />
         </div>
-        <label for="surname">Выберите цвет</label>
-        <div class="ps-3 img-card d-flex flex-wrap">
-          <div v-for="(color, index) in colors" :key="index" :class="{ 'bg-black_2': activeColor === color }"
-            class="p-2">
-            <div :style="{ backgroundColor: color }" class="color-circle" @click="selectColor(color)"></div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between add-user-buttons">
-          <button @click="toggleModal('.add-user-modal')" class="dont" type="button">
+
+
+        <div class="d-flex justify-content-end add-user-buttons w-100">
+          <button @click="toggleModal('.add-user-modal')" class="dont me-3" type="button">
             Отмена
           </button>
           <button class="submit" type="submit">
@@ -621,7 +633,11 @@ export default {
 
 <style lang="scss" scoped>
 .add-user-modal {
-  z-index: 1;
+  z-index: 99;
+}
+
+.add-user-modal .content {
+  width: 50%;
 }
 
 .text-yellow {
