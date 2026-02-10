@@ -85,6 +85,11 @@ export default {
   },
 
   methods: {
+    forceLogout() {
+      this.setCookie('token', '', -1);
+      this.statusReg = false;
+      router.replace('/login');
+    },
     submitData() {
       if (this.loading) return;
 
@@ -132,12 +137,34 @@ export default {
     },
 
     getToken() {
-      this.statusReg = this.getCookie('token');
-      if (this.statusReg) {
-        router.push("/");
-      }
-    },
+      const token = this.getCookie('token');
 
+      if (!token) {
+        this.statusReg = false;
+        return;
+      }
+
+      axios
+        .get('https://api.mubingym.com/users', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          // ❗ если API вернул users — считаем сессию битой
+          if (response.config.url.includes('/users')) {
+            this.forceLogout();
+            return;
+          }
+
+          this.statusReg = true;
+          router.push('/');
+        })
+        .catch(() => {
+          // 401 / 403 / любая ошибка
+          this.forceLogout();
+        });
+    },
     logout() {
       this.setCookie('token', '', -1);
       this.statusReg = false;
@@ -151,8 +178,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.direction-column{
-    flex-direction: column;
+.direction-column {
+  flex-direction: column;
 }
-
 </style>

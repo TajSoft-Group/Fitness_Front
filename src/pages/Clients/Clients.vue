@@ -69,7 +69,7 @@
         <div class="info d-flex justify-content-between form">
           <div class="age mr-30">
             <label for="age">Возраст</label>
-            <input type="text" id="age" v-model="formData.age" />
+            <input type="text" id="age" v-model="formData.age" readonly />
           </div>
           <div class="age mr-30">
             <label for="height">Рост</label>
@@ -183,7 +183,13 @@
                   </RouterLink>
                 </td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.age ? `${user.age} ${getAgeSuffix(user.age)}` : '- лет' }}</td>
+                <td>{{ user.birthday
+                  ? `${new Date().getFullYear() - new Date(user.birthday).getFullYear()} ${getAgeSuffix(
+                    new Date().getFullYear() - new Date(user.birthday).getFullYear()
+                  )}`
+                  : '- лет'
+                  }}
+                </td>
                 <td>
                   {{ user.weight ? user.weight + 'кг,' : '- кг,' }}&nbsp;
                   {{ user.height ? user.height + 'см' : '- см' }}
@@ -364,6 +370,25 @@ export default {
   },
 
   watch: {
+    "formData.birthday"(value) {
+      if (!value) {
+        this.formData.age = "";
+        return;
+      }
+
+      const today = new Date();
+      const birthDate = new Date(value);
+
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+
+      // корректировка, если ДР ещё не был в этом году
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      this.formData.age = age;
+    },
     searchActive() {
       this.currentPage = 1; // Сброс на первую страницу при новом поиске
     },
@@ -496,6 +521,7 @@ export default {
   background-color: #6f42c1;
   color: #ffffff;
 }
+
 .pagination-wrapper {
   display: flex;
   align-items: center;
@@ -547,5 +573,4 @@ export default {
   color: #999;
   font-size: 18px;
 }
-
 </style>
