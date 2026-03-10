@@ -173,7 +173,8 @@ const routes = [{
   {
     path: '/delete-account',
     name: 'deleteAccount',
-    component: deleteAccount
+    component: deleteAccount,
+    meta: { public: true }
   },
 
 ];
@@ -189,10 +190,10 @@ router.beforeEach((to, from, next) => {
   const authRequired = !publicPages.includes(to.path);
   const token = Cookies.get('token');
 
-  if (authRequired && !token) {
+  if (authRequired && !token && !to.meta.public) {
     return next('/login');
   }
-
+  
   next();
 });
 
