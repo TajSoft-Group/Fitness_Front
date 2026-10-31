@@ -11,6 +11,7 @@ import ReviewsPage from "@/pages/Courses/ReviewsPage.vue";
 import Clients from "@/pages/Clients/Clients.vue";
 import UserPages from "@/pages/Clients/UserPage.vue";
 import UserBlocked from "@/pages/Clients/UserBlocked.vue";
+import Debtors from "@/pages/Clients/Debtors.vue";
 import Newsletters from "@/pages/Newsletters.vue";
 import MailingsPlanned from "@/pages/sletters/MailingsPlanned.vue";
 import MailingDelivered from "@/pages/sletters/MailingDelivered.vue";
@@ -77,6 +78,11 @@ const routes = [{
     path: '/user-locked',
     name: 'UserBlocked',
     component: UserBlocked
+  },
+  {
+    path: '/debtors',
+    name: 'debtors',
+    component: Debtors
   },
   {
     path: '/newsletters',

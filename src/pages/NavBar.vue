@@ -65,7 +65,7 @@ export default {
               <li :class="{ active: ActiveMenu === '/services' }"><router-link to="/services">Услуги</router-link></li>
               <li :class="{ active: ActiveMenu === '/courses' }"><router-link to="/courses">Курсы</router-link></li>
 
-              <li :class="{ active: ['/finance', '/transactions', '/newsletters'].includes(ActiveMenu) }"
+              <li :class="{ active: ['/finance', '/transactions', '/newsletters', '/report', '/debtors'].includes(ActiveMenu) }"
                 class="trigger-hover">
                 <a>Управление</a>
                 <ul class="hidden-hover bg-gray p-0 position-absolute mt-0 pt-4 rounded-3">
@@ -77,6 +77,8 @@ export default {
                       to="/newsletters">Рассылки</router-link></li>
                   <li :class="{ active: ActiveMenu === '/report' }"><router-link
                       to="/report">Отчет</router-link></li>
+                  <li :class="{ active: ActiveMenu === '/debtors' }"><router-link
+                      to="/debtors">Должники</router-link></li>
                 </ul>
               </li>
 

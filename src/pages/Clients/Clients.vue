@@ -153,6 +153,7 @@
               </select>
             </div>
           </div>
+          <router-link to="/debtors" class="blocked">Должники</router-link>
           <!-- <router-link to="user-locked">Заблокированные</router-link> -->
         </div>
       </div>
