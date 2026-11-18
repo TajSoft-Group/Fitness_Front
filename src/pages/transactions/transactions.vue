@@ -174,6 +174,7 @@
 </template>
 
 <script>
+import { API_URL } from '@/config';
 import gets from "@/components/axios/get.js";
 import Cookies from "js-cookie";
 import DataPicker from "@/pages/transactions/DataPicker.vue";
@@ -221,7 +222,7 @@ export default {
     loadData() {
       const token = Cookies.get("token");
 
-      gets('https://api.mubingym.com/api/transactions', token)
+      gets(API_URL + '/api/transactions', token)
         .then((response) => {
           const normalized = {};
 

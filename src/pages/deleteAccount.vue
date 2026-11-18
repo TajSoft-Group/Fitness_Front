@@ -1,5 +1,6 @@
 
 <script>
+import { API_URL } from '@/config';
 import gets from "@/components/axios/get.js";
 import form_Data from "@/components/axios/formData.js";
 import posts from "@/components/axios/posts.js";
@@ -61,7 +62,7 @@ export default {
     },
     deleteProduct(id){
       console.log(id)
-      deletes(`https://api.mubingym.com/product/${ parseInt(id) }`)
+      deletes(`${API_URL}/product/${ parseInt(id) }`)
           .then(
               (response) =>
               {
@@ -110,7 +111,7 @@ export default {
     // ///////////// //////////// => addCategory // => product
     async addCategory(typeAdd) {
       if (typeAdd === "addCategory") {
-        posts("https://api.mubingym.com/category_create", {
+        posts(API_URL + "/category_create", {
           name: this.AddCategory,
         })
             .then((response) => {
@@ -118,12 +119,12 @@ export default {
               if (response.status === 200) {
                 this.addStatus = true;
                 this.getInfo(
-                    "https://api.mubingym.com/category",
+                    API_URL + "/category",
                     "buttonsCategory",
                     1
                 );
                 this.getInfo(
-                    "https://api.mubingym.com/product/all",
+                    API_URL + "/product/all",
                     "productList",
                     2
                 );
@@ -142,13 +143,13 @@ export default {
             console.log('yes');
             delete FormData.img
             response = await Patch(
-                `https://api.mubingym.com/product/${ FormData.id }`,
+                `${API_URL}/product/${ FormData.id }`,
                 FormData
             );
             this.editNull()
           }else{
             response = await form_Data(
-                "https://api.mubingym.com/product_create",
+                API_URL + "/product_create",
                 FormData
             );
           }
@@ -157,12 +158,12 @@ export default {
           if (response.status === 200) {
             this.addStatus = true;
             await this.getInfo(
-                "https://api.mubingym.com/category",
+                API_URL + "/category",
                 "buttonsCategory",
                 1
             );
             await this.getInfo(
-                "https://api.mubingym.com/product/all",
+                API_URL + "/product/all",
                 "productList",
                 2
             );
@@ -219,7 +220,7 @@ export default {
     },
     deleteCategory(id){
       console.log(id)
-      deletes(`https://api.mubingym.com/category/delete/${ parseInt(id) }`)
+      deletes(`${API_URL}/category/delete/${ parseInt(id) }`)
           .then(
               (response) =>
               {
@@ -236,12 +237,12 @@ export default {
   },
   mounted() {
     this.getInfo(
-        "https://api.mubingym.com/category",
+        API_URL + "/category",
         "buttonsCategory",
         1
     );
     this.getInfo(
-        "https://api.mubingym.com/product/all",
+        API_URL + "/product/all",
         "productList",
         2
     );

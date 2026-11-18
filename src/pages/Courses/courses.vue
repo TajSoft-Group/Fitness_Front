@@ -172,7 +172,7 @@
               <div class="user-list-item" :class="{ active: activeIndex === index }"
                 @click.self="toggleCollapse(index)">
                 <div class="user-list-item-img">
-                  <img v-if="trener.img" :src="`https://api.mubingym.com/${trener.img}`" alt="" />
+                  <img v-if="trener.img" :src="`${$api}/${trener.img}`" alt="" />
                   <img v-else src="@/assets/images/user-photo.png" alt="" />
                 </div>
                 {{ trener.name + " " + trener.surname }}
@@ -264,7 +264,7 @@
           </div>
 
           <!-- Фото -->
-          <img class="w-100 h-100" :src="'https://api.mubingym.com/' + curs.img" alt="">
+          <img class="w-100 h-100" :src="$api + '/' + curs.img" alt="">
 
           <!-- Текст -->
           <div class="at-bottom position-absolute bottom-0 ps-4">
@@ -321,7 +321,7 @@
                 -{{ curs.discount + "%" }}
               </div>
               <img
-                :src="'https://api.mubingym.com/' + curs.img"
+                :src="$api + '/' + curs.img"
               />
               <div class="product-info">
                 <div class="product-title mb-2 border-color-yellow">
@@ -441,6 +441,7 @@
 
 </template>
 <script>
+import { API_URL } from '@/config';
 import Cookies from "js-cookie";
 import posts from "@/components/axios/posts.js";
 import gets from "@/components/axios/get.js";
@@ -543,9 +544,9 @@ export default {
 
       try {
         const [coursesRes, coachesRes, usersRes] = await Promise.all([
-          gets("https://api.mubingym.com/api/courses/all/admin", token),
-          gets("https://api.mubingym.com/api/coach/all", token),
-          posts("https://api.mubingym.com/users", { form: "0", to: "0" }, token),
+          gets(API_URL + "/api/courses/all/admin", token),
+          gets(API_URL + "/api/coach/all", token),
+          posts(API_URL + "/users", { form: "0", to: "0" }, token),
         ]);
 
         this.cursList = coursesRes.data;
@@ -589,7 +590,7 @@ export default {
 
       try {
         const token = Cookies.get("token");
-        const res = await posts("https://api.mubingym.com/enroll/courses", this.cursData, token);
+        const res = await posts(API_URL + "/enroll/courses", this.cursData, token);
         this.showSuccess(res.data.message || "Клиент успешно записан!");
         this.payModalVisible = false;
         await this.loadAllData();
@@ -607,7 +608,7 @@ export default {
 
       try {
         const token = Cookies.get("token");
-        await posts(`https://api.mubingym.com/courses/status/${id}`, {}, token);
+        await posts(`${API_URL}/courses/status/${id}`, {}, token);
         this.showSuccess("Архивы успешно пересобраны");
         await this.loadAllData();
       } catch (err) {
@@ -656,7 +657,7 @@ export default {
       this.loadingText = "Создание курса...";
 
       try {
-        await form_Data("https://api.mubingym.com/api/courses/create", fd);
+        await form_Data(API_URL + "/api/courses/create", fd);
         this.showSuccess("Курс успешно создан!");
         this.addCourseModalVisible = false;
         this.resetForm();

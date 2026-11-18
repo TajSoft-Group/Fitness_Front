@@ -1,4 +1,5 @@
 <script>
+import { API_URL } from '@/config';
 import lottie from 'lottie-web'
 import animationData from '@/assets/images/enter.json'
 import posts from '@/components/axios/posts';
@@ -10,7 +11,7 @@ export default {
       this.anim.goToAndPlay(0, true)
     },
     openDoor() {
-      posts('https://api.mubingym.com/post/door')
+      posts(API_URL + '/post/door')
         .then((response) => {
           console.log('Турникет открыт:', response.data);
         })

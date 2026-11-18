@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { API_URL } from '@/config';
 import { defineComponent } from 'vue';
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
@@ -126,7 +127,7 @@ export default defineComponent({
           startDate = oneMonthBack.toISOString().split('T')[0];
           endDate = currentDate.toISOString().split('T')[0];
         }
-        const response = await posts("https://api.mubingym.com/finance_chart", {
+        const response = await posts(API_URL + "/finance_chart", {
           start_date: startDate,
           end_date: endDate
         });

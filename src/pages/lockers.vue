@@ -185,6 +185,7 @@
 
 </template>
 <script setup>
+import { API_URL } from '@/config';
 import { ref } from 'vue'
 import Cookies from "js-cookie";
 import gets from "@/components/axios/get.js";
@@ -255,7 +256,7 @@ export default {
       this.loadingText = "Освобождение шкафчика..."
       this.isLoading = true
 
-      posts(`https://api.mubingym.com/api/closet/free/${id}`)
+      posts(`${API_URL}/api/closet/free/${id}`)
         .then((response) => {
           if (response.status === 200) {
             this.toastMessage = "Шкафчик успешно освобождён"
@@ -291,7 +292,7 @@ export default {
       const token = Cookies.get("token");
 
       gets(
-        `https://api.mubingym.com/api/closet/all`,
+        `${API_URL}/api/closet/all`,
         token
       )
         .then((response) => {
@@ -310,7 +311,7 @@ export default {
       const token = Cookies.get("token");
 
       posts(
-        "https://api.mubingym.com/users",
+        API_URL + "/users",
         { form: "0", to: "0" },
         token
       )
@@ -330,7 +331,7 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      posts('https://api.mubingym.com/api/closet/create', formData)
+      posts(API_URL + '/api/closet/create', formData)
         .then((response) => {
 
           if (response.status === 200) {
@@ -351,7 +352,7 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      deletes(`https://api.mubingym.com/api/closet/delete/${this.deleter}`)
+      deletes(`${API_URL}/api/closet/delete/${this.deleter}`)
         .then((response) => {
           this.isLoading = false;
           this.loadingText = "Удаление...";
@@ -374,7 +375,7 @@ export default {
       this.loadingText = "Загрузка...";
       this.isLoading = true;
 
-      posts(`https://api.mubingym.com/api/closet/update/${this.edit}`, formData)
+      posts(`${API_URL}/api/closet/update/${this.edit}`, formData)
         .then((response) => {
 
           if (response.status === 200) {

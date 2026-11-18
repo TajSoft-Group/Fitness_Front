@@ -30,7 +30,7 @@
               </div>
               <div class="carousel-inner slider-inner height-400 my-4">
                 <div v-for="(value, index) in DataUsers.cover_imgs" :class="['carousel-item', { active: index === 0 }]">
-                  <img :src="'https://api.mubingym.com/' + value" class="d-block w-100" alt="..." />
+                  <img :src="$api + '/' + value" class="d-block w-100" alt="..." />
                 </div>
 
               </div>
@@ -51,7 +51,7 @@
             </div>
             <div class="title-trainer">
               <div class="teacher-img img-width-200 border-9px" :style="{ borderColor: DataUsers.color }">
-                <img :src="'https://api.mubingym.com/' + DataUsers.avatar
+                <img :src="$api + '/' + DataUsers.avatar
                   " alt="" />
               </div>
             </div>
@@ -164,6 +164,7 @@
 </template>
 
 <script>
+import { API_URL } from '@/config';
 import Cookies from "js-cookie";
 import ButtonSorting from "@/UI/ButtonSorting.vue";
 import gets from "@/components/axios/get.js";
@@ -182,7 +183,7 @@ export default {
     getInfo() {
       const token = Cookies.get("token");
       gets(
-        `https://api.mubingym.com/api/coach/${this.id}`,
+        `${API_URL}/api/coach/${this.id}`,
         token
       )
         .then((response) => {

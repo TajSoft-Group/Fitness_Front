@@ -1,4 +1,5 @@
 <script setup>
+import { API_URL } from '@/config';
 import { ref, onMounted, computed } from "vue";
 import Cookies from "js-cookie";
 import gets from "@/components/axios/get";
@@ -14,7 +15,7 @@ const loadEntries = async () => {
 
     try {
         const res = await gets(
-            "https://api.mubingym.com/api/services",
+            API_URL + "/api/services",
             token
         );
 

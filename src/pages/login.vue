@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { API_URL } from '@/config';
 import axios from "axios";
 import router from "@/router/index.js";
 
@@ -102,7 +103,7 @@ export default {
       };
 
       axios
-        .post('https://api.mubingym.com/login_check', dataToSend)
+        .post(API_URL + '/login_check', dataToSend)
         .then(response => {
           const token = response.data.token;
           this.setCookie('token', token, 31);
@@ -145,7 +146,7 @@ export default {
       }
 
       axios
-        .get('https://api.mubingym.com/users', {
+        .get(API_URL + '/users', {
           headers: {
             Authorization: `Bearer ${token}`
           }

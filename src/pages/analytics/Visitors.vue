@@ -177,6 +177,7 @@
 </template>
 
 <script>
+import { API_URL } from '@/config';
 import LineChart from "@/components/Chart/LineChart.vue";
 import BarChart from "@/components/Chart/BarChart.vue";
 import Cookies from "js-cookie";
@@ -290,8 +291,8 @@ export default {
       const token = Cookies.get("token");
 
       const url = this.bankForm.id
-        ? `https://api.mubingym.com/api/banks/update/${this.bankForm.id}`
-        : `https://api.mubingym.com/api/banks/create`;
+        ? `${API_URL}/api/banks/update/${this.bankForm.id}`
+        : `${API_URL}/api/banks/create`;
 
       try {
         await posts(url, this.bankForm, token);
@@ -322,7 +323,7 @@ export default {
 
       try {
         await posts(
-          `https://api.mubingym.com/api/banks/delete/${this.deleteBankItem.id}`,
+          `${API_URL}/api/banks/delete/${this.deleteBankItem.id}`,
           {},
           token
         );
@@ -345,7 +346,7 @@ export default {
 
       try {
         const response = await gets(
-          "https://api.mubingym.com/api/banks/get/all",
+          API_URL + "/api/banks/get/all",
           token
         );
 

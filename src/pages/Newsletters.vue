@@ -298,6 +298,7 @@
 </template>
 
 <script setup>
+import { API_URL } from '@/config';
 import { ref } from 'vue'
 import DataPicker from "@/pages/analytics/DataPicker.vue";
 const picked = ref(`Укажите вид поощрения`)
@@ -397,7 +398,7 @@ export default {
       const token = Cookies.get("token");
 
       posts(
-        "https://api.mubingym.com/users",
+        API_URL + "/users",
         { form: "0", to: "0" },
         token
       )
@@ -441,7 +442,7 @@ export default {
 
       this.letter.type = type;
       console.log(this.letter);
-      posts('https://api.mubingym.com/api/mailings/create', sending, token)
+      posts(API_URL + '/api/mailings/create', sending, token)
         .then((response) => {
           this.isLoading = false;
           this.toaster = true;
@@ -512,7 +513,7 @@ export default {
 
       this.isLoading = true;
       this.loadingText = 'Загрузка рассылок...';
-      gets('https://api.mubingym.com/api/mailings/get', token)
+      gets(API_URL + '/api/mailings/get', token)
         .then((response) => {
           this.letters = response.data.data.map(letter => ({
             ...letter,
@@ -530,7 +531,7 @@ export default {
       if (confirm('Вы уверены, что хотите удалить эту рассылку?')) {
         this.isLoading = true;
         this.loadingText = 'Удаление рассылки...';
-        deletes(`https://api.mubingym.com/api/mailings/delete/${id}`)
+        deletes(`${API_URL}/api/mailings/delete/${id}`)
           .then((response) => {
             this.isLoading = false;
             this.toaster = true;

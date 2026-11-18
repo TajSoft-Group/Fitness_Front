@@ -259,6 +259,7 @@
 
   </template>
   <script>
+import { API_URL } from '@/config';
   import posts from "@/components/axios/posts.js";
   import gets from "@/components/axios/get.js"
   import form_Data from "@/components/axios/formData.js";
@@ -345,7 +346,7 @@
     },
     methods:{
       coursesFn(){
-        posts('https://api.mubingym.com/enroll/courses', {...this.cursData})
+        posts(API_URL + '/enroll/courses', {...this.cursData})
             .then(response => {
               this.Delay('loading', 1)
               console.log(this.cursData)
@@ -476,7 +477,7 @@
 
         this.isLoading = true
         try {
-          const response = await form_Data('https://api.mubingym.com/api/courses/create', FormData);
+          const response = await form_Data(API_URL + '/api/courses/create', FormData);
           this.isLoading = false
 
           console.log(response)
@@ -494,7 +495,7 @@
               td.max_reports = JSON.stringify(td.max_reports)
               console.log(td)
               try {
-                const response = form_Data('https://api.mubingym.com/api/training/create', td);
+                const response = form_Data(API_URL + '/api/training/create', td);
                 if (response.status === 201) {
                   this.addStatus = true;
                   // await this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
@@ -552,7 +553,7 @@
       },
     },
     mounted() {
-      this.getInfo('https://api.mubingym.com/api/coach/all','DataUsers', 1)
+      this.getInfo(API_URL + '/api/coach/all','DataUsers', 1)
       this.getInfo('https://fitness.abdurazzoq.beget.tech/api/courses/all','cursList', 2)
       // this.getInfoUsers()
     },

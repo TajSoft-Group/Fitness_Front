@@ -200,6 +200,7 @@
 </template>
 
 <script>
+import { API_URL } from '@/config';
 import Cookies from "js-cookie";
 import gets from "@/components/axios/get.js";
 
@@ -313,7 +314,7 @@ export default {
       const token = Cookies.get("token");
       this.isLoading = true;
 
-      gets("https://api.mubingym.com/api/cards/negative-balance", token)
+      gets(API_URL + "/api/cards/negative-balance", token)
         .then((res) => {
           this.debtors = Array.isArray(res.data)
             ? res.data

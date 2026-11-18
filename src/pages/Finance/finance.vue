@@ -213,6 +213,7 @@
 </template>
 
 <script>
+import { API_URL } from '@/config';
 import DataPicker from "@/pages/transactions/DataPicker.vue";
 import gets from "@/components/axios/get";
 
@@ -263,7 +264,7 @@ export default {
       });
 
       const response = await fetch(
-        `https://api.mubingym.com/api/reports/products-sales-all/excel?${params.toString()}`,
+        `${API_URL}/api/reports/products-sales-all/excel?${params.toString()}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -287,7 +288,7 @@ export default {
 
       if (!this.dateFrom || !this.dateTo) return;
 
-      const baseURL = 'https://api.mubingym.com/api';
+      const baseURL = API_URL + '/api';
       const token = localStorage.getItem('token');
 
       this.isLoading = true;

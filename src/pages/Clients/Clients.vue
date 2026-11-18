@@ -263,6 +263,7 @@
 </template>
 
 <script>
+import { API_URL } from '@/config';
 import Cookies from "js-cookie";
 import posts from "@/components/axios/posts.js";
 
@@ -417,7 +418,7 @@ export default {
       const token = Cookies.get("token");
 
       // Загрузка пользователей
-      posts("https://api.mubingym.com/users", { form: "0", to: "0" }, token)
+      posts(API_URL + "/users", { form: "0", to: "0" }, token)
         .then(res => {
           this.DataUsers = res.data.users || [];
           this.loading = false;
@@ -433,7 +434,7 @@ export default {
       oneMonthBack.setMonth(oneMonthBack.getMonth() - 1);
       oneMonthBack = oneMonthBack.toISOString().split("T")[0];
 
-      posts("https://api.mubingym.com/count", { start_date: oneMonthBack, end_date: currentDate }, token)
+      posts(API_URL + "/count", { start_date: oneMonthBack, end_date: currentDate }, token)
         .then(res => {
           this.statistic = res.data || {};
           this.isLoading = false;
@@ -444,7 +445,7 @@ export default {
     submitForm() {
       const token = Cookies.get("token");
       this.isLoading = true;
-      posts("https://api.mubingym.com/user_register", { ...this.formData, status: "active" }, token)
+      posts(API_URL + "/user_register", { ...this.formData, status: "active" }, token)
         .then(res => {
           if (res.status === 200) {
             this.isLoading = false;

@@ -179,6 +179,7 @@
 
 </template>
 <script>
+import { API_URL } from '@/config';
 import axios from "axios";
 import DataPicker from "@/pages/report/DataPicker.vue";
 import Cookies from "js-cookie";
@@ -290,7 +291,7 @@ export default {
         const token = Cookies.get("token");
 
         posts(
-          "https://api.mubingym.com/users", {
+          API_URL + "/users", {
           form: "0",
           to: "0",
         }, token
@@ -319,7 +320,7 @@ export default {
         const token = localStorage.getItem("token");
 
         await axios.post(
-          `https://api.mubingym.com/api/enroll-services/update/${this.selectedEnrollId}`,
+          `${API_URL}/api/enroll-services/update/${this.selectedEnrollId}`,
           {
             user_id: this.selectedUserId
           },
@@ -354,7 +355,7 @@ export default {
         const token = localStorage.getItem("token");
 
         await axios.delete(
-          `https://api.mubingym.com/api/enroll-services/delete/${item.id}`,
+          `${API_URL}/api/enroll-services/delete/${item.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -386,7 +387,7 @@ export default {
         const token = localStorage.getItem("token");
 
         const res = await axios.post(
-          `https://api.mubingym.com/api/enroll-services/pause/${item.id}`,
+          `${API_URL}/api/enroll-services/pause/${item.id}`,
           {},
           {
             headers: {
@@ -414,7 +415,7 @@ export default {
       });
 
       const response = await fetch(
-        `https://api.mubingym.com/export/subscriptions?${params.toString()}`,
+        `${API_URL}/export/subscriptions?${params.toString()}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -447,7 +448,7 @@ export default {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(
-          "https://api.mubingym.com/api/services/by-date",
+          API_URL + "/api/services/by-date",
           {
             params: this.dateFrom && this.dateTo
               ? { from: this.dateFrom, to: this.dateTo }
