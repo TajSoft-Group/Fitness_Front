@@ -392,7 +392,6 @@ import Cookies from "js-cookie";
 import posts from "@/components/axios/posts.js";
 import gets from "@/components/axios/get.js";
 import form_Data from "@/components/axios/formData.js";
-import { Exception } from "sass";
 export default {
   data() {
     return {

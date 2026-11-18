@@ -1,0 +1,12 @@
+# .env lives only on the server and reaches the build through compose, never through the image.
+.env
+.env.*
+!.env.example
+
+.git
+.claude
+.idea
+.vscode
+node_modules
+dist
+deploy

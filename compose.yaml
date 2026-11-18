@@ -1,0 +1,25 @@
+# Everything is read from the server's .env (never in git or in the image):
+# PORT — the port on 127.0.0.1 the host nginx proxies to, VITE_API_URL — the API the bundle is built against.
+name: mubingym-admin
+
+services:
+  web:
+    image: mubingym-admin
+    build:
+      context: .
+      target: web
+      args:
+        VITE_API_URL: ${VITE_API_URL:?VITE_API_URL is not set}
+    restart: unless-stopped
+    ports:
+      # Only on localhost: the host nginx proxies the domain here and handles HTTPS (deploy/mubingym-admin.conf).
+      - "127.0.0.1:${PORT:?PORT is not set}:80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 5s
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
